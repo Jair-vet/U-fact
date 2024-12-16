@@ -13,7 +13,7 @@ import { QuotationRequestProduct } from 'src/app/models/quotation-request-produc
 import { CatalogClientsComponent } from '../../orders/components/catalog-clients/catalog-clients.component';
 import { MatSelect } from '@angular/material/select';
 import { QuotationProductsInventoryComponent } from '../components/quotation-products-inventory/quotation-products-inventory.component';
-import { QuotationRequestService } from 'src/app/services/quotation-request.service';
+// import { QuotationRequestService } from 'src/app/services/quotation-request.service';
 import { QuotationRequest } from 'src/app/models/quotation-request.model';
 
 @Component({
@@ -47,7 +47,7 @@ export class EditQuotationRequestComponent implements OnInit {
   protected _onDestroy = new Subject<void>();
   path: string = 'dashboard/quotation-request'
 
-  constructor(private dialog: MatDialog, private _route: ActivatedRoute, private _listPriceService: ListPriceService, private el: ElementRef, private _userService: UserService, private breakpointObserver: BreakpointObserver, private _formBuider: FormBuilder, private _router: Router, private _quotationRequestService: QuotationRequestService) {
+  constructor(private dialog: MatDialog, private _route: ActivatedRoute, private _listPriceService: ListPriceService, private el: ElementRef, private _userService: UserService, private breakpointObserver: BreakpointObserver, private _formBuider: FormBuilder, private _router: Router, ) {
 
     this.breakpointObserver.observe([
       Breakpoints.XSmall,
@@ -237,21 +237,7 @@ export class EditQuotationRequestComponent implements OnInit {
   }
 
   loadData() {
-    this._quotationRequestService.getData(this.idQuotationRequest).subscribe({
-      next: (resp) => {
-        console.log(resp)
-        this.setValues(resp)
-      },
-      complete: () => {
-        this.loading = false
-      },
-      error: (err) => {
-        this.error = true
-        this.error_msg = err.error.message
-        this.loading = false
-      },
-    })
-
+   
 
 
   }
@@ -314,20 +300,6 @@ export class EditQuotationRequestComponent implements OnInit {
   update() {
     if (this.validateProducts()) {
       this.loading = true
-      this._quotationRequestService.update(this.form.value, this.products).subscribe({
-        next: (resp) => {
-          Swal.fire({ title: 'OK', text: resp, icon: 'success', confirmButtonColor: '#58B1F7', heightAuto: false })
-        },
-        complete: () => {
-          this.loading = false
-        },
-        error: (err) => {
-          this.loading = false
-          console.log(err)
-          Swal.fire({ title: 'ERROR', text: err.error.message, icon: 'error', confirmButtonColor: '#58B1F7', heightAuto: false })
-
-        },
-      })
     } else {
       this.loading = false
       Swal.fire({ title: 'ERROR', text: 'ALGUNOS PRODUCTOS NO ESTAN COMPLETO', icon: 'error', confirmButtonColor: '#58B1F7', heightAuto: false })

@@ -104,10 +104,10 @@ import { EntriesToPurchaseOrderProductComponent } from './store/components/entri
 import { PaginationComponent } from './common/pagination/pagination.component';
 import { AddOrderRequisitionComponent } from './production/add-order-requisition/add-order-requisition.component';
 import { TotalTagComponent } from './common/total-tag/total-tag.component';
-import { QuotationRequestComponent } from './quotation-request/quotation-request.component';
-import { CreateQuotationRequestComponent } from './quotation-request/create-quotation-request/create-quotation-request.component';
-import { EditQuotationRequestComponent } from './quotation-request/edit-quotation-request/edit-quotation-request.component';
-import { QuotationProductsInventoryComponent } from './quotation-request/components/quotation-products-inventory/quotation-products-inventory.component';
+// import { QuotationRequestComponent } from './quotation-request/quotation-request.component';
+// import { CreateQuotationRequestComponent } from './quotation-request/create-quotation-request/create-quotation-request.component';
+// import { EditQuotationRequestComponent } from './quotation-request/edit-quotation-request/edit-quotation-request.component';
+// import { QuotationProductsInventoryComponent } from './quotation-request/components/quotation-products-inventory/quotation-products-inventory.component';
 import { KardexEntriesDeparturesComponent } from './store/products/kardex-entries-departures/kardex-entries-departures.component';
 import { SeeEntryDepartureComponent } from './store/products/see-entry-departure/see-entry-departure.component';
 import { DetailDepartureSaleComponent } from './store/products/see-entry-departure/detail-departure-sale/detail-departure-sale.component';
@@ -232,10 +232,10 @@ import { CreateBankComponent } from './banks/create-bank/create-bank.component';
     PaginationComponent,
     AddOrderRequisitionComponent,
     TotalTagComponent,
-    QuotationRequestComponent,
-    CreateQuotationRequestComponent,
-    EditQuotationRequestComponent,
-    QuotationProductsInventoryComponent,
+    // QuotationRequestComponent,
+    // CreateQuotationRequestComponent,
+    // EditQuotationRequestComponent,
+    // QuotationProductsInventoryComponent,
     KardexEntriesDeparturesComponent,
     SeeEntryDepartureComponent,
     DetailDepartureSaleComponent,

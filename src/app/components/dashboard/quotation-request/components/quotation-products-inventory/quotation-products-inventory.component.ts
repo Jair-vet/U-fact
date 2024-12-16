@@ -5,7 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { QuotationRequestProduct } from 'src/app/models/quotation-request-product.model';
-import { QuotationRequestService } from 'src/app/services/quotation-request.service';
+// import { QuotationRequestService } from 'src/app/services/quotation-request.service';
 
 
 
@@ -39,7 +39,7 @@ export class QuotationProductsInventoryComponent implements OnInit {
   protected _onDestroy = new Subject<void>();
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<QuotationProductsInventoryComponent>, private breakpointObserver: BreakpointObserver, private _quotationRequestService: QuotationRequestService) {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, public dialogRef: MatDialogRef<QuotationProductsInventoryComponent>, private breakpointObserver: BreakpointObserver, ) {
 
     this.breakpointObserver.observe([
       Breakpoints.XSmall,
@@ -85,24 +85,6 @@ export class QuotationProductsInventoryComponent implements OnInit {
     console.log(this.data)
     this.waiting = true
     this.loading = true
-    this._quotationRequestService.getProductForQuotationRequest().subscribe({
-      next: (resp) => {
-        this.products = resp
-        console.log(resp)
-        this.dataSource = new MatTableDataSource(this.products);
-      },
-      complete: () => {
-        console.log('COMPLETO')
-        this.loading = false
-        this.waiting = false
-      },
-      error: (err) => {
-        console.log('ERROR')
-
-        this.loading = false
-        console.log(err)
-      },
-    })
   }
 
   checkItemSelect(product: QuotationRequestProduct) {

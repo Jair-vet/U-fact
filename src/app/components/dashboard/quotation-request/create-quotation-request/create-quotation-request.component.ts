@@ -20,7 +20,7 @@ import { QuotationRequestProduct } from 'src/app/models/quotation-request-produc
 import { CatalogClientsComponent } from '../../orders/components/catalog-clients/catalog-clients.component';
 import { MatSelect } from '@angular/material/select';
 import { QuotationProductsInventoryComponent } from '../components/quotation-products-inventory/quotation-products-inventory.component';
-import { QuotationRequestService } from 'src/app/services/quotation-request.service';
+// import { QuotationRequestService } from 'src/app/services/quotation-request.service';
 const clearFields = environment.clearFields;
 
 @Component({
@@ -72,7 +72,7 @@ export class CreateQuotationRequestComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     private _formBuider: FormBuilder,
     private _router: Router,
-    private _quotationRequestService: QuotationRequestService
+
   ) {
     this.breakpointObserver
       .observe([
@@ -363,34 +363,34 @@ export class CreateQuotationRequestComponent implements OnInit {
   create() {
     if (this.validateProducts()) {
       this.loading = true;
-      this._quotationRequestService
-        .create(this.form.value, this.products)
-        .subscribe({
-          next: (resp) => {
-            Swal.fire({
-              title: 'OK',
-              text: resp,
-              icon: 'success',
-              confirmButtonColor: '#58B1F7',
-              heightAuto: false,
-            });
-          },
-          complete: () => {
-            this.clearFields();
-            this.loading = false;
-          },
-          error: (err) => {
-            this.loading = false;
-            console.log(err);
-            Swal.fire({
-              title: 'ERROR',
-              text: err.error.message,
-              icon: 'error',
-              confirmButtonColor: '#58B1F7',
-              heightAuto: false,
-            });
-          },
-        });
+      // this._quotationRequestService
+      //   .create(this.form.value, this.products)
+      //   .subscribe({
+      //     next: (resp) => {
+      //       Swal.fire({
+      //         title: 'OK',
+      //         text: resp,
+      //         icon: 'success',
+      //         confirmButtonColor: '#58B1F7',
+      //         heightAuto: false,
+      //       });
+      //     },
+      //     complete: () => {
+      //       this.clearFields();
+      //       this.loading = false;
+      //     },
+      //     error: (err) => {
+      //       this.loading = false;
+      //       console.log(err);
+      //       Swal.fire({
+      //         title: 'ERROR',
+      //         text: err.error.message,
+      //         icon: 'error',
+      //         confirmButtonColor: '#58B1F7',
+      //         heightAuto: false,
+      //       });
+      //     },
+      //   });
     } else {
       this.loading = false;
       Swal.fire({

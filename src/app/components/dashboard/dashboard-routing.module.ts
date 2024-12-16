@@ -50,9 +50,9 @@ import { PurchaseOrdersComponent } from './purchase-orders/purchase-orders.compo
 import { CreatePurchaseOrderComponent } from './purchase-orders/create-purchase-order/create-purchase-order.component';
 import { EditPurchaseOrderComponent } from './purchase-orders/edit-purchase-order/edit-purchase-order.component';
 import { AddOrderRequisitionComponent } from './production/add-order-requisition/add-order-requisition.component';
-import { QuotationRequestComponent } from './quotation-request/quotation-request.component';
-import { CreateQuotationRequestComponent } from './quotation-request/create-quotation-request/create-quotation-request.component';
-import { EditQuotationRequestComponent } from './quotation-request/edit-quotation-request/edit-quotation-request.component';
+
+
+
 import { KardexEntriesDeparturesComponent } from './store/products/kardex-entries-departures/kardex-entries-departures.component';
 import { PurchaseOrderEntryComponent } from './store/entries/purchase-order-entry/purchase-order-entry.component';
 import { CreditNotesComponent } from './credit-note/credit-notes/credit-notes.component';
@@ -193,15 +193,6 @@ const routes: Routes = [
         component: DetailsBalanceClientComponent,
       },
       // ! Eliminar
-      { path: 'quotation-request', component: QuotationRequestComponent },
-      {
-        path: 'quotation-request/create-quotation',
-        component: CreateQuotationRequestComponent,
-      },
-      {
-        path: 'quotation-request/edit-quotation-request/:id',
-        component: EditQuotationRequestComponent,
-      },
     ],
   },
 ];

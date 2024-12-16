@@ -6,7 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { QuotationRequest } from 'src/app/models/quotation-request.model';
 import { StatusQuotationRequest } from 'src/app/models/status-quotation-request.model';
-import { QuotationRequestService } from 'src/app/services/quotation-request.service';
+// import { QuotationRequestService } from 'src/app/services/quotation-request.service';
 import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';
 import { PdfViewComponent } from '../store/components/pdf-view/pdf-view.component';
@@ -39,7 +39,7 @@ export class QuotationRequestComponent implements OnInit {
 
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private _router: Router, private dialog: MatDialog, private breakpointObserver: BreakpointObserver, private _quotationService: QuotationRequestService, private _userService: UserService) {
+  constructor(private _router: Router, private dialog: MatDialog, private breakpointObserver: BreakpointObserver, private _userService: UserService) {
 
     this.breakpointObserver.observe([
       Breakpoints.XSmall,
@@ -94,19 +94,6 @@ export class QuotationRequestComponent implements OnInit {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        this._quotationService.changeStatus(record.id.toString(), '3').subscribe({
-          next: (resp) => {
-            Swal.fire({ title: 'OK', text: resp, icon: 'success', confirmButtonColor: '#58B1F7', heightAuto: false })
-          },
-          complete: () => {
-            this.loadData();
-          },
-          error: (err) => {
-            console.log(err)
-            Swal.fire({ title: 'ERROR', text: err.error.message, icon: 'error', confirmButtonColor: '#58B1F7', heightAuto: false })
-          },
-
-        })
       }
     })
   }
@@ -128,20 +115,6 @@ export class QuotationRequestComponent implements OnInit {
 
   getDataQuotationRequest(quotationRequest: QuotationRequest) {
     this.loading = true
-    this._quotationService.generateQuotationRequest(quotationRequest.id).subscribe({
-      next: (resp) => {
-        console.log(resp)
-        this.dataPDF = resp
-      },
-      complete: () => {
-        this.printFile(quotationRequest)
-        this.loading = false
-      },
-      error: (err) => {
-        console.log(err)
-        this.loading = false
-      },
-    })
   }
 
   printFile(quotationRequest: QuotationRequest) {
@@ -167,24 +140,6 @@ export class QuotationRequestComponent implements OnInit {
 
   loadData() {
     this.loading = true
-    this._quotationService.getAllData(this.idStatus, this.numberPage).subscribe({
-      next: (resp) => {
-        console.log(resp.quotationsRequest)
-        this.totalPages = resp.total_pages
-        this.dataSource = new MatTableDataSource(resp.quotationsRequest);
-        this.loading = false
-      },
-      complete: () => {
-        this.dataSource.sort = this.sort;
-        this.isDisabled = false
-      },
-      error: (err) => {
-        this.loading = false
-        console.log(err)
-        this.error = true
-        this.error_msg = err.error.message
-      },
-    })
   }
 
 
