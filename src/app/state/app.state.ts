@@ -16,7 +16,6 @@ import { filterPaymentPluginReducer } from './reducers/filter-payments-plugins.r
 import { FilterCreditNoteState } from '../models/models-state/filter-credit-note.state';
 import { filterCreditNoteReducer } from './reducers/filter-credit-note.reducers';
 import { FilterDeliveryState } from '../models/models-state/filter-delivery.state';
-import { filterDeliveryReducer } from './reducers/filter-delivery.reducers';
 
 export interface AppState {
   filterSaleNote: FilterSaleNoteState;
@@ -27,7 +26,6 @@ export interface AppState {
   filterPurchaseOrder: FilterPurchaseOrderState;
   filterPaymentPlugin: FilterPaymentPluginState;
   filterCreditNote: FilterCreditNoteState;
-  filterDelivery: FilterDeliveryState;
 }
 export const ROOT_REDUCERS: ActionReducerMap<AppState> = {
   filterSaleNote: filterSalesNotesReducer,
@@ -38,5 +36,4 @@ export const ROOT_REDUCERS: ActionReducerMap<AppState> = {
   filterPurchaseOrder: filterPurchaseOrderReducer,
   filterPaymentPlugin: filterPaymentPluginReducer,
   filterCreditNote: filterCreditNoteReducer,
-  filterDelivery: filterDeliveryReducer,
 };
