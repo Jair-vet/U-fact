@@ -50,18 +50,13 @@ import { PurchaseOrdersComponent } from './purchase-orders/purchase-orders.compo
 import { CreatePurchaseOrderComponent } from './purchase-orders/create-purchase-order/create-purchase-order.component';
 import { EditPurchaseOrderComponent } from './purchase-orders/edit-purchase-order/edit-purchase-order.component';
 import { AddOrderRequisitionComponent } from './production/add-order-requisition/add-order-requisition.component';
-
-
-
 import { KardexEntriesDeparturesComponent } from './store/products/kardex-entries-departures/kardex-entries-departures.component';
 import { PurchaseOrderEntryComponent } from './store/entries/purchase-order-entry/purchase-order-entry.component';
 import { CreditNotesComponent } from './credit-note/credit-notes/credit-notes.component';
 import { CreateCreditNoteComponent } from './credit-note/create-credit-note/create-credit-note.component';
 import { SalesReturnsComponent } from './store/entries/sales-returns/sales-returns.component';
 import { AccountsReceivableComponent } from './treasury/accounts-receivable/accounts-receivable.component';
-import { DeliveriesComponent } from './deliveries/deliveries.component';
 import { AccountsPaysComponent } from './treasury/accounts-pays/accounts-pays.component';
-import { SeeDeliveryComponent } from './deliveries/see-delivery/see-delivery.component';
 import { BanksComponent } from './banks/banks.component';
 import { CreateBankComponent } from './banks/create-bank/create-bank.component';
 
@@ -88,13 +83,6 @@ const routes: Routes = [
       {
         path: 'store/detail-order-production/:id',
         component: DetailOrderProductionComponent,
-      },
-
-      { path: 'deliveries', component: DeliveriesComponent },
-      {
-        path: 'deliveries/see-delivery/:id',
-
-        component: SeeDeliveryComponent,
       },
 
       { path: 'products', component: ProductComponent },

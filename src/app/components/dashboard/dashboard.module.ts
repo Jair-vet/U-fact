@@ -104,10 +104,6 @@ import { EntriesToPurchaseOrderProductComponent } from './store/components/entri
 import { PaginationComponent } from './common/pagination/pagination.component';
 import { AddOrderRequisitionComponent } from './production/add-order-requisition/add-order-requisition.component';
 import { TotalTagComponent } from './common/total-tag/total-tag.component';
-// import { QuotationRequestComponent } from './quotation-request/quotation-request.component';
-// import { CreateQuotationRequestComponent } from './quotation-request/create-quotation-request/create-quotation-request.component';
-// import { EditQuotationRequestComponent } from './quotation-request/edit-quotation-request/edit-quotation-request.component';
-// import { QuotationProductsInventoryComponent } from './quotation-request/components/quotation-products-inventory/quotation-products-inventory.component';
 import { KardexEntriesDeparturesComponent } from './store/products/kardex-entries-departures/kardex-entries-departures.component';
 import { SeeEntryDepartureComponent } from './store/products/see-entry-departure/see-entry-departure.component';
 import { DetailDepartureSaleComponent } from './store/products/see-entry-departure/detail-departure-sale/detail-departure-sale.component';
@@ -121,10 +117,7 @@ import { SalesReturnsComponent } from './store/entries/sales-returns/sales-retur
 import { CatalogAvailableInventoryComponent } from './store/components/catalog-available-inventory/catalog-available-inventory.component';
 import { AccountsReceivableComponent } from './treasury/accounts-receivable/accounts-receivable.component';
 import { SalesNotesPayableComponent } from './treasury/components/sales-notes-payable/sales-notes-payable.component';
-import { DeliveriesComponent } from './deliveries/deliveries.component';
 import { AccountsPaysComponent } from './treasury/accounts-pays/accounts-pays.component';
-import { SeeDeliveryComponent } from './deliveries/see-delivery/see-delivery.component';
-import { SalesNotesByDeliveryFinishedComponent } from './deliveries/sales-notes-by-delivery-finished/sales-notes-by-delivery-finisehd.component';
 import { InvoicesBalanceComponent } from './treasury/components/invoices-balance/invoices-balance.component';
 import { BanksComponent } from './banks/banks.component';
 import { CreateBankComponent } from './banks/create-bank/create-bank.component';
@@ -232,10 +225,6 @@ import { CreateBankComponent } from './banks/create-bank/create-bank.component';
     PaginationComponent,
     AddOrderRequisitionComponent,
     TotalTagComponent,
-    // QuotationRequestComponent,
-    // CreateQuotationRequestComponent,
-    // EditQuotationRequestComponent,
-    // QuotationProductsInventoryComponent,
     KardexEntriesDeparturesComponent,
     SeeEntryDepartureComponent,
     DetailDepartureSaleComponent,
@@ -249,9 +238,6 @@ import { CreateBankComponent } from './banks/create-bank/create-bank.component';
     CatalogAvailableInventoryComponent,
     AccountsReceivableComponent,
     SalesNotesPayableComponent,
-    DeliveriesComponent,
-    SeeDeliveryComponent,
-    SalesNotesByDeliveryFinishedComponent,
     InvoicesBalanceComponent,
     BanksComponent,
     CreateBankComponent
