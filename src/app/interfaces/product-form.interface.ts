@@ -1,0 +1,33 @@
+export interface ProductInterface {
+  id: number;
+  number: number;
+  code: string;
+  description: string;
+  image: string;
+  status: number;
+  id_company: number;
+  id_sat_unit: number;
+  id_family_product: number;
+  id_sub_family_product: number;
+  code_unit_sat: string;
+  name_unit_sat: string;
+  family_product: string;
+  sub_family_product: string;
+  price_without_iva: number;
+  minimum_inventory: number;
+  initial_inventory: number;
+  id_tradename: number;
+  id_code_prod_service: number;
+  id_mold: number;
+  mold: string;
+  id_measure: number;
+  measure: string;
+  tradename: string;
+  part_number: string;
+  amount_pieces: number;
+  weight_pieces: number;
+  is_comercial_product: boolean;
+  is_dollars: boolean;
+  tariff_fraction: string;
+  unit_custom: string;
+}

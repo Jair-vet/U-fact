@@ -1,0 +1,144 @@
+<form [formGroup]="form" (ngSubmit)="create()">
+  <mat-card>
+    <mat-card-header class="primary" style="padding: 10px">
+      <mat-icon style="font-size: 20px">note_add</mat-icon>
+      <span> CREAR NOTA DE CREDITO </span>
+      <div class="item-spacer"></div>
+
+      <span class="icon-close-modal" (click)="closeDialog()">&#10008;</span>
+    </mat-card-header>
+    <mat-grid-list cols="12" rowHeight="80px">
+      <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>COMENTARIOS</mat-label>
+          <textarea matInput formControlName="comments" rows="1"></textarea>
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>TIPO</mat-label>
+          <mat-select formControlName="id_type">
+            <mat-option value="1">BONIFICACIÓN</mat-option>
+            <mat-option value="2">DEVOLUCIÓN</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile
+        *ngIf="form.value.id_type == '1'"
+        [colspan]="colMedium"
+        [rowspan]="1"
+      >
+        <mat-form-field appearance="outline" floatLabel="always">
+          <span matPrefix>$ &nbsp;</span>
+          <mat-label>TOTAL</mat-label>
+          <input matInput formControlName="total" style="text-align: right" />
+          <mat-error *ngIf="form.invalid">Ingresa solo números</mat-error>
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile
+        [colspan]="form.value.id_type == '1' ? 12 : colMedium"
+        [rowspan]="1"
+      >
+        <div class="item-spacer"></div>
+        <button
+          type="submit"
+          class="btnPrimary"
+          [disabled]="loading"
+          mat-raised-button
+        >
+          <mat-icon class="icon-size">save</mat-icon>GUARDAR
+        </button>
+      </mat-grid-tile>
+
+      <mat-grid-tile
+        *ngIf="form.value.id_type == '2'"
+        [colspan]="12"
+        [rowspan]="1"
+      >
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>BUSCAR</mat-label>
+          <input matInput (keyup)="applyFilter($event)" #input />
+        </mat-form-field>
+      </mat-grid-tile>
+    </mat-grid-list>
+
+    <div class="mat-elevation-z8" *ngIf="form.value.id_type == '2'">
+      <div class="table-container-pagination">
+        <div class="overlay-loading" *ngIf="loading">
+          <div class="spinner-wrapper">
+            <mat-spinner
+              diameter="50"
+              *ngIf="loading"
+              class="spinner"
+              color="primary"
+            ></mat-spinner>
+          </div>
+        </div>
+        <table mat-table [dataSource]="dataSource" matSort>
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true"
+          ></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+          <ng-container matColumnDef="batch">
+            <th mat-header-cell class="primary" *matHeaderCellDef>LOTE</th>
+            <td mat-cell *matCellDef="let item" style="width: 20%">
+              {{ item.batch }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="number">
+            <th mat-header-cell class="primary" *matHeaderCellDef>NUMERO</th>
+            <td mat-cell *matCellDef="let item" style="width: 15%">
+              {{ item.number }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="product">
+            <th mat-header-cell class="primary" *matHeaderCellDef>PRODUCTO</th>
+            <td mat-cell *matCellDef="let item" style="width: 30%">
+              {{ item.product }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="date">
+            <th mat-header-cell class="primary" *matHeaderCellDef>FECHA</th>
+            <td
+              mat-cell
+              *matCellDef="let item"
+              style="width: 20%; text-align: center"
+            >
+              {{ item.date }}
+            </td></ng-container
+          >
+
+          <ng-container matColumnDef="actions">
+            <th class="primary" mat-header-cell *matHeaderCellDef>
+              SELECCIONAR
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let item"
+              style="width: 15%"
+              style="text-align: center"
+            >
+              <a
+                *ngIf="!checkItem(item); else check_box"
+                style="color: rgb(130, 16, 12)"
+                (click)="select(item, true)"
+              >
+                <mat-icon class="custom-size-animation"
+                  >check_box_outline_blank</mat-icon
+                >
+              </a>
+              <ng-template #check_box
+                ><a style="color: var(--primary)" (click)="select(item, false)">
+                  <mat-icon class="custom-size-animation">check_box</mat-icon>
+                </a></ng-template
+              >
+            </td>
+          </ng-container>
+        </table>
+      </div>
+    </div>
+  </mat-card>
+</form>

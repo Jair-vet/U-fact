@@ -1,0 +1,162 @@
+<mat-toolbar class="title">
+  <span>PEDIDOS</span>
+  <div class="item-spacer"></div>
+  <button mat-raised-button class="btnPrimary" (click)="validateCSD()" style="height: 80%; margin-top: 10px">
+    <mat-icon class="icon-size">add</mat-icon>AGREGAR
+  </button>
+</mat-toolbar><br />
+
+<div class="container" *ngIf="!loading">
+  <mat-card class="card" *ngIf="!error">
+    <mat-grid-list cols="12" rowHeight="70px">
+      <mat-grid-tile [colspan]="colBig" [rowspan]="1">
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>BUSCAR</mat-label>
+          <input matInput (keyup)="applyFilter()" [(ngModel)]="valueSearch" #input />
+        </mat-form-field>
+        <div class="item-spacer"></div>
+      </mat-grid-tile>
+      <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>STATUS</mat-label>
+          <mat-select [disabled]="loading" [(ngModel)]="idType" (ngModelChange)="changeStatus()">
+            <mat-option value="1">PENDIENTES</mat-option>
+            <mat-option value="2">SURTIDOS</mat-option>
+            <mat-option value="3">CANCELADOS</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-grid-tile>
+    </mat-grid-list>
+    <div class="mat-elevation-z8">
+      <div class="table-container-pagination">
+        <table mat-table [dataSource]="dataSource" matSort>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <ng-container matColumnDef="number">
+            <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="number">
+              FOLIO
+            </th>
+            <td mat-cell *matCellDef="let item" style="width: 10%">
+              {{ item.number }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="client">
+            <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="client">
+              CLIENTE
+            </th>
+            <td mat-cell *matCellDef="let item" style="width: 15%">
+              {{ item.client }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="seller">
+            <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="seller">
+              VENDEDOR
+            </th>
+            <td mat-cell *matCellDef="let item" style="width: 10%">
+              {{ item.seller }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="status">
+              STATUS
+            </th>
+            <td mat-cell *matCellDef="let item" [style]="{
+                width: '10%',
+                background:
+                  item.percentage == 100
+                    ? 'linear-gradient(90deg, #E0FFB9 ' +
+                      item.percentage +
+                      '%, #E7E7E7 ' +
+                      item.percentage +
+                      '%)'
+                    : 'linear-gradient(90deg, #FFE7B9 ' +
+                      item.percentage +
+                      '%, #E7E7E7 ' +
+                      item.percentage +
+                      '%)'
+              }">
+              <span class="percentage-order right">% {{ item.percentage }}</span>
+              <span>{{ item.status }}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="total">
+            <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="total">
+              TOTAL
+            </th>
+            <td mat-cell *matCellDef="let item" style="width: 15%; text-align: right; padding-right: 50px">
+              <span class="currency-dollars" *ngIf="item.is_dollars">USD</span>
+              <span class="currency-mxn" *ngIf="!item.is_dollars">MXN</span>{{ item.total | currency : "2" : "$" }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="date">
+            <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="date">
+              FECHA
+            </th>
+            <td mat-cell *matCellDef="let item" style="width: 15%">
+              {{ item.date }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="deadline">
+            <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="deadline">
+              ENTREGA
+            </th>
+            <td mat-cell *matCellDef="let item" style="width: 10%">
+              {{ item.deadline }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell class="primary" *matHeaderCellDef>ACCIONES</th>
+            <td mat-cell *matCellDef="let item" style="width: 15%; text-align: right">
+              <a class="btnAction" routerLink="/dashboard/orders/see-order/{{ item.id }}" style="color: var(--primary)"
+                matTooltip="VER">
+                <mat-icon class="custom-size-animation">visibility</mat-icon>
+              </a>
+              <a *ngIf="!inactive && item.id_status == 1" class="btnAction" style="color: var(--error)"
+                (click)="inactiveRecord(item)" matTooltip="CANCELAR">
+                <mat-icon class="custom-size-animation">close</mat-icon>
+              </a>
+              <a *ngIf="!inactive" class="btnAction" (click)="openHistory(item)" style="color: var(--document_two)"
+                matTooltip="HISTORIAL">
+                <mat-icon class="custom-size-animation">history</mat-icon>
+              </a>
+              <a *ngIf="!inactive && item.id_status != 2" class="btnAction"
+                routerLink="/dashboard/orders/products-order/{{ item.id }}" style="color: var(--document_one)"
+                matTooltip="SURTIR">
+                <mat-icon class="custom-size-animation">double_arrow</mat-icon>
+              </a>
+              <a *ngIf="!inactive" class="btnAction" style="color: var(--success)" (click)="openCatalogDepartures(item)"
+                matTooltip="VER SALIDAS">
+                <mat-icon class="custom-size-animation">unarchive</mat-icon>
+              </a>
+              <a *ngIf="!inactive" class="btnAction" style="color: var(--info)"
+                routerLink="/dashboard/orders/traceability/{{ item.id }}" matTooltip="TRAZABILIDAD">
+                <mat-icon class="custom-size-animation">timeline</mat-icon>
+              </a>
+            </td>
+          </ng-container>
+        </table>
+      </div>
+      <div style="display: flex">
+        <div class="item-spacer"></div>
+        <!-- <app-total-tag [total]="total"></app-total-tag> -->
+        <app-pagination [loading]="loading" (numberPageEmitter)="changePage($event)" [numberPage]="numberPage"
+          [labelPage]="totalPages"></app-pagination>
+      </div>
+    </div>
+  </mat-card>
+
+  <mat-card *ngIf="error" class="colorSecondary">
+    <div class="error">
+      <mat-icon style="font-size: 50px" aria-hidden="false">lock</mat-icon>
+      <h1>{{ error_msg }}</h1>
+    </div>
+  </mat-card>
+</div>
+<div class="container" *ngIf="loading">
+  <mat-card class="card">
+    <mat-spinner diameter="50" class="spinner" style="top: 40%" color="primary"></mat-spinner>
+  </mat-card>
+</div>

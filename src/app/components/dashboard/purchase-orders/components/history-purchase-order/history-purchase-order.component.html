@@ -1,0 +1,59 @@
+<mat-card *ngIf="!error">
+    <mat-card-header class="primary" style="padding:10px">
+        <mat-icon style="font-size:20px">library_books</mat-icon>
+        <span>
+            HISTORIAL DE ORDEN DE COMPRA [{{data.folio}}]
+        </span>
+        <div class="item-spacer"></div>
+
+        <span class="icon-close-modal" (click)="closeDialog()">&#10008;</span>
+
+    </mat-card-header>
+    <mat-spinner diameter="50" *ngIf="loading" class="spinner" color="primary"></mat-spinner>
+
+    <mat-stepper *ngIf="!loading" orientation="vertical" #stepper [selectedIndex]="currentStatus">
+        <mat-step [stepControl]="formGroup" class="primary">
+            <ng-template matStepLabel>POR AUTORIZAR</ng-template>
+            <ng-template matStepContent>
+                <p *ngFor="let item of list_status_one">{{item.date}} -- <i><b>{{item.user}}</b></i></p>
+            </ng-template>
+        </mat-step>
+
+        <mat-step [stepControl]="formGroup">
+            <ng-template matStepLabel>AUTORIZADO</ng-template>
+            <ng-template matStepContent>
+                <p *ngFor="let item of list_status_two">{{item.date}} -- <i><b>{{item.user}}</b></i></p>
+            </ng-template>
+        </mat-step>
+
+        <mat-step [stepControl]="formGroup">
+            <ng-template matStepLabel>RECEPCIONANDO</ng-template>
+            <ng-template matStepContent>
+                <p *ngFor="let item of list_status_three">{{item.date}} -- <i><b>{{item.user}}</b></i></p>
+            </ng-template>
+        </mat-step>
+
+        <mat-step [stepControl]="formGroup">
+            <ng-template matStepLabel>RECEPCIONADO</ng-template>
+            <ng-template matStepContent>
+                <p *ngFor="let item of list_status_four">{{item.date}} -- <i><b>{{item.user}}</b></i></p>
+            </ng-template>
+        </mat-step>
+        <mat-step [stepControl]="formGroup">
+
+            <ng-template matStepLabel>CANCELADO</ng-template>
+            <ng-template matStepContent>
+                <p *ngFor="let item of list_status_five">{{item.date}} -- <i><b>{{item.user}}</b></i>
+                </p>
+            </ng-template>
+
+        </mat-step>
+    </mat-stepper>
+</mat-card>
+<mat-card *ngIf="error" class="colorSecondary">
+
+    <div class="error">
+        <mat-icon style="font-size: 50px" aria-hidden="false">lock</mat-icon>
+        <h1>{{error_msg}}</h1>
+    </div>
+</mat-card>

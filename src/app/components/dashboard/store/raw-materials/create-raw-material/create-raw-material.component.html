@@ -1,0 +1,162 @@
+<form [formGroup]="form" (ngSubmit)="createProduct()">
+
+
+
+
+    <mat-toolbar class="title">
+        <button mat-icon-button class="textColor" type="button" (click)="cancel()">
+            <mat-icon>arrow_back_ios</mat-icon>
+        </button>
+        <span>PRODUCTO MP</span>
+        <div class="item-spacer"></div>
+        <button type="submit" class="btnPrimary" [disabled]="form.invalid" style="height:80%; margin-top: 10px;"
+            mat-raised-button>
+            <mat-icon class="icon-size">save</mat-icon>GUARDAR
+        </button>
+    </mat-toolbar> <br>
+
+    <div class="secondary">
+        <mat-spinner diameter="50" *ngIf="loading" class="spinner" color="primary"></mat-spinner>
+
+    </div>
+    <div class="container" *ngIf="!loading">
+        <mat-card class="card colorSecondary">
+            <mat-card class="mat-elevation-z8 card-prop" style="padding:0%; margin-bottom: 20px;">
+                <mat-card-header class="primary" style="padding:10px">
+                    <mat-icon style="font-size:20px">shopping_cart</mat-icon>
+                    <span>
+                        DETALLES DE PRODUCTO
+                    </span>
+                </mat-card-header>
+
+                <mat-grid-list cols="12" rowHeight="80px">
+
+
+                    <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <mat-label>PROVEEDOR</mat-label>
+                            <input [readonly]="true" matInput formControlName="tradename">
+                            <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
+                        </mat-form-field>
+                    </mat-grid-tile>
+
+                    <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
+                        <button type="button" (click)="openCatalogTradenames()" mat-raised-button class="btnPrimary">
+                            <mat-icon class="size-icon">library_books</mat-icon> NOMBRES COMERCIALES
+                        </button>
+                        <div class="item-spacer"></div>
+                    </mat-grid-tile>
+
+
+                    <mat-grid-tile [colspan]="colMedium" [rowspan]="2">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <mat-label>DESCRIPCIÓN</mat-label>
+                            <textarea matInput formControlName="description" placeholder="Información..."
+                                rows="6"></textarea>
+                            <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
+                        </mat-form-field>
+                    </mat-grid-tile>
+
+                    <mat-grid-tile [colspan]="colMedium" [rowspan]="4">
+                        <div class="center-image">
+                            <img [src]="imageTemp" height="200" class="logo">
+                            <div class="overlay">
+                                <div class="text">
+                                    <button type="button" (click)="imageInput.click()" class="btnSecondary"
+                                        mat-raised-button>
+                                        <mat-icon class="icon-size">cloud_upload</mat-icon>SUBIR
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <input accept=".jpg, .png" hidden (change)="changeImage($event)" #imageInput type="file"
+                            id="file">
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <mat-label>CODIGO INTERNO</mat-label>
+                            <input matInput formControlName="code">
+                            <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
+                        </mat-form-field>
+                    </mat-grid-tile>
+
+                    <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <mat-label>UNIDAD </mat-label>
+                            <mat-select [formControl]="satUnitCtrl" (selectionChange)="setUnitSat()" #singleSelect
+                                required>
+                                <mat-option>
+                                    <ngx-mat-select-search placeholderLabel="Buscar unidad..."
+                                        [formControl]="satUnitFilterCtrl">
+                                    </ngx-mat-select-search>
+                                </mat-option>
+                                <mat-option *ngFor="let unit of filteredSatUnit | async" [value]="unit">
+                                    {{unit.name!}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </mat-grid-tile>
+
+
+                    <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <mat-label>FAMILIA DE PRODUCTO</mat-label>
+                            <input matInput formControlName="family_product" name="family_product">
+                            <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
+                        </mat-form-field>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
+
+                        <button type="button" (click)="openCatalogFamilyProducts()" mat-raised-button
+                            class="btnPrimary">
+                            <mat-icon class="size-icon">library_books</mat-icon> FAMILIAS
+                        </button>
+                        <div class="item-spacer"></div>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
+
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <mat-label>SUB FAMILIA DE PRODUCTO</mat-label>
+                            <input matInput formControlName="sub_family_product" name="sub_family_product">
+                            <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
+                        </mat-form-field>
+                    </mat-grid-tile>
+
+                    <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
+                        <button type="button" (click)="openCatalogSubFamilyProducts()" mat-raised-button
+                            class="btnPrimary">
+                            <mat-icon class="size-icon">library_books</mat-icon> SUB-FAMILIAS
+                        </button>
+                        <div class="item-spacer"></div>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <mat-label>INVENTARIO INICIAL</mat-label>
+
+                            <input matInput formControlName="initial_inventory" style="text-align:right;">
+                            <mat-error *ngIf="form.invalid">Ingresa solo números</mat-error>
+                        </mat-form-field>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <mat-label>INVENTARIO MINIMO</mat-label>
+
+                            <input matInput formControlName="minimum_inventory" style="text-align:right;">
+                            <mat-error *ngIf="form.invalid">Ingresa solo números</mat-error>
+                        </mat-form-field>
+                    </mat-grid-tile>
+
+                    <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <span matPrefix>$ &nbsp;</span>
+                            <mat-label>COSTO SIN IVA</mat-label>
+                            <input matInput formControlName="price_without_iva" style="text-align:right;">
+                            <mat-error *ngIf="form.invalid">Ingresa solo números</mat-error>
+                        </mat-form-field>
+                    </mat-grid-tile>
+
+                </mat-grid-list>
+            </mat-card>
+        </mat-card>
+    </div>
+</form>

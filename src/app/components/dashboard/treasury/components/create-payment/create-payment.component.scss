@@ -1,0 +1,53 @@
+.card-content {
+    max-height: 500px;
+    /* Altura máxima del contenido del diálogo */
+    overflow-y: auto;
+    /* Permite el scroll vertical si el contenido es más largo que la altura máxima */
+}
+
+::ng-deep .mat-dialog-container {
+
+    padding: 0px !important;
+    border-radius: 10px !important;
+
+}
+
+.block {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+
+
+.number_letter {
+
+    color: var(--secondary);
+    font-size: 12px;
+}
+
+input[type=file]::file-selector-button {
+    margin-right: 20px;
+    border: none;
+    background: var(--primary);
+    padding: 10px 20px;
+
+    color: aliceblue;
+    cursor: pointer;
+    transition: background .2s ease-in-out;
+}
+
+input[type=file]::file-selector-button:hover {
+    background: var(--secondary);
+}
+
+.input-money {
+    text-align: right;
+}
+
+/* Estilo para ocultar las flechas */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

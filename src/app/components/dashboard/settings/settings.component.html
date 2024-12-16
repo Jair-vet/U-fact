@@ -1,0 +1,335 @@
+<form [formGroup]="form" (ngSubmit)="saveData()">
+
+    <mat-toolbar class="title">
+        <span>CONFIGURACIÓN</span>
+        <div class="item-spacer"></div>
+
+        <button type="submit" [disabled]="form.invalid" mat-raised-button class="btnPrimary"
+            style="height:80%; margin-top: 10px;">
+            <mat-icon class="size-icon">save</mat-icon>
+            <span>{{textButtonSave}}</span>
+        </button>
+    </mat-toolbar><br>
+    <div class="secondary">
+        <mat-spinner diameter="50" *ngIf="loading" class="spinner" color="primary"></mat-spinner>
+    </div>
+    <div class="container" *ngIf="!loading">
+
+        <mat-card style="padding:0%" class="colorSecondary card">
+            <mat-grid-list cols="12" rowHeight="400px">
+                <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+                    <mat-card class="mat-elevation-z8 card-prop" style="width:90%;height: 90%; padding:0%">
+                        <mat-card-header class="primary" style="padding:10px">
+                            <mat-icon style="font-size:20px">palette</mat-icon>
+                            <span>
+                                LOGOTIPO - COLOR - SERIE
+                            </span>
+                        </mat-card-header>
+                        <mat-card-content>
+
+                            <mat-grid-list cols="12" rowHeight="40px">
+                                <mat-grid-tile [colspan]="12" [rowspan]="1">
+                                    <span>SELECCIONA TU TEMA Y LOGO</span>
+                                </mat-grid-tile>
+                                <mat-grid-tile [colspan]="6" [rowspan]="6">
+                                    <div class="center-image">
+                                        <img [src]="imageTemp" height="100" class="logo">
+                                        <div class="overlay">
+                                            <div class="text">
+                                                <button type="button" (click)="imageInput.click()" class="btnSecondary"
+                                                    mat-raised-button>
+                                                    <mat-icon class="icon-size">cloud_upload</mat-icon>SUBIR
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input accept=".jpg, .png" hidden (change)="changeImage($event)" #imageInput
+                                        type="file" id="file">
+                                </mat-grid-tile>
+
+                                <mat-grid-tile [colspan]="6" [rowspan]="2">
+                                    <mat-icon style="font-size:35px; color:var(--primary)">palette</mat-icon>
+
+
+                                </mat-grid-tile>
+                                <mat-grid-tile [colspan]="6" [rowspan]="2">
+
+
+                                    <mat-form-field appearance="outline" style="width:90%" floatLabel="always">
+                                        <mat-label>TEMA</mat-label>
+                                        <input matInput type="color" class="primary" [value]="color"
+                                            (change)="updateColor($event)">
+                                    </mat-form-field>
+
+                                </mat-grid-tile>
+
+                                <mat-grid-tile [colspan]="6" [rowspan]="2">
+                                    <mat-form-field appearance="outline" floatLabel="always" style="width:90%">
+                                        <mat-label>SERIE FACTURA</mat-label>
+                                        <input matInput formControlName="serie" name="serie">
+                                    </mat-form-field>
+                                </mat-grid-tile>
+                            </mat-grid-list>
+                        </mat-card-content>
+                    </mat-card>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+                    <mat-card class="mat-elevation-z8 card-prop" style="width:90%;height: 90%; padding:0%">
+                        <mat-card-header class="primary" style="padding:10px">
+                            <mat-icon style="font-size:20px">check_circle</mat-icon>
+                            <span>
+                                CERTIFICADO CSD
+                            </span>
+                        </mat-card-header>
+                        <mat-card-content>
+
+                            <mat-grid-list cols="12" rowHeight="40px">
+                                <mat-grid-tile [colspan]="12" [rowspan]="1">
+                                    <span>No. SERIE DEL CERTIFICADO</span>
+                                </mat-grid-tile>
+                                <mat-grid-tile class="textColor" [colspan]="12" [rowspan]="1">
+                                    <span><b>{{user.serial}}</b> </span>
+                                </mat-grid-tile>
+
+                                <mat-grid-tile [colspan]="12" [rowspan]="1">
+                                    <span>VALIDO HASTA</span>
+                                </mat-grid-tile>
+
+                                <mat-grid-tile class="textColor" [colspan]="12" [rowspan]="1">
+                                    <span><b> {{user.getValidTo}}</b> </span>
+                                </mat-grid-tile>
+
+
+                                <mat-grid-tile class="textColor" [colspan]="12" [rowspan]="2">
+
+                                    <button type="button" (click)="openDialogInstallCSD()" mat-raised-button
+                                        class="btnPrimary">
+
+                                        <span>INSTALAR UN CSD</span>
+                                    </button>
+                                </mat-grid-tile>
+                            </mat-grid-list>
+                        </mat-card-content>
+                    </mat-card>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+                    <mat-card class="mat-elevation-z8 card-prop" style="width:90%;height: 90%; padding:0%">
+                        <mat-card-header class="primary" style="padding:10px">
+                            <mat-icon style="font-size:20px">account_balance</mat-icon>
+                            <span>
+                                MIS DATOS BANCARIOS
+                            </span>
+                        </mat-card-header>
+                        <mat-card-content>
+
+                            <mat-grid-list cols="12" rowHeight="80px">
+                                <mat-grid-tile [colspan]="12" [rowspan]="1">
+                                    <mat-form-field floatPlaceholder="never" appearance="outline" floatLabel="always">
+                                        <mat-label>BANCO</mat-label>
+                                        <mat-select [formControl]="banksCtrl" placeholder="Banco" #singleSelect
+                                            name="baksCtrl" (selectionChange)="clearFields()">
+                                            <mat-option>
+                                                <ngx-mat-select-search placeholderLabel="Buscar..."
+                                                    [formControl]="banksFilterCtrl">
+                                                </ngx-mat-select-search>
+                                            </mat-option>
+                                            <mat-option *ngFor="let bank of filteredBanks | async" [value]="bank">
+                                                {{bank.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </mat-grid-tile>
+                                <mat-grid-tile [colspan]="12" [rowspan]="1">
+                                    <mat-form-field appearance="outline" floatLabel="always">
+
+                                        <input matInput [maxlength]="18" [minlength]="18"
+                                            formControlName="interbank_code" name="interbank_code">
+                                        <mat-error *ngIf="form.invalid">Ingresar cadena de 18 números</mat-error>
+                                        <mat-label>CLABE INTERBANCARIA</mat-label>
+                                    </mat-form-field>
+                                </mat-grid-tile>
+                                <mat-grid-tile [colspan]="12" [rowspan]="1">
+                                    <mat-form-field appearance="outline" floatLabel="always">
+                                        <mat-label>NUMERO DE CUENTA</mat-label>
+                                        <input matInput name="account" formControlName="account">
+                                        <mat-error *ngIf="form.invalid">Ingresar solo números</mat-error>
+                                    </mat-form-field>
+                                </mat-grid-tile>
+
+                            </mat-grid-list>
+                        </mat-card-content>
+                    </mat-card>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="12" [rowspan]="2">
+                    <mat-card class="mat-elevation-z8 card-prop"
+                        style="width:100%;height: 100%; margin:20px; padding:0%">
+                        <mat-card-header class="primary" style="padding:10px">
+                            <mat-icon style="font-size:20px">contacts</mat-icon>
+                            <span>
+                                DATOS FISCALES
+                            </span>
+                        </mat-card-header>
+                        <mat-grid-list cols="12" rowHeight="40px">
+                            <mat-grid-tile colspan="12" rowspan="1"></mat-grid-tile>
+                            <mat-grid-tile [colspan]="colBig" [rowspan]="2">
+                                <mat-form-field appearance="outline" floatLabel="always">
+                                    <mat-label>REGIMEN FISCAL</mat-label>
+                                    <mat-select (selectionChange)="isValidSelect()" [formControl]="taxRegimesCtrl"
+                                        #singleSelect name="taxRegimesCtrl">
+                                        <mat-option>
+                                            <ngx-mat-select-search placeholderLabel="Buscar Regimen Fiscal"
+                                                [formControl]="taxRegimesFilterCtrl">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option *ngFor="let tax_regime of filteredTaxRegimes | async"
+                                            [value]="tax_regime">
+                                            [{{tax_regime.code}}] - {{tax_regime.description}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="colBig" [rowspan]="2">
+                                <mat-form-field appearance="outline" floatLabel="always">
+                                    <mat-label>NOMBRE COMERCIAL</mat-label>
+                                    <textarea matInput formControlName="tradename" name="tradename" rows="2"></textarea>
+                                </mat-form-field>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="colBig" [rowspan]="2">
+                                <mat-form-field appearance="outline" floatLabel="always">
+                                    <mat-label>RAZÓN SOCIAL O NOMBRE</mat-label>
+                                    <input matInput formControlName="name" name="name">
+                                </mat-form-field>
+                            </mat-grid-tile>
+
+                            <mat-grid-tile [colspan]="colBig" [rowspan]="2">
+                                <mat-form-field appearance="outline" floatLabel="always">
+                                    <mat-label>R.F.C</mat-label>
+                                    <input matInput [readonly]="true" [minlength]="minRFC" [maxlength]="maxRFC"
+                                        formControlName="rfc">
+                                    <mat-error *ngIf="form.invalid">Ingresar un RFC valido para el tipo de
+                                        regimen</mat-error>
+                                </mat-form-field>
+                            </mat-grid-tile>
+
+
+                            <mat-grid-tile [colspan]="colMedium" [rowspan]="2">
+                                <mat-form-field appearance="outline" floatLabel="always">
+                                    <mat-label>CÓDIGO POSTAL</mat-label>
+                                    <input matInput name="postal_code" (ngModelChange)="validatePostalCode()"
+                                        formControlName="postal_code" [maxlength]="5" [minlength]="5"
+                                        [readonly]="waitValidatePostalCode">
+                                </mat-form-field>
+                            </mat-grid-tile>
+
+                            <mat-grid-tile [colspan]="colMedium" [rowspan]="2">
+                                <mat-form-field appearance="outline" floatLabel="always">
+                                    <mat-label>COLONIA</mat-label>
+                                    <mat-select [formControl]="suburbsCtrl" #singleSelect name="suburbsCtrl">
+                                        <mat-option>
+                                            <ngx-mat-select-search placeholderLabel="Buscar..."
+                                                [formControl]="suburbsFilterCtrl">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option *ngFor="let suburb of filteredSuburbs | async" [value]="suburb">
+                                            {{suburb.suburb}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </mat-grid-tile>
+
+                            <mat-grid-tile [colspan]="colMedium" [rowspan]="2">
+                                <mat-form-field appearance="outline" floatLabel="always">
+                                    <mat-label>MUNICIPIO</mat-label>
+                                    <mat-select [formControl]="municipalitiesCtrl" #singleSelect
+                                        name="municipalitiesCtrl">
+                                        <mat-option>
+                                            <ngx-mat-select-search placeholderLabel="Buscar..."
+                                                [formControl]="municipalitiesFilterCtrl">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option *ngFor="let municipality of filteredMunicipalities | async"
+                                            [value]="municipality">
+                                            {{municipality.municipality}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </mat-grid-tile>
+
+
+                            <mat-grid-tile [colspan]="colMedium" [rowspan]="2">
+                                <mat-form-field appearance="outline" floatLabel="always">
+                                    <mat-label>ESTADO</mat-label>
+                                    <mat-select [formControl]="statesCtrl" #singleSelect name="statesCtrl">
+                                        <mat-option>
+                                            <ngx-mat-select-search placeholderLabel="Buscar..."
+                                                [formControl]="statesFilterCtrl">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+                                        <mat-option *ngFor="let state of filteredStates | async" [value]="state">
+                                            {{state.state}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </mat-grid-tile>
+
+
+
+
+                            <mat-grid-tile [colspan]="colMedium" [rowspan]="2">
+                                <mat-form-field appearance="outline" floatLabel="always">
+                                    <mat-label>DOMICILIO</mat-label>
+                                    <input matInput formControlName="address" name="address">
+                                </mat-form-field>
+                            </mat-grid-tile>
+
+                            <mat-grid-tile [colspan]="colSmall" [rowspan]="2">
+                                <mat-form-field appearance="outline" floatLabel="always">
+                                    <mat-label>NUM. EXT</mat-label>
+                                    <input matInput formControlName="num_ext" name="num_ext">
+                                </mat-form-field>
+                            </mat-grid-tile>
+
+                            <mat-grid-tile [colspan]="colSmall" [rowspan]="2">
+                                <mat-form-field appearance="outline" floatLabel="always">
+                                    <mat-label>NUM. INT</mat-label>
+                                    <input matInput formControlName="num_int" name="num_int">
+                                </mat-form-field>
+                            </mat-grid-tile>
+
+
+                            <mat-grid-tile [colspan]="colMedium" [rowspan]="2">
+                                <mat-form-field appearance="outline" floatLabel="always">
+                                    <mat-label>TELEFONO</mat-label>
+                                    <input matInput name="phone" formControlName="phone" [maxlength]="10"
+                                        [minlength]="10">
+                                </mat-form-field>
+                            </mat-grid-tile>
+
+
+                            <mat-grid-tile [colspan]="colMedium" [rowspan]="2">
+                                <mat-form-field appearance="outline" floatLabel="always">
+                                    <mat-label>EMAIL</mat-label>
+                                    <input matInput name="email" formControlName="email">
+                                </mat-form-field>
+                            </mat-grid-tile>
+
+                            <mat-grid-tile [colspan]="colMedium" [rowspan]="2">
+                                <mat-form-field appearance="outline" floatLabel="always">
+                                    <mat-label>EMAIL DE SOPORTE</mat-label>
+                                    <input matInput name="email" formControlName="email_support">
+                                </mat-form-field>
+                            </mat-grid-tile>
+
+
+
+
+
+
+                        </mat-grid-list>
+                    </mat-card>
+
+                </mat-grid-tile>
+            </mat-grid-list>
+
+
+        </mat-card><br>

@@ -1,0 +1,33 @@
+<mat-toolbar class="title">
+  <span>TABLERO</span>
+  <div class="item-spacer"></div>
+
+</mat-toolbar><br>
+
+<div class="container">
+
+  <mat-card class="card" *ngIf="!error">
+    <mat-grid-list cols="12" rowHeight="100px">
+      <mat-grid-tile [colspan]="colBig" [rowspan]="5">
+        <app-bar-chart [typeChart]="'pie'"></app-bar-chart>
+
+
+      </mat-grid-tile>
+
+
+
+    </mat-grid-list>
+
+
+
+
+  </mat-card>
+
+  <mat-card *ngIf="error" class="colorSecondary">
+    <div class="error">
+      <mat-icon style="font-size: 50px" aria-hidden="false">lock</mat-icon>
+      <h1>{{error_msg}}</h1>
+    </div>
+  </mat-card>
+
+</div>

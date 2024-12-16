@@ -1,0 +1,318 @@
+<mat-toolbar class="title">
+  <button mat-icon-button class="textColor" type="button" (click)="cancel()">
+    <mat-icon>arrow_back_ios</mat-icon>
+  </button>
+  <span>COMPLEMENTO DE PAGO</span>
+  <div class="item-spacer"></div>
+  <button
+    type="button"
+    (click)="create()"
+    class="btnPrimary"
+    style="height: 80%; margin-top: 10px"
+    mat-raised-button
+    [disabled]="buttonDisabled || loading"
+  >
+    <mat-icon class="icon-size">save</mat-icon>GUARDAR
+  </button>
+</mat-toolbar>
+<br />
+<div class="container">
+  <div class="secondary">
+    <mat-spinner
+      diameter="50"
+      *ngIf="loading"
+      class="spinner"
+      color="primary"
+    ></mat-spinner>
+  </div>
+  <mat-card
+    *ngIf="!loading && !error"
+    style="height: 100%"
+    class="colorSecondary"
+  >
+    <mat-card
+      class="mat-elevation-z8 card-prop"
+      style="padding: 0%; margin-bottom: 20px"
+    >
+      <mat-card-header class="primary" style="padding: 10px">
+        <mat-icon style="font-size: 20px">folder_open</mat-icon>
+        <span> FACTURAS </span>
+      </mat-card-header>
+      <mat-grid-list cols="12" rowHeight="80px">
+        <mat-grid-tile [colspan]="12" [rowspan]="1">
+          <div class="item-spacer"></div>
+          <button
+            type="button"
+            (click)="openListInvoices()"
+            class="btnPrimary"
+            style="margin: 5px"
+            mat-raised-button
+          >
+            <mat-icon class="icon-size">library_books</mat-icon>SELECCIONAR
+            FACTURAS
+          </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+      <div class="table-container-medium" style="width: 99%; margin: 0 auto">
+        <div class="overlay-loading" *ngIf="loading">
+          <div class="spinner-wrapper">
+            <mat-spinner
+              diameter="50"
+              *ngIf="loading"
+              class="spinner"
+              color="primary"
+            ></mat-spinner>
+          </div>
+        </div>
+        <table mat-table [dataSource]="dataSource" matSort>
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true"
+          ></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          <ng-container matColumnDef="delete">
+            <th
+              mat-header-cell
+              class="primary"
+              *matHeaderCellDef
+              mat-sort-header="delete"
+            >
+              ELIMINAR
+            </th>
+            <td mat-cell *matCellDef="let item" style="width: 10%">
+              <a style="color: rgb(130, 16, 12)" (click)="deleteItem(item)">
+                <mat-icon class="custom-size-animation">delete</mat-icon>
+              </a>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="number">
+            <th
+              mat-header-cell
+              class="primary"
+              *matHeaderCellDef
+              mat-sort-header="number"
+            >
+              NUMERO
+            </th>
+            <td mat-cell *matCellDef="let item" style="width: 10%">
+              {{ item.serie }}{{ item.number }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="uuid">
+            <th
+              mat-header-cell
+              class="primary"
+              *matHeaderCellDef
+              mat-sort-header="uuid"
+            >
+              UUID
+            </th>
+            <td mat-cell *matCellDef="let item" style="width: 20%">
+              {{ item.uuid }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="parcial">
+            <th
+              mat-header-cell
+              class="primary"
+              *matHeaderCellDef
+              mat-sort-header="parcial"
+            >
+              PARCIALIDAD
+            </th>
+            <td mat-cell *matCellDef="let item" style="width: 10%">
+              {{ item.parcialidad + 1 }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="sub_total">
+            <th
+              mat-header-cell
+              class="primary"
+              *matHeaderCellDef
+              mat-sort-header="sub_total"
+            >
+              BASE IVA
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let item"
+              style="width: 10%; text-align: right; padding-right: 40px"
+            >
+              <span class="currency-dollars" *ngIf="payment.is_dollars"
+                >USD</span
+              >
+              <span class="currency-mxn" *ngIf="!payment.is_dollars">MXN</span>
+              {{ item.sub_total | currency : "2" : "$" }}
+            </td> </ng-container
+          ><ng-container matColumnDef="tax">
+            <th
+              mat-header-cell
+              class="primary"
+              *matHeaderCellDef
+              mat-sort-header="tax"
+            >
+              IVA
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let item"
+              style="width: 10%; text-align: right; padding-right: 40px"
+            >
+              <span class="currency-dollars" *ngIf="payment.is_dollars"
+                >USD</span
+              >
+              <span class="currency-mxn" *ngIf="!payment.is_dollars">MXN</span>
+              {{ item.tax | currency : "2" : "$" }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="total">
+            <th
+              mat-header-cell
+              class="primary"
+              *matHeaderCellDef
+              mat-sort-header="total"
+            >
+              SALDO ANTERIOR
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let item"
+              style="width: 10%; text-align: right; padding-right: 40px"
+            >
+              <span class="currency-dollars" *ngIf="payment.is_dollars"
+                >USD</span
+              >
+              <span class="currency-mxn" *ngIf="!payment.is_dollars">MXN</span>
+              {{ item.total - item.total_pay | currency : "$" }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="total_pay">
+            <th
+              mat-header-cell
+              class="primary"
+              *matHeaderCellDef
+              mat-sort-header="total_pay"
+            >
+              PAGO
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let item"
+              style="width: 10%; text-align: right; padding-right: 40px"
+            >
+              <span class="input-symbol">
+                <input
+                  class="custom-input"
+                  [ngModelOptions]="{ standalone: true }"
+                  type="number"
+                  [(ngModel)]="item.input_total"
+                  (ngModelChange)="updateValorsInvoice(item)"
+                />
+              </span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="remaining">
+            <th
+              mat-header-cell
+              class="primary"
+              *matHeaderCellDef
+              mat-sort-header="remaining"
+            >
+              SALDO INSOLUTO
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let item"
+              style="width: 10%; text-align: right; padding-right: 40px"
+            >
+              <span class="currency-dollars" *ngIf="payment.is_dollars"
+                >USD</span
+              >
+              <span class="currency-mxn" *ngIf="!payment.is_dollars">MXN</span>
+              {{
+                item.total - item.total_pay - item.input_total | currency : "$"
+              }}
+            </td>
+          </ng-container>
+        </table>
+      </div>
+      <br />
+    </mat-card>
+    <mat-grid-list cols="12" rowHeight="65px">
+      <mat-grid-tile [colspan]="12" [rowspan]="4">
+        <div class="item-spacer"></div>
+        <mat-card class="mat-elevation-z8 card-prop card-calculate">
+          <mat-card-header class="primary" style="padding: 10px">
+            <mat-icon style="font-size: 20px">attach_money</mat-icon>
+            <span> CALCULOS </span>
+          </mat-card-header>
+          <mat-grid-list cols="12" rowHeight="50px" style="margin-left: 10px">
+            <mat-grid-tile [colspan]="11" [rowspan]="1">
+              <span>PAGO: </span>
+              <div class="item-spacer"></div>
+              <span class="textColor">
+                <b
+                  >{{ payment.total - payment.total_in_use | currency : "$" }}
+                </b></span
+              >
+            </mat-grid-tile>
+            <mat-grid-tile [colspan]="11" [rowspan]="1">
+              <span>GASTADO:</span>
+              <div class="item-spacer"></div>
+              <span class="currency-dollars" *ngIf="payment.is_dollars"
+                >USD</span
+              >
+              <span class="currency-mxn" *ngIf="!payment.is_dollars">MXN</span>
+              <span class="textColor">
+                <b>{{ total_invoices | currency : "$" }}</b></span
+              >
+            </mat-grid-tile>
+            <mat-grid-tile [colspan]="11" [rowspan]="1">
+              <span>RESTANTE: </span>
+              <div class="item-spacer"></div>
+              <span class="currency-dollars" *ngIf="payment.is_dollars"
+                >USD</span
+              >
+              <span class="currency-mxn" *ngIf="!payment.is_dollars">MXN</span>
+              <span class="textColor">
+                <b
+                  >{{
+                    payment.total - payment.total_in_use - total_invoices
+                      | currency : "$"
+                  }}
+                </b></span
+              >
+            </mat-grid-tile>
+            <mat-grid-tile [colspan]="11" [rowspan]="1">
+              <div class="item-spacer"></div>
+              <mat-icon
+                *ngIf="
+                  payment.total - payment.total_in_use - total_invoices < 0
+                "
+                style="font-size: 30px; color: crimson"
+                aria-hidden="false"
+                >error</mat-icon
+              >
+              <mat-icon
+                *ngIf="
+                  payment.total - payment.total_in_use - total_invoices >= 0
+                "
+                style="font-size: 30px; color: darkgreen"
+                aria-hidden="false"
+                >check_circle</mat-icon
+              >
+
+              <div class="item-spacer"></div>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </mat-card>
+  <mat-card *ngIf="error" class="colorSecondary">
+    <div class="error">
+      <mat-icon style="font-size: 50px" aria-hidden="false">lock</mat-icon>
+      <h1>{{ error_msg }}</h1>
+    </div>
+  </mat-card>
+</div>

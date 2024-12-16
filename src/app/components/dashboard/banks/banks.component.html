@@ -1,0 +1,116 @@
+<mat-toolbar class="title">
+    <span>BANCOS</span>
+    <div class="item-spacer"></div>
+    <button mat-raised-button class="btnPrimary" (click)="createBank()" style="height:80%; margin-top: 10px;">
+        <mat-icon class="icon-size">add</mat-icon>AGREGAR
+    </button>
+
+</mat-toolbar><br>
+
+<div class="container">
+    <mat-card class="card">
+
+        <mat-grid-list cols="12" rowHeight="70px">
+            <mat-grid-tile [colspan]="colBig" [rowspan]="1">
+                <mat-form-field appearance="outline" floatLabel="always">
+                    <mat-label>BUSCAR</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" #input>
+
+                </mat-form-field>
+                <div class="item-spacer"></div>
+            </mat-grid-tile>
+            <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+
+
+                <button class="switch" mat-raised-button (click)="changeStateInactive(true)" [disabled]="isDisabled"
+                    *ngIf="!inactive" style="background-color:rgb(176, 35, 10);   color:aliceblue; width:95%; ">
+                    <mat-icon>close</mat-icon>VER INACTIVOS
+                </button>
+
+                <button class="switch" mat-raised-button (click)="changeStateInactive(false)" [disabled]="isDisabled"
+                    *ngIf="inactive" style="background-color:rgb(10, 176, 18); color:aliceblue; width:95%; ">
+                    <mat-icon>check</mat-icon> VER ACTIVOS
+                </button>
+
+
+            </mat-grid-tile>
+        </mat-grid-list>
+
+        <div class="mat-elevation-z8">
+
+            <div class="table-container">
+                <div class="overlay-loading" *ngIf="loading">
+                    <div class="spinner-wrapper">
+
+                        <mat-spinner diameter="50" *ngIf="loading" class="spinner" color="primary"></mat-spinner>
+                    </div>
+                </div>
+                <table mat-table [dataSource]="dataSource" matSort>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    <ng-container matColumnDef="bank">
+                        <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="bank">
+                            BANCO</th>
+                        <td mat-cell *matCellDef="let item" style="width:15%"> {{item.bank}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="account">
+                        <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="account">
+                            CUENTA </th>
+                        <td mat-cell *matCellDef="let item" style="width:15%"> {{item.account}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="clabe">
+                        <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="clabe">
+                            CLABE</th>
+                        <td mat-cell *matCellDef="let item" style="width:15%;   ">
+                            {{item.clabe}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="type_account">
+                        <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="type_account">
+                            TIPO</th>
+                        <td mat-cell *matCellDef="let item" style="width:15%; ">
+                            {{item.type_account == 1? 'NACIONAL': 'INTERNACIONAL' }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="total_mxn">
+                        <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="total_mxn">
+                            TOTAL EN PESOS
+                        </th>
+                        <td mat-cell *matCellDef="let item" style="width: 15%; text-align: right; padding-right: 20px">
+
+                            <span class="currency-mxn">MXN</span>{{ item.total_mxn | currency : "2"
+                            : "$" }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="total_dollars">
+                        <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="total_dollars">
+                            TOTAL EN DOLARES
+                        </th>
+                        <td mat-cell *matCellDef="let item" style="width: 15%; text-align: right; padding-right: 20px">
+                            <span class="currency-dollars">USD</span>
+
+                            {{ item.total_dollars | currency : "2" : "$" }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell class="primary" *matHeaderCellDef>
+                            ACCIONES </th>
+                        <td mat-cell *matCellDef="let item" style="width:10%; text-align: right;">
+
+
+                            <a *ngIf="inactive" class="btnAction" style="color:rgb(10, 132, 65)" (click)="restore(item)"
+                                matTooltip="RESTAURAR">
+                                <mat-icon class="custom-size-animation">settings_backup_restore</mat-icon>
+                            </a>
+                            <a *ngIf="!inactive" class="btnAction" style="color:rgb(193, 32, 32)"
+                                (click)="inactiveRecord(item)" matTooltip="DESACTIVAR">
+                                <mat-icon class="custom-size-animation">block</mat-icon>
+                            </a>
+                        </td>
+                    </ng-container>
+                </table>
+            </div>
+        </div>
+    </mat-card>
+</div>

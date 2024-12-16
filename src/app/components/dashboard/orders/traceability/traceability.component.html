@@ -1,0 +1,86 @@
+<mat-toolbar class="title">
+    <button mat-icon-button class="textColor" type="button" (click)="cancel()">
+        <mat-icon>arrow_back_ios</mat-icon>
+    </button>
+    <span>TRAZABILIDAD</span>
+    <div class="item-spacer"></div>
+    <button type="button" [disabled]="loading" (click)="openHistory()" class="btnSecondary"
+        style="height:80%; margin-top: 10px;" mat-raised-button>
+        <mat-icon class="icon-size">history</mat-icon>HISTORIAL DE PEDIDO
+    </button>
+    <button type="button" [disabled]="loading" *ngIf="!isSelectAll" (click)="selectAll(true)" class="btnSecondary"
+        style="height:80%; margin-top: 10px;" mat-raised-button>
+        <mat-icon class="icon-size">check_box_outline_blank</mat-icon>SELECCIONAR TODO
+    </button>
+    <button type="button" [disabled]="loading" *ngIf="isSelectAll" (click)="selectAll(false)" class="btnSecondary"
+        style="height:80%; margin-top: 10px;" mat-raised-button>
+        <mat-icon class="icon-size">check_box</mat-icon>SELECCIONAR TODO
+    </button>
+    <button type="button" [disabled]="loading" (click)="openEmailsByClient()" class="btnPrimary"
+        style="height:80%; margin-top: 10px;" mat-raised-button>
+        <mat-icon class="icon-size">mail</mat-icon>ENVIAR
+    </button>
+</mat-toolbar> <br>
+
+<div class="secondary">
+    <mat-spinner diameter="50" *ngIf="loading" class="spinner" color="primary"></mat-spinner>
+</div>
+<div class="container">
+    <mat-card class="card colorSecondary" *ngIf="!loading && !error">
+
+        <mat-card-header class="primary" style="padding:10px">
+            <mat-icon style="font-size:20px">history</mat-icon>
+            <span>
+                HISTORIA DE PEDIDO
+            </span>
+        </mat-card-header>
+
+        <mat-stepper orientation="horizontal" #stepper [selectedIndex]="currentStatus">
+            <mat-step [stepControl]="traceabilityFormGroup" class="primary">
+                <ng-template matStepLabel>PEDIDO</ng-template>
+                <ng-template matStepContent>
+                    <app-detail-order [order]="data.order[0]"></app-detail-order>
+                </ng-template>
+            </mat-step>
+
+            <mat-step [stepControl]="traceabilityFormGroup">
+                <ng-template matStepLabel>INFORMES DE CALIDAD</ng-template>
+                <ng-template matStepContent>
+                    <app-certificates-traceability [certificates]="data.certificates"></app-certificates-traceability>
+                </ng-template>
+            </mat-step>
+
+            <mat-step [stepControl]="traceabilityFormGroup">
+                <ng-template matStepLabel>NOTAS DE VENTA Y PACKING LIST</ng-template>
+                <ng-template matStepContent>
+                    <app-departures-traceability [departures]="data.departures"></app-departures-traceability>
+                </ng-template>
+            </mat-step>
+
+
+            <mat-step [stepControl]="traceabilityFormGroup">
+                <ng-template matStepLabel>FACTURAS</ng-template>
+                <ng-template matStepContent>
+                    <app-invoices-traceability [invoices]="data.invoices" [user]="user"></app-invoices-traceability>
+                </ng-template>
+            </mat-step>
+
+            <mat-step [stepControl]="traceabilityFormGroup">
+                <ng-template matStepLabel>COMPLEMENTOS DE PAGO</ng-template>
+                <ng-template matStepContent>
+                    <app-payments-plugins-traceability [payments_plugins]="data.payments_plugins"
+                        [user]="user"></app-payments-plugins-traceability>
+                </ng-template>
+            </mat-step>
+        </mat-stepper>
+
+    </mat-card>
+    <mat-card *ngIf="error" class="colorSecondary">
+        <div class="error">
+            <mat-icon style="font-size: 50px" aria-hidden="false">lock</mat-icon>
+            <h1>{{error_msg}}</h1>
+        </div>
+    </mat-card>
+
+
+</div>

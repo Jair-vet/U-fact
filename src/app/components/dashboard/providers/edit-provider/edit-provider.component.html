@@ -1,0 +1,381 @@
+<form [formGroup]="form" (ngSubmit)="updateRecord()">
+
+
+    <mat-toolbar class="title">
+        <button mat-icon-button class="textColor" type="button" (click)="cancel()">
+            <mat-icon>arrow_back_ios</mat-icon>
+        </button>
+
+
+        <span>PROVEEDOR</span>
+        <div class="item-spacer"></div>
+
+
+        <button type="submit" [ngClass]="{'btnPrimary':true, 'blink_me' : !form.invalid }" [disabled]="form.invalid"
+            style="height:80%; margin-top: 10px;" mat-raised-button>
+            <mat-icon class="icon-size">save</mat-icon>GUARDAR
+        </button>
+
+
+    </mat-toolbar> <br>
+
+    <div class="container">
+
+
+        <div class="secondary">
+            <mat-spinner diameter="50" *ngIf="loading" class="spinner" color="primary"></mat-spinner>
+
+        </div>
+        <mat-card *ngIf="!loading && !error" style="height:100% ;" class="colorSecondary">
+
+
+            <mat-card class="mat-elevation-z8 card-prop" style="padding:0%; margin-bottom: 20px;">
+                <mat-card-header class="primary" style="padding:10px">
+                    <mat-icon style="font-size:20px">receipt</mat-icon>
+                    <span>
+                        DATOS GENERALES
+                    </span>
+                </mat-card-header>
+
+                <mat-grid-list cols="12" rowHeight="80px">
+
+                    <mat-grid-tile [colspan]="colBig" [rowspan]="1">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <mat-label>RAZÓN SOCIAL</mat-label>
+                            <input matInput name="name" formControlName="name">
+                            <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
+                        </mat-form-field>
+                    </mat-grid-tile>
+
+                    <mat-grid-tile [colspan]="colBig" [rowspan]="1">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <mat-label>R.F.C</mat-label>
+                            <input matInput name="rfc" [minlength]="minRFC" [maxlength]="maxRFC" formControlName="rfc">
+                            <mat-error *ngIf="form.invalid">Ingresar un RFC valido </mat-error>
+                        </mat-form-field>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="colBig" [rowspan]="1">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <mat-label>REPRESENTANTE</mat-label>
+                            <input matInput name="representative" formControlName="representative">
+                            <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
+                        </mat-form-field>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="colBig" [rowspan]="1">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <mat-label>NÚMERO TELEFONICO</mat-label>
+                            <input matInput formControlName="telephone" maxlength="10" minlength="10" name="telephone">
+                            <mat-error *ngIf="form.invalid">Ingresar un telefono de diez números</mat-error>
+                        </mat-form-field>
+                    </mat-grid-tile>
+
+                    <mat-grid-tile [colspan]="colBig" [rowspan]="1">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <mat-label>CORREO</mat-label>
+                            <input matInput formControlName="email" name="email">
+                            <mat-error *ngIf="form.invalid">Ingresa correo valido</mat-error>
+                        </mat-form-field>
+                    </mat-grid-tile>
+                    <form [formGroup]="formTradename" (ngSubmit)="createContact()">
+
+                    </form>
+                </mat-grid-list>
+            </mat-card>
+
+            <mat-card class="mat-elevation-z8 card-prop" style="padding:0%; margin-bottom: 20px;">
+                <mat-card-header class="primary" style="padding:10px">
+                    <mat-icon style="font-size:20px">account_balance</mat-icon>
+                    <span>
+                        DATOS BANCARIOS
+                    </span>
+                </mat-card-header>
+                <mat-grid-list cols="12" rowHeight="80px">
+                    <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+                        <mat-form-field floatPlaceholder="never" appearance="outline" floatLabel="always">
+                            <mat-label>BANCO</mat-label>
+                            <mat-select [formControl]="banksCtrl" placeholder="Seleccionar Banco" #singleSelect
+                                name="baksCtrl" (selectionChange)="changePropertiesFieldsBanks()">
+                                <mat-option>
+                                    <ngx-mat-select-search placeholderLabel="Buscar..." [formControl]="banksFilterCtrl">
+                                    </ngx-mat-select-search>
+                                </mat-option>
+                                <mat-option *ngFor="let bank of filteredBanks | async" [value]="bank">
+                                    {{bank.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+                        <mat-form-field appearance="outline" floatLabel="always">
+
+                            <input matInput [maxlength]="18" [minlength]="18" formControlName="interbank_code"
+                                name="interbank_code">
+                            <mat-error *ngIf="form.invalid">Ingresar cadena de 18 números</mat-error>
+                            <mat-label>CLABE INTERBANCARIA</mat-label>
+                        </mat-form-field>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <mat-label>NUMERO DE CUENTA</mat-label>
+                            <input matInput name="account" formControlName="account">
+                            <mat-error *ngIf="form.invalid">Ingresar solo números</mat-error>
+                        </mat-form-field>
+                    </mat-grid-tile>
+
+                </mat-grid-list>
+            </mat-card>
+
+            <mat-card class="mat-elevation-z8 card-prop" style="padding:0%; margin-bottom: 20px;">
+                <mat-card-header class="primary" style="padding:10px">
+                    <mat-icon style="font-size:20px">contact_phone</mat-icon>
+                    <span>
+                        NOMBRES COMERCIALES
+                    </span>
+                </mat-card-header>
+                <mat-grid-list cols="12" rowHeight="80px">
+
+                    <form [formGroup]="formTradename" (ngSubmit)="createTradename()">
+
+                        <mat-grid-tile [colspan]="colBig" [rowspan]="1">
+                            <mat-form-field appearance="outline" floatLabel="always">
+                                <mat-label>NOMBRE COMERCIAL</mat-label>
+                                <input matInput name="name" formControlName="name">
+                                <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
+                            </mat-form-field>
+                        </mat-grid-tile>
+
+                        <mat-grid-tile [colspan]="colBig" [rowspan]="1">
+                            <button type="submit" class="btnPrimary" [disabled]="formTradename.invalid"
+                                mat-raised-button>
+                                <mat-icon>add</mat-icon>AGREGAR NOMBRE COMERCIAL
+                            </button>
+                            <div class="item-spacer"></div>
+                        </mat-grid-tile>
+                    </form>
+                    <mat-grid-tile [colspan]="12" [rowspan]="2">
+                        <div class="table-container-small">
+                            <div class="overlay-loading" *ngIf="loadingTradenames">
+                                <div class="spinner-wrapper">
+
+                                    <mat-spinner diameter="50" *ngIf="loadingTradenames" class="spinner"
+                                        color="primary"></mat-spinner>
+                                </div>
+                            </div>
+                            <table mat-table [dataSource]="dataTradenames" matSort>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumnsTradenames; sticky: true"
+                                    style="width:50%"></tr>
+                                <tr mat-row *matRowDef="let row; columns:  displayedColumnsTradenames;"
+                                    style="width:50%"></tr>
+
+
+                                <ng-container matColumnDef="name" style="width:50%">
+                                    <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="name">
+                                        NOMBRE
+                                    </th>
+                                    <td mat-cell *matCellDef="let tradename"> {{tradename.name }}
+                                    </td>
+                                </ng-container>
+
+
+                                <ng-container matColumnDef="actions" style="width:50%">
+                                    <th mat-header-cell class="primary" *matHeaderCellDef>
+                                        ACCIONES </th>
+                                    <td mat-cell *matCellDef="let tradename; let i = index">
+                                        <a class="btnAction" style="color:rgb(193, 32, 32)"
+                                            (click)="deleteTradename(tradename.id)" matTooltip="ELIMINAR">
+                                            <mat-icon class="custom-size-animation">delete</mat-icon>
+                                        </a>
+                                    </td>
+                                </ng-container>
+                            </table>
+                        </div><br>
+                    </mat-grid-tile>
+
+                </mat-grid-list>
+
+            </mat-card>
+
+            <mat-card class="mat-elevation-z8 card-prop" style="padding:0%; margin-bottom: 20px;">
+                <mat-card-header class="primary" style="padding:10px">
+                    <mat-icon style="font-size:20px">contact_phone</mat-icon>
+                    <span>
+                        DATOS DE CONTACTO
+                    </span>
+                </mat-card-header>
+                <mat-grid-list cols="12" rowHeight="80px">
+
+
+                    <form [formGroup]="formContact" (ngSubmit)="createContact()">
+
+                        <mat-grid-tile [colspan]="colBig" [rowspan]="1">
+                            <mat-form-field appearance="outline" floatLabel="always">
+                                <mat-label>NOMBRE</mat-label>
+                                <input matInput formControlName="name" name="name">
+                                <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
+                            </mat-form-field>
+                        </mat-grid-tile>
+
+                        <mat-grid-tile [colspan]="colSmall" [rowspan]="3">
+                            <mat-list>
+
+                                <mat-label><b>TIPO DE CORREO:</b> </mat-label>
+
+                                <mat-radio-group formControlName="id_type_email" aria-labelledby="radio-group-label"
+                                    class="radio-group ">
+                                    <mat-list>
+                                        <mat-radio-button class="radio-button" value="4">
+                                            RECIBO DE PAGO
+                                        </mat-radio-button><br>
+                                        <mat-radio-button class="radio-button" value="5">
+                                            RECIBO DE OC
+                                        </mat-radio-button><br>
+                                        <mat-radio-button class="radio-button" value="6">
+                                            OTRO
+                                        </mat-radio-button><br>
+                                    </mat-list>
+                                </mat-radio-group>
+                            </mat-list>
+
+                        </mat-grid-tile>
+                        <mat-grid-tile [colspan]="colBig" [rowspan]="1">
+                            <mat-form-field appearance="outline" floatLabel="always">
+                                <mat-label>NÚMERO TELEFONICO</mat-label>
+                                <input matInput formControlName="telephone" maxlength="10" minlength="10"
+                                    name="telephone">
+                                <mat-error *ngIf="form.invalid">Ingresar una cadena de diez números</mat-error>
+                            </mat-form-field>
+                        </mat-grid-tile>
+
+                        <mat-grid-tile [colspan]="colBig" [rowspan]="1">
+                            <mat-form-field appearance="outline" floatLabel="always">
+                                <mat-label>CORREO</mat-label>
+                                <input matInput formControlName="email" name="email">
+                                <mat-error *ngIf="formContact.invalid">Ingresa un correo electronico
+                                    correcto</mat-error>
+                            </mat-form-field>
+                        </mat-grid-tile>
+
+                        <mat-grid-tile [colspan]="12" [rowspan]="1">
+                            <div class="item-spacer"></div>
+                            <button type="submit" class="btnPrimary" [disabled]="formContact.invalid" mat-raised-button>
+                                <mat-icon>add</mat-icon>AGREGAR CONTACTO
+                            </button>
+                            <div class="item-spacer"></div>
+                        </mat-grid-tile>
+                    </form>
+                    <mat-grid-tile [colspan]="12" [rowspan]="3">
+                        <div class="table-container-small">
+                            <div class="overlay-loading" *ngIf="loadingContacts">
+                                <div class="spinner-wrapper">
+
+                                    <mat-spinner diameter="50" *ngIf="loadingContacts" class="spinner"
+                                        color="primary"></mat-spinner>
+                                </div>
+                            </div>
+                            <table mat-table [dataSource]="dataContacts" matSort>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumnsContacts; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumnsContacts;"></tr>
+
+                                <ng-container matColumnDef="name">
+                                    <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="name"> NOMBRE
+                                    </th>
+                                    <td mat-cell *matCellDef="let contact" style="width:20%"> {{contact.name }} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="email">
+                                    <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="email">
+                                        CORREO </th>
+                                    <td mat-cell *matCellDef="let contact" style="width:20%"> {{contact.email }} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="telephone">
+                                    <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="telephone">
+                                        TELEFONO
+                                    </th>
+                                    <td mat-cell *matCellDef="let contact" style="width:10%">{{contact.telephone}} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="type">
+                                    <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="type"> TIPO
+                                    </th>
+                                    <td mat-cell *matCellDef="let contact" style="width:10%">{{contact.type}} </td>
+                                </ng-container>
+
+
+                                <ng-container matColumnDef="actions">
+                                    <th mat-header-cell class="primary" *matHeaderCellDef>
+                                        ACCIONES </th>
+                                    <td mat-cell *matCellDef="let contact; let i = index"
+                                        style="width:10%; text-align: right;">
+                                        <a class="btnAction" style="color:rgb(193, 32, 32)"
+                                            (click)="deleteContact(contact.id)" matTooltip="ELIMINAR">
+                                            <mat-icon class="custom-size-animation">delete</mat-icon>
+                                        </a>
+                                    </td>
+                                </ng-container>
+                            </table>
+                        </div>
+                    </mat-grid-tile>
+                </mat-grid-list>
+
+            </mat-card>
+
+            <mat-card class="mat-elevation-z8 card-prop" style="padding:0%; margin-bottom: 20px;">
+                <mat-card-header class="primary" style="padding:10px">
+                    <mat-icon style="font-size:20px">receipt</mat-icon>
+                    <span>
+                        COMENTARIOS Y CREDITO
+                    </span>
+                </mat-card-header>
+
+                <mat-grid-list cols="12" rowHeight="80px">
+
+
+
+                    <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <mat-label>CREDITO</mat-label>
+                            <span matPrefix>$ &nbsp;</span>
+                            <input matInput formControlName="credit_limit" style="text-align:right;">
+                            <mat-error *ngIf="form.invalid">Ingresa solo números</mat-error>
+                        </mat-form-field>
+                    </mat-grid-tile>
+
+
+                    <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <mat-label>DÍAS DE CREDITO</mat-label>
+                            <input matInput formControlName="credit_days" style="text-align:right;">
+                            <mat-error *ngIf="form.invalid">Ingresa solo números</mat-error>
+                        </mat-form-field>
+                    </mat-grid-tile>
+
+                    <mat-grid-tile [colspan]="colMedium" [rowspan]="2">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <mat-label>COMENTARIOS</mat-label>
+                            <textarea matInput formControlName="comments" rows="6"></textarea>
+
+                            <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
+                        </mat-form-field>
+                    </mat-grid-tile>
+
+
+                </mat-grid-list>
+            </mat-card>
+        </mat-card><br>
+        <mat-card *ngIf="error" class="colorSecondary">
+            <div class="error">
+                <mat-icon style="font-size: 50px" aria-hidden="false">lock</mat-icon>
+                <h1>{{error_msg}}</h1>
+            </div>
+        </mat-card>
+
+
+
+
+
+
+    </div>
+</form>

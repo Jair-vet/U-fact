@@ -1,0 +1,160 @@
+<mat-toolbar class="title">
+  <span>PAGOS</span>
+  <div class="item-spacer"></div>
+  <button mat-raised-button class="btnPrimary" (click)="openBox()" style="height: 80%; margin-top: 10px">
+    <mat-icon class="icon-size">payments</mat-icon>CAJA
+  </button>
+</mat-toolbar><br />
+
+<div class="container" *ngIf="!loading">
+  <mat-card class="card" *ngIf="!error">
+    <mat-grid-list cols="12" rowHeight="70px">
+      <mat-grid-tile [colspan]="12" [rowspan]="1">
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>BUSCAR</mat-label>
+          <input matInput (keyup)="applyFilter()" [(ngModel)]="valueSearch" #input />
+        </mat-form-field>
+        <div class="item-spacer"></div>
+      </mat-grid-tile>
+    </mat-grid-list>
+
+    <div class="mat-elevation-z8">
+      <div class="table-container-pagination">
+        <table mat-table [dataSource]="dataSource" matSort>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+          <!-- Position Column -->
+
+          <ng-container matColumnDef="number">
+            <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="number">
+              NUMERO
+            </th>
+            <td mat-cell *matCellDef="let item" style="width: 10%">
+              {{ item.number }}
+            </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="client">
+            <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="client">
+              CLIENTE
+            </th>
+            <td mat-cell *matCellDef="let item" style="width: 25%">
+              <button type="button" [class]="getClassToButtonClient(item.id_client)"
+                (click)="seeDetailsBalanceClient(item)" style="margin-top: 5px; width: 70%" mat-raised-button>
+                <mat-icon *ngIf="item.id_client == 0" class="icon-size">error</mat-icon>
+                <mat-icon *ngIf="item.id_client != 0" class="icon-size">monetization_on</mat-icon>
+                {{ item.client }}
+              </button>
+            </td>
+          </ng-container>
+
+          <!-- Weight Column -->
+          <ng-container matColumnDef="date">
+            <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="date">
+              FECHA
+            </th>
+            <td mat-cell *matCellDef="let item" style="width: 15%">
+              {{ item.date }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="payment_method">
+            <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="payment_method">
+              METODO DE PAGO
+            </th>
+            <td mat-cell *matCellDef="let item" style="width: 10%">
+              {{ item.payment_method }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="bank">
+            <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="bank">
+              CUENTA DE BANCO
+            </th>
+            <td mat-cell *matCellDef="let item" style="width: 15%">
+              {{ item.bank }} [{{item.account}}]
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="total">
+            <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="total">
+              TOTAL
+            </th>
+            <td mat-cell *matCellDef="let item" style="width: 15%; text-align: right; padding-right: 20px">
+              <span class="currency-dollars" *ngIf="item.is_dollars">USD</span>
+              <span class="currency-mxn" *ngIf="!item.is_dollars">MXN</span>{{ item.total | currency : "2" : "$" }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="saldo">
+            <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="saldo">
+              SALDO
+            </th>
+            <td mat-cell *matCellDef="let item" style="width: 15%; text-align: right; padding-right: 20px">
+              <span class="currency-dollars" *ngIf="item.is_dollars">USD</span>
+              <span class="currency-mxn" *ngIf="!item.is_dollars">MXN</span>{{ item.total - item.total_in_use | currency
+              : "2" : "$" }}
+            </td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell class="primary" *matHeaderCellDef>ACCIONES</th>
+            <td mat-cell *matCellDef="let item" style="width: 10%; text-align: right">
+              <a routerLink="/dashboard/payments/payment-plugin/{{ item.id }}" *ngIf="
+                  item.add_payment_plugin &&
+                  item.id_client != 0 &&
+                  item.total - item.total_in_use > 0 &&
+                  item.path_attachment != ''
+                " style="color: var(--success)" matTooltip="Complemento de Pago">
+                <mat-icon class="custom-size-animation">monetization_on</mat-icon>
+              </a>
+              <a *ngIf="
+                  !item.add_payment_plugin ||
+                  item.id_client == 0 ||
+                  item.total - item.total_in_use <= 0 ||
+                  item.path_attachment == ''
+                " style="color: var(--error)" matTooltip="Pago no disponible">
+                <mat-icon class="custom-size-animation">monetization_on</mat-icon>
+              </a>
+              <a *ngIf="
+                  (item.path_attachment != '' && item.id_payment_method != 6) ||
+                  item.id_payment_method == 6
+                " style="color: var(--document_two)" matTooltip="Comprobante" (click)="openAttachment(item)">
+                <mat-icon class="custom-size-animation">receipt</mat-icon>
+              </a>
+
+              <a *ngIf="
+                  item.path_attachment == '' &&
+                  item.id_client != 0 &&
+                  item.id_payment_method != 6
+                " style="color: rgb(172, 5, 5)" matTooltip="Sin Comprobante" (click)="openAddAttachment(item)">
+                <mat-icon class="custom-size-animation">receipt</mat-icon>
+              </a>
+            </td>
+          </ng-container>
+        </table>
+      </div>
+      <div style="display: flex">
+        <div class="item-spacer"></div>
+        <app-total-tag [total]="total"></app-total-tag>
+        <app-pagination [loading]="loading" (numberPageEmitter)="changePage($event)" [numberPage]="numberPage"
+          [labelPage]="totalPages"></app-pagination>
+      </div>
+    </div>
+  </mat-card>
+
+  <mat-card *ngIf="error" class="colorSecondary">
+    <div class="error">
+      <mat-icon style="font-size: 50px" aria-hidden="false">lock</mat-icon>
+      <h1>{{ error_msg }}</h1>
+    </div>
+  </mat-card>
+</div>
+<div class="container" *ngIf="loading">
+  <mat-card class="card">
+    <mat-spinner diameter="50" class="spinner" style="top: 40%" color="primary"></mat-spinner>
+  </mat-card>
+</div>

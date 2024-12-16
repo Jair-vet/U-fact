@@ -1,0 +1,206 @@
+<mat-toolbar class="title">
+    <span>COBRANZA</span>
+    <div class="item-spacer"></div>
+
+</mat-toolbar> <br>
+<div class="container">
+    <mat-card class="card" *ngIf="!error">
+        <mat-grid-list cols="12" rowHeight="70px">
+            <mat-grid-tile [colspan]="12" [rowspan]="1">
+                <mat-form-field appearance="outline" floatLabel="always">
+                    <mat-label>BUSCAR</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" #input>
+                </mat-form-field>
+                <div class="item-spacer"></div>
+            </mat-grid-tile>
+
+        </mat-grid-list>
+        <div class="mat-elevation-z8" style="width: 133%;">
+            <div class="table-container-large">
+                <div class="overlay-loading" *ngIf="loading" style="width: 133%;">
+                    <div class="spinner-wrapper">
+
+                        <mat-spinner diameter="50" *ngIf="loading" class="spinner" color="primary"></mat-spinner>
+                    </div>
+                </div>
+                <table mat-table [dataSource]="dataSource" matSort>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                    <!-- Position Column -->
+
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="name"> CLIENTE </th>
+                        <td mat-cell *matCellDef="let client" style="width:15%"> {{client.name}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="debt_sales_notes_mxn_vigency">
+                        <th mat-header-cell class="primary" *matHeaderCellDef
+                            mat-sort-header="debt_sales_notes_mxn_vigency">NOTAS DE VENTA AL CORRIENTE PESOS </th>
+                        <td mat-cell *matCellDef="let client" style="width:10%">
+                            <span class="currency-mxn">MXN</span>
+                            <span matTooltip="{{client.name}}" style="color:var(--success)"> {{
+                                client.debt_sales_notes_mxn_vigency | currency : "2"
+                                :"$" }}</span>
+
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="debt_sales_notes_mxn_no_vigency">
+                        <th mat-header-cell class="primary" *matHeaderCellDef
+                            mat-sort-header="debt_sales_notes_mxn_no_vigency">NOTAS DE VENTA VENCIDAS
+                            PESOS
+                        </th>
+                        <td mat-cell *matCellDef="let client" style="width:10%">
+                            <span class="currency-mxn">MXN</span>
+                            <span matTooltip="{{client.name}}" style="color:var(--error)">
+                                {{client.debt_sales_notes_mxn_no_vigency | currency : "2"
+                                :
+                                "$" }}</span>
+
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="debt_sales_notes_usd_vigency">
+                        <th mat-header-cell class="primary" *matHeaderCellDef
+                            mat-sort-header="debt_sales_notes_usd_vigency">NOTAS DE VENTA AL CORRIENTE DOLARES </th>
+                        <td mat-cell *matCellDef="let client" style="width:10%">
+                            <span class="currency-dollars">USD</span>
+                            <span matTooltip="{{client.name}}" style="color:var(--success)"> {{
+                                client.debt_sales_notes_usd_vigency | currency : "2"
+                                :"$" }}</span>
+
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="debt_sales_notes_usd_no_vigency">
+                        <th mat-header-cell class="primary" *matHeaderCellDef
+                            mat-sort-header="debt_sales_notes_usd_no_vigency">NOTAS VENTAS VENCIDAS
+                            DOLARES
+                        </th>
+                        <td mat-cell *matCellDef="let client" style="width:10%">
+                            <span class="currency-dollars">USD</span>
+                            <span matTooltip="{{client.name}}" style="color:var(--error)">
+                                {{client.debt_sales_notes_usd_no_vigency | currency : "2"
+                                :
+                                "$" }}</span>
+
+                        </td>
+                    </ng-container>
+
+                    <!-- Weight Column -->
+                    <ng-container matColumnDef="debt_invoices_mxn_vigency">
+                        <th mat-header-cell class="primary" *matHeaderCellDef
+                            mat-sort-header="debt_invoices_mxn_vigency">FACTURAS AL CORRIENTE PESOS </th>
+                        <td mat-cell *matCellDef="let client" style="width:10%">
+                            <span class="currency-mxn">MXN</span>
+                            <span matTooltip="{{client.name}}" style="color:var(--success)"> {{
+                                client.debt_invoices_mxn_vigency | currency : "2"
+                                :"$" }}</span>
+
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="debt_invoices_mxn_no_vigency">
+                        <th mat-header-cell class="primary" *matHeaderCellDef
+                            mat-sort-header="debt_invoices_mxn_no_vigency">FACTURAS VENCIDAS
+                            PESOS
+                        </th>
+                        <td mat-cell *matCellDef="let client" style="width:10%">
+                            <span class="currency-mxn">MXN</span>
+                            <span matTooltip="{{client.name}}" style="color:var(--error)">
+                                {{client.debt_invoices_mxn_no_vigency | currency : "2" :
+                                "$" }}</span>
+
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="debt_invoices_usd_vigency">
+                        <th mat-header-cell class="primary" *matHeaderCellDef
+                            mat-sort-header="debt_invoices_usd_vigency">FACTURAS AL CORRIENTE DOLARES </th>
+                        <td mat-cell *matCellDef="let client" style="width:10%">
+                            <span class="currency-dollars">USD</span>
+                            <span matTooltip="{{client.name}}" style="color:var(--success)"> {{
+                                client.debt_invoices_usd_vigency | currency : "2"
+                                :"$" }}</span>
+
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="debt_invoices_usd_no_vigency">
+                        <th mat-header-cell class="primary" *matHeaderCellDef
+                            mat-sort-header="debt_invoices_usd_no_vigency">FACTURAS VENCIDAS
+                            DOLARES
+                        </th>
+                        <td mat-cell *matCellDef="let client" style="width:10%">
+                            <span class="currency-dollars">USD</span>
+                            <span matTooltip="{{client.name}}" style="color:var(--error)">
+                                {{client.debt_invoices_usd_no_vigency | currency : "2" :
+                                "$" }}</span>
+
+                        </td>
+                    </ng-container>
+
+
+
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell class="primary" *matHeaderCellDef>
+                            ACCIONES </th>
+                        <td mat-cell *matCellDef="let client" style="width:5%; text-align: right;">
+
+                            <a class="btnAction" (click)="goToBalance(client)" style="color:var(--document_three)"
+                                matTooltip="BALANCE">
+                                <mat-icon class="custom-size-animation">balance</mat-icon>
+                            </a>
+
+                        </td>
+                    </ng-container>
+                </table>
+
+            </div>
+            <div style="display: flex;">
+                <div class="item-spacer"></div>
+                <app-total-tag [total]="total_debt_sales_notes_mxn_no_vigency" [label]="'TOTAL NOTAS EN PESOS'"
+                    [colorLabel]="'var(--error)'" [isCurrency]="true">
+                </app-total-tag>
+                <app-total-tag [total]="total_debt_sales_notes_mxn_vigency" [label]="'TOTAL NOTAS EN PESOS'"
+                    [colorLabel]="'var(--success)'" [isCurrency]="true">
+                </app-total-tag>
+                <app-total-tag [total]="total_debt_sales_notes_usd_no_vigency" [label]="'TOTAL NOTAS EN DOLARES'"
+                    [colorLabel]="'var(--error)'" [isCurrency]="true">
+                </app-total-tag>
+                <app-total-tag [total]="total_debt_sales_notes_usd_vigency" [label]="'TOTAL NOTAS EN DOLARES '"
+                    [colorLabel]="'var(--success)'" [isCurrency]="true">
+                </app-total-tag>
+
+                <app-total-tag [total]="total_debt_invoices_mxn_no_vigency" [label]="'TOTAL FACTURAS EN PESOS '"
+                    [colorLabel]="'var(--error)'" [isCurrency]="true">
+                </app-total-tag>
+                <app-total-tag [total]="total_debt_invoices_mxn_vigency" [label]="'TOTAL FACTURAS EN PESOS'"
+                    [colorLabel]="'var(--success)'" [isCurrency]="true">
+                </app-total-tag>
+                <app-total-tag [total]="total_debt_invoices_usd_no_vigency" [label]="'TOTAL FACTURAS EN DOLARES '"
+                    [colorLabel]="'var(--error)'" [isCurrency]="true">
+                </app-total-tag>
+                <app-total-tag [total]="total_debt_invoices_usd_vigency" [label]="'TOTAL FACTURAS EN DOLARES'"
+                    [colorLabel]="'var(--success)'" [isCurrency]="true">
+                </app-total-tag>
+
+
+            </div>
+
+
+        </div>
+    </mat-card>
+
+    <mat-card *ngIf="error" class="colorSecondary">
+        <div class="error">
+            <mat-icon style="font-size: 50px" aria-hidden="false">lock</mat-icon>
+            <h1>{{error_msg}}</h1>
+        </div>
+    </mat-card>
+
+</div>

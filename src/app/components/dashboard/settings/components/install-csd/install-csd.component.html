@@ -1,0 +1,94 @@
+<mat-card style="padding:0%;  width: 100%;height:100%;">
+
+    <mat-spinner diameter="50" *ngIf="loading" class="spinner" color="primary"></mat-spinner>
+    <form [formGroup]="form" *ngIf=" !loading" (ngSubmit)="installCERT()">
+
+        <mat-dialog-content class="mat-typography">
+            <mat-card-header class="headerPrimary" style="padding:10px">
+                <mat-icon style="font-size:20px">check_circle</mat-icon>
+                <span>
+                    AGREGAR CSD
+                </span>
+            </mat-card-header>
+
+
+            <mat-grid-list cols="12" rowHeight="80px">
+                <mat-grid-tile style="margin-left:10px" [colspan]="12" [rowspan]="1">
+                    <span> <b>EN ESTA SECCIÓN PUEDES CARGAR TU CSD PARA EMITIR TUS CFDI</b> </span>
+                    <div class="item-spacer"></div>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="9" [rowspan]="1">
+                    <mat-form-field appearance="outline" floatLabel="always">
+
+                        <input name="file_cer" matInput formControlName="file_cer" [value]="selectedFileCERname"
+                            [readonly]="true">
+
+                        <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
+                        <mat-label>INGRESA TÚ CERTIFICADO .CER</mat-label>
+                    </mat-form-field>
+                </mat-grid-tile>
+
+                <mat-grid-tile [colspan]="3" [rowspan]="1">
+
+                    <button type="button" style="width:90%;" class="primary" mat-raised-button
+                        (click)="fileCER.click()">
+                        {{textButtonCER}} <mat-icon class="icon-size">folder</mat-icon>
+                    </button>
+
+                    <input (change)="onFileSelectedCER($event)" hidden accept=".cer" #fileCER type="file">
+                    <div class="item-spacer"></div>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="9" [rowspan]="1">
+                    <mat-form-field appearance="outline" floatLabel="always">
+
+                        <input name="file_key" matInput formControlName="file_key" [value]="selectedFileKEYname"
+                            [readonly]="true">
+
+                        <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
+
+                        <mat-label>INGRESA TÚ ARCHIVO .KEY</mat-label>
+                    </mat-form-field>
+                </mat-grid-tile>
+
+                <mat-grid-tile [colspan]="3" [rowspan]="1">
+
+                    <button type="button" style="width:90%;" class="primary" mat-raised-button
+                        (click)="fileKEY.click()">{{textButtonKEY}} <mat-icon class="icon-size">folder</mat-icon>
+                    </button>
+
+                    <input (change)="onFileSelectedKEY($event)" hidden accept=".key" #fileKEY type="file">
+                    <div class="item-spacer"></div>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="12" [rowspan]="1">
+                    <mat-form-field appearance="outline" floatLabel="always">
+
+                        <input name="password_csd" [type]="showPassword ? 'text' : 'password'" matInput
+                            formControlName="password_csd">
+                        <mat-icon matSuffix (click)="togglePasswordVisibility()">
+                            {{showPassword?'visibility_off':'visibility'}}
+                        </mat-icon>
+                        <mat-label>INGRESAR CONTRASEÑA DE CSD</mat-label>
+                    </mat-form-field>
+                </mat-grid-tile>
+            </mat-grid-list>
+
+
+
+
+
+        </mat-dialog-content>
+
+
+
+        <mat-dialog-actions>
+            <div class="item-spacer"></div>
+            <button type="button" mat-dialog-close style="margin: 5px ;" mat-raised-button color="basic">
+                <mat-icon class="size-icon">close</mat-icon>CERRAR
+            </button>
+            <button type="submit" style="margin: 5px ;" class="primary" [disabled]="form.invalid" mat-raised-button>
+                <mat-icon class="size-icon">save</mat-icon>
+                GUARDAR
+            </button>
+        </mat-dialog-actions>
+    </form>
+</mat-card>

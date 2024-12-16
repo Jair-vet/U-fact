@@ -1,0 +1,46 @@
+<mat-card>
+    <mat-card-header class="primary" style="padding:10px">
+        <mat-icon style="font-size:20px">library_books</mat-icon>
+        <span>
+            HISTORIAL DE PRODUCTO
+        </span>
+    </mat-card-header>
+
+    <mat-stepper orientation="vertical" #stepper [selectedIndex]="currentStatus">
+        <mat-step [stepControl]="oneFormGroup" class="primary">
+            <ng-template matStepLabel>POR PRODUCIR</ng-template>
+            <ng-template matStepContent>
+                <p *ngFor="let item of list_status_one">{{item.date}} -- <i><b>{{item.user}}</b></i></p>
+            </ng-template>
+        </mat-step>
+        <mat-step [stepControl]="twoFormGroup">
+
+            <ng-template matStepLabel>EN PRODUCCIÓN</ng-template>
+            <ng-template matStepContent>
+                <p *ngFor="let item of list_status_two">{{item.date}} -- <i><b>{{item.user}}</b></i>
+                </p>
+            </ng-template>
+
+        </mat-step>
+        <mat-step [stepControl]="threeFormGroup">
+            <ng-template matStepLabel>TERMINADO</ng-template>
+            <ng-template matStepContent>
+                <p *ngFor="let item of list_status_three">{{item.date}} -- <i><b>{{item.user}}</b></i></p>
+            </ng-template>
+        </mat-step>
+
+        <mat-step [stepControl]="fourFormGroup">
+            <ng-template matStepLabel>RECHAZADO</ng-template>
+            <ng-template matStepContent>
+                <p *ngFor="let item of list_status_four">{{item.date}} -- <i><b>{{item.user}}</b></i></p>
+            </ng-template>
+        </mat-step>
+    </mat-stepper>
+    <mat-dialog-actions>
+        <div class="item-spacer"></div>
+
+        <button type="button" mat-dialog-close style="margin: 5px ;" mat-raised-button color="basic">
+            <mat-icon class="size-icon">close</mat-icon>CERRAR
+        </button>
+    </mat-dialog-actions>
+</mat-card>

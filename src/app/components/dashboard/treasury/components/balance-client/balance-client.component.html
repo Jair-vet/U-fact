@@ -1,0 +1,56 @@
+<mat-grid-list cols="12" rowHeight="80px">
+    <mat-grid-tile [colspan]="colSmall" [rowspan]="5">
+        <mat-card class="mat-elevation-z8  pointer"
+            style="background-color: var(--error-two); width: 80%; height: 70%;  ">
+            <mat-card-content>
+                <mat-icon class="logo">description</mat-icon><br><br>
+                <span class="label">FACTURAS</span><br><br><br>
+                <span class="money"> -{{showBalance.total_invoices | currency: '2' :
+                    "$"}}</span>
+            </mat-card-content>
+        </mat-card>
+    </mat-grid-tile>
+
+    <mat-grid-tile [colspan]="colSmall" [rowspan]="5">
+        <mat-card class="mat-elevation-z8  pointer"
+            style="background-color: var(--error-two); width: 80%; height: 70%;  ">
+            <mat-card-content>
+                <mat-icon class="logo">receipt</mat-icon><br><br>
+                <span class="label">NOTAS DE VENTA</span><br><br><br>
+                <span class="money"> -{{showBalance.total_sales_notes | currency: '2' :
+                    "$"}}</span>
+            </mat-card-content>
+        </mat-card>
+    </mat-grid-tile>
+
+    <mat-grid-tile [colspan]="colSmall" [rowspan]="5">
+        <mat-card class="mat-elevation-z8  pointer"
+            style="background-color: var(--success-two); width: 80%; height: 70%;  ">
+            <mat-card-content>
+                <mat-icon class="logo">monetization_on</mat-icon> <br><br>
+                <span class="label">SALDO</span><br><br><br>
+                <span class="money"> {{showBalance.total_payments | currency: '2' :
+                    "$"}}</span>
+            </mat-card-content>
+        </mat-card>
+    </mat-grid-tile>
+
+
+    <mat-grid-tile [colspan]="colSmall" [rowspan]="5">
+        <mat-card class="mat-elevation-z8  pointer" [ngClass]="{'positive': showBalance.total_payments - (showBalance.total_sales_notes +
+                    showBalance.total_invoices) > 0 , 'neutro': showBalance.total_payments - (showBalance.total_sales_notes +
+                    showBalance.total_invoices) == 0, 'negative': showBalance.total_payments - (showBalance.total_sales_notes +
+                    showBalance.total_invoices)< 0}">
+            <mat-card-content>
+                <mat-icon class="logo">balance</mat-icon><br><br>
+                <span class="label">BALANCE</span><br><br><br>
+                <span class="money"> {{ showBalance.total_payments - (showBalance.total_sales_notes +
+                    showBalance.total_invoices) | currency: '2' :
+                    "$"}}</span>
+            </mat-card-content>
+        </mat-card>
+    </mat-grid-tile>
+
+
+
+</mat-grid-list>

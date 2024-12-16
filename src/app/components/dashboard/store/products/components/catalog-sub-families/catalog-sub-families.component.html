@@ -1,0 +1,58 @@
+<mat-card>
+    <mat-card-header class="primary" style="padding:10px">
+        <mat-icon style="font-size:20px">library_books</mat-icon>
+        <span>
+            SUB FAMILIAS DE PRODUCTOS MP
+        </span>
+        <div class="item-spacer"></div>
+        <span class="icon-close-modal" (click)="closeDialog()">&#10008;</span>
+    </mat-card-header>
+
+
+    <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>BUSCAR</mat-label>
+        <input matInput (keyup)="applyFilter($event)" #input>
+
+    </mat-form-field>
+
+
+
+
+    <div class="mat-elevation-z8">
+
+        <div class="table-container-medium-two">
+            <div class="overlay-loading" *ngIf="loading">
+                <div class="spinner-wrapper">
+
+                    <mat-spinner diameter="50" *ngIf="loading" class="spinner" color="primary"></mat-spinner>
+                </div>
+            </div>
+            <table mat-table [dataSource]="dataSource" matSort>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <ng-container matColumnDef="sub_family_product">
+                    <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="sub_family_product">
+                        SUB FAMILIA DE PRODUCTO TERMINADO </th>
+                    <td mat-cell *matCellDef="let item" [mat-dialog-close]="item" style="width:40%">
+                        {{item.sub_family_product}}</td>
+                </ng-container>
+                <ng-container matColumnDef="family_product">
+                    <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="family_product">
+                        FAMILIA DE PRODUCTO TERMINADO </th>
+                    <td mat-cell *matCellDef="let item" [mat-dialog-close]="item" style="width:40%">
+                        {{item.family_product}}</td>
+                </ng-container>
+                <ng-container matColumnDef="actions">
+                    <th class="primary" mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let item" [mat-dialog-close]="item" style="text-align: center;">
+                        <button style="color:rgb(16, 61, 95)" [mat-dialog-close]="item" mat-icon-button>
+                            <mat-icon>check_circle</mat-icon>
+                        </button>
+
+                    </td>
+                </ng-container>
+            </table>
+        </div>
+    </div>
+
+</mat-card>

@@ -1,0 +1,135 @@
+<mat-toolbar class="title">
+  <button mat-icon-button class="textColor" type="button" (click)="cancel()">
+    <mat-icon>arrow_back_ios</mat-icon>
+  </button>
+
+  <span>BALANCE DE CUENTA&nbsp;&nbsp;</span><span class="period">
+    PERIODO {{ dateStart | date : "dd/MM/yyyy" }} -
+    {{ dateEnd | date : "dd/MM/yyyy" }}</span>
+  <div class="item-spacer"></div>
+  <button (click)="changeTypeCurrency(false)" class="currency-dollars button-currency" *ngIf="is_dollars">
+    USD
+  </button>
+  <button (click)="changeTypeCurrency(true)" class="currency-mxn button-currency" *ngIf="!is_dollars">
+    MXN
+  </button>
+
+  <button mat-raised-button class="btnPrimary" (click)="stateAccount()" style="height: 80%; margin-top: 10px">
+    <mat-icon class="icon-size">balance</mat-icon>ESTADO DE CUENTA
+  </button>
+
+  <button mat-raised-button class="btnPrimary" (click)="historyPayments()" style="height: 80%; margin-top: 10px">
+    <mat-icon class="icon-size">history</mat-icon>HISTORIAL DE PAGOS
+  </button>
+  <button style="height: 80%; margin-top: 10px" mat-raised-button class="btnSecondary"
+    *ngIf="!filtersBalanceAccount.opened" (click)="filtersBalanceAccount.toggle()">
+    <mat-icon class="custom-size-animation">keyboard_arrow_left</mat-icon>FILTRAR
+  </button>
+
+  <button style="height: 80%; margin-top: 10px" mat-raised-button class="btnSecondary"
+    *ngIf="filtersBalanceAccount.opened" (click)="filtersBalanceAccount.toggle()">
+    <mat-icon class="custom-size-animation">keyboard_arrow_right</mat-icon>FILTRAR
+  </button>
+</mat-toolbar>
+<br />
+
+<div class="container">
+  <div class="secondary">
+    <mat-spinner diameter="50" *ngIf="loading" class="spinner" color="primary"></mat-spinner>
+  </div>
+  <mat-card class="card" *ngIf="!loading && !error">
+    <mat-tab-group class="mat-tab-group-small" mat-align-tabs="center" fitInkBarToContent>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">description</mat-icon>
+          <span class="title-tab">FACTURAS</span>
+        </ng-template>
+
+        <mat-card *ngIf="!error">
+          <app-invoices-balance [invoices]="balance.invoices" [total]="balance.total_invoices"></app-invoices-balance>
+        </mat-card>
+        <mat-card *ngIf="error" class="colorSecondary">
+          <div class="error">
+            <mat-icon style="font-size: 50px" aria-hidden="false">lock</mat-icon>
+            <h1>{{ error_msg }}</h1>
+          </div>
+        </mat-card>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">receipt</mat-icon>
+          <span class="title-tab">NOTAS DE VENTA</span>
+        </ng-template>
+
+        <mat-card *ngIf="!error">
+          <app-sales-notes-by-client [sales_notes]="balance.sales_notes"
+            [total]="balance.total_sales_notes"></app-sales-notes-by-client>
+        </mat-card>
+        <mat-card *ngIf="error" class="colorSecondary">
+          <div class="error">
+            <mat-icon style="font-size: 50px" aria-hidden="false">lock</mat-icon>
+            <h1>{{ error_msg }}</h1>
+          </div>
+        </mat-card>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">monetization_on</mat-icon>
+          <span class="title-tab">PAGOS </span>
+        </ng-template>
+        <mat-card *ngIf="!error">
+          <app-payments-balance [payments]="balance.payments" [total]="balance.total_payments"></app-payments-balance>
+        </mat-card>
+        <mat-card *ngIf="error" class="colorSecondary">
+          <div class="error">
+            <mat-icon style="font-size: 50px" aria-hidden="false">lock</mat-icon>
+            <h1>{{ error_msg }}</h1>
+          </div>
+        </mat-card>
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">balance</mat-icon>
+          <span class="title-tab">BALANCE</span>
+        </ng-template>
+
+        <mat-card *ngIf="!error">
+          <app-balance-client [balance]="balance"></app-balance-client>
+        </mat-card>
+        <mat-card *ngIf="error" class="colorSecondary">
+          <div class="error">
+            <mat-icon style="font-size: 50px" aria-hidden="false">lock</mat-icon>
+            <h1>{{ error_msg }}</h1>
+          </div>
+        </mat-card>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+  <mat-card *ngIf="error" class="colorSecondary">
+    <div class="error">
+      <mat-icon style="font-size: 50px" aria-hidden="false">lock</mat-icon>
+      <h1>{{ error_msg }}</h1>
+    </div>
+  </mat-card>
+</div>
+
+<mat-sidenav #filtersBalanceAccount class="sidenav" fixedInViewport
+  style="z-index: 100; width: 300px; text-align: center" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+  mode="over" [opened]="false" position="end">
+  <mat-grid-list cols="12" rowHeight="70px" style="margin-top: 50%">
+    <mat-grid-tile [colspan]="12" [rowspan]="2">
+      <mat-form-field appearance="outline" floatLabel="always" style="height: 100%; margin-top: 0%">
+        <mat-label>INGRESAR PERIODO</mat-label>
+        <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+          <input matStartDate formControlName="start" placeholder="FECHA INICIO" (dateChange)="setDates()" />
+          <input matEndDate formControlName="end" placeholder="FECHA FIN" (dateChange)="setDates()" />
+        </mat-date-range-input>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+        <mat-error *ngIf="range.controls['start'].hasError('matStartDateInvalid')">Fecha de inicio invalida</mat-error>
+        <mat-error *ngIf="range.controls['end'].hasError('matEndDateInvalid')">Fecha de fin invalida</mat-error>
+      </mat-form-field>
+    </mat-grid-tile>
+  </mat-grid-list>
+</mat-sidenav>

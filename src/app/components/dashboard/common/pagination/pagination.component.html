@@ -1,0 +1,16 @@
+<div class="container-pagination">
+    <div class="item-spacer"></div>
+
+    <div class="number-pages">
+        <span class="button-pagination" (click)="changeNumberPage(-1)">
+            <mat-icon style="font-size: 20px;">arrow_back_ios</mat-icon>
+        </span>
+        <input [disabled]="loading" class="input-pages" type="number" [(ngModel)]="numberPage"
+            (change)="changeNumberPage(0)">
+        <div class="total-pages"><span class="label-pagination">{{labelPage}}</span></div>
+
+        <span class="button-pagination" (click)="changeNumberPage(1)">
+            <mat-icon style="font-size: 20px;"> arrow_forward_ios</mat-icon>
+        </span>
+    </div>
+</div>

@@ -1,0 +1,131 @@
+<mat-card>
+    <mat-card-header class="primary" style="padding:10px">
+        <span class="material-symbols-outlined" style="margin-right: 5px;font-size: 18px;">
+            approval_delegation
+        </span>
+        <span>
+            {{client}}
+        </span>
+        <div class="item-spacer"></div>
+        <span class="icon-close-modal" (click)="closeDialog()">&#10008;</span>
+    </mat-card-header>
+    <mat-grid-list cols="12" rowHeight="70px">
+        <mat-grid-tile [colspan]="colBig" [rowspan]="1">
+            <mat-form-field appearance="outline" floatLabel="always">
+                <mat-label>BUSCAR</mat-label>
+                <input matInput (keyup)="applyFilter($event)" #input>
+
+            </mat-form-field>
+
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+            <button mat-raised-button class="btnPrimary" (click)="stateAccount()" style="height:80%; margin-top: 10px;">
+                <mat-icon class="icon-size">balance</mat-icon>ESTADO DE CUENTA
+            </button>
+        </mat-grid-tile>
+
+    </mat-grid-list>
+
+    <div class="mat-elevation-z8">
+        <div class="table-container">
+            <div class="overlay-loading" *ngIf="loading">
+                <div class="spinner-wrapper">
+                    <mat-spinner diameter="50" *ngIf="loading" class="spinner" color="primary"></mat-spinner>
+                </div>
+            </div>
+            <table mat-table [dataSource]="dataSource" matSort>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <ng-container matColumnDef="number">
+                    <th mat-header-cell class="primary" *matHeaderCellDef>
+                        FOLIO </th>
+                    <td mat-cell *matCellDef="let item" style="width:10%" [ngClass]="{'saleNoteDue': item.days < 0}">
+                        {{item.number}}</td>
+                </ng-container>
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell class="primary" *matHeaderCellDef>
+                        FECHA </th>
+                    <td mat-cell *matCellDef="let item" style="width:15%" [ngClass]="{'saleNoteDue': item.days < 0}">
+                        {{item.date}}</td>
+                </ng-container>
+                <ng-container matColumnDef="due_date">
+                    <th mat-header-cell class="primary" *matHeaderCellDef>
+                        VENCIMIENTO </th>
+                    <td mat-cell *matCellDef="let item" style="width:10%" [ngClass]="{'saleNoteDue': item.days < 0}">
+                        {{item.due_date}}</td>
+                </ng-container>
+                <ng-container matColumnDef="days">
+                    <th mat-header-cell class="primary" *matHeaderCellDef>
+                        DÍAS VENCIDOS </th>
+                    <td mat-cell *matCellDef="let item" style="width:10%" [ngClass]="{'saleNoteDue': item.days < 0}">
+                        {{item.days}}</td>
+                </ng-container>
+                <ng-container matColumnDef="total">
+                    <th mat-header-cell class="primary" *matHeaderCellDef>
+                        TOTAL </th>
+                    <td mat-cell *matCellDef="let item" style="width:15%;" [ngClass]="{'saleNoteDue': item.days < 0}">
+                        {{item.total | currency: '2' :
+                        "$"}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="total_pay">
+                    <th mat-header-cell class="primary" *matHeaderCellDef>
+                        ABONO</th>
+                    <td mat-cell *matCellDef="let item" style="width:10%;" [ngClass]="{'saleNoteDue': item.days < 0}">
+                        {{item.total_pay | currency: '2' :
+                        "$"}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="total_to_pay">
+                    <th mat-header-cell class="primary" *matHeaderCellDef>
+                        SALDO</th>
+                    <td mat-cell *matCellDef="let item" style="width:10%;" [ngClass]="{'saleNoteDue': item.days < 0}">
+                        {{item.total_to_pay | currency: '2' :
+                        "$"}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="due_saldo">
+                    <th mat-header-cell class="primary" *matHeaderCellDef>
+                        SALDO VENCIDO</th>
+                    <td mat-cell *matCellDef="let item" style="width:10%;" [ngClass]="{'saleNoteDue': item.days < 0}">
+                        {{item.due_saldo | currency: '2' :
+                        "$"}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell class="primary" *matHeaderCellDef>
+                        ACCIONES</th>
+                    <td mat-cell *matCellDef="let item" style="width:10%; text-align:right;"
+                        [ngClass]="{'saleNoteDue': item.days < 0}">
+                        <a style="color:var(--document_two)" (click)="getDataPackingListPDF(item)"
+                            matTooltip="Packing List">
+                            <mat-icon class="custom-size-animation">list_alt</mat-icon>
+                        </a>
+                        <a style="color:var(--document_three)" (click)="getDataSaleNotePDF(item)"
+                            matTooltip="Nota de Venta">
+                            <mat-icon class="custom-size-animation">receipt</mat-icon>
+                        </a>
+                    </td>
+                </ng-container>
+
+
+
+
+            </table>
+        </div>
+        <div style="display: flex;">
+            <div class="item-spacer"></div>
+            <app-total-tag [total]="total" [label]="'TOTAL'" [colorLabel]="'var(--success)'"
+                [isCurrency]="true"></app-total-tag>
+            <app-total-tag [total]="total_pay" [label]="'ABONO'" [colorLabel]="'var(--other_two)'"
+                [isCurrency]="true"></app-total-tag>
+            <app-total-tag [total]="total_to_pay" [label]="'SALDO'" [colorLabel]="'var(--primary)'"
+                [isCurrency]="true"></app-total-tag>
+            <app-total-tag [total]="due_saldo" [label]="'SALDO VENCIDO'" [colorLabel]="'var(--error)'"
+                [isCurrency]="true"></app-total-tag>
+
+        </div>
+    </div>
+
+
+</mat-card>

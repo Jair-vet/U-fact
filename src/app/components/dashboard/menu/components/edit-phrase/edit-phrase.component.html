@@ -1,0 +1,29 @@
+<form [formGroup]="form" (ngSubmit)="updatePhrase()">
+    <mat-spinner diameter="50" *ngIf="loading" class="spinner" color="primary"></mat-spinner>
+    <mat-card *ngIf="!loading">
+        <mat-card-header class="primary" style="padding:10px">
+            <mat-icon style="font-size:20px">edit</mat-icon>
+            <span>
+                CAMBIAR FRASE
+            </span>
+        </mat-card-header>
+
+        <mat-grid-list cols="12" rowHeight="80px">
+            <mat-grid-tile [colspan]="12" [rowspan]="2">
+                <mat-form-field appearance="outline" floatLabel="always">
+                    <mat-label>FRASE</mat-label>
+                    <textarea matInput formControlName="phrase" placeholder="Información..." rows="6"></textarea>
+
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile [colspan]="12" [rowspan]="1">
+                <button type="submit" class="btnPrimary" [disabled]="form.invalid" style="height:80%; margin-top: 10px;"
+                    mat-raised-button>
+                    <mat-icon class="icon-size">save</mat-icon>GUARDAR
+                </button>
+            </mat-grid-tile>
+        </mat-grid-list>
+
+
+    </mat-card>
+</form>

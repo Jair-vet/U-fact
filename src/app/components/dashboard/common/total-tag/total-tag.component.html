@@ -1,0 +1,14 @@
+<div class="container-total">
+    <div class="item-spacer"></div>
+    <div class="tag-total">
+        <span class="tag" [style.background-color]="colorLabel">
+            {{label}}
+        </span>
+        <span class="total" *ngIf="isCurrency">
+            {{total | currency: '2' :"$"}}
+        </span>
+        <span class="total" *ngIf="!isCurrency">
+            {{total }}
+        </span>
+    </div>
+</div>

@@ -1,0 +1,81 @@
+<form [formGroup]="form" (ngSubmit)="create()">
+    <mat-toolbar class="title">
+        <button mat-icon-button class="textColor" type="button" (click)="cancel()">
+            <mat-icon>arrow_back_ios</mat-icon>
+        </button>
+        <span>CUENTA DE BANCO</span>
+        <div class="item-spacer"></div>
+        <button type="submit" class="btnPrimary" [disabled]="form.invalid" style="height:80%; margin-top: 10px;"
+            mat-raised-button>
+            <mat-icon class="icon-size">save</mat-icon>GUARDAR
+        </button>
+    </mat-toolbar> <br>
+
+    <div class="secondary">
+        <mat-spinner diameter="50" *ngIf="loading" class="spinner" color="primary"></mat-spinner>
+
+    </div>
+    <div class="container">
+        <mat-card class="colorSecondary card" *ngIf="!loading && !error">
+            <mat-card class="mat-elevation-z8 card-prop" style="padding:0%; margin-bottom: 20px;">
+                <mat-card-header class="primary" style="padding:10px">
+                    <mat-icon style="font-size:20px">account_balance</mat-icon>
+                    <span>
+                        DETALLES DE CUENTA DE BANCO
+                    </span>
+                </mat-card-header>
+
+
+                <mat-grid-list cols="12" rowHeight="80px">
+                    <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+                        <mat-form-field floatPlaceholder="never" appearance="outline" floatLabel="always">
+                            <mat-label>BANCO</mat-label>
+                            <mat-select [formControl]="banksCtrl" placeholder="Banco" #singleSelect name="baksCtrl"
+                                (selectionChange)="clearFields()">
+                                <mat-option>
+                                    <ngx-mat-select-search placeholderLabel="Buscar..." [formControl]="banksFilterCtrl">
+                                    </ngx-mat-select-search>
+                                </mat-option>
+                                <mat-option *ngFor="let bank of filteredBanks | async" [value]="bank">
+                                    {{bank.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <mat-label>TIPO DE CUENTA</mat-label>
+                            <mat-select formControlName="type_account">
+                                <mat-option value="1">NACIONAL</mat-option>
+                                <mat-option value="2">INTERNACIONAL</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <input matInput [maxlength]="18" [minlength]="18" formControlName="clabe"
+                                name="interbank_code">
+                            <mat-error *ngIf="form.invalid">Ingresar cadena de 18 números</mat-error>
+                            <mat-label>CLABE INTERBANCARIA</mat-label>
+                        </mat-form-field>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+                        <mat-form-field appearance="outline" floatLabel="always">
+                            <mat-label>NUMERO DE CUENTA</mat-label>
+                            <input matInput name="account" formControlName="account">
+                            <mat-error *ngIf="form.invalid">Ingresar solo números</mat-error>
+                        </mat-form-field>
+                    </mat-grid-tile>
+
+                </mat-grid-list>
+            </mat-card>
+        </mat-card>
+        <mat-card *ngIf="error" class="colorSecondary">
+            <div class="error">
+                <mat-icon style="font-size: 50px" aria-hidden="false">lock</mat-icon>
+                <h1>{{error_msg}}</h1>
+            </div>
+        </mat-card>
+
+    </div>
+</form>

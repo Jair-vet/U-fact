@@ -1,0 +1,406 @@
+<form [formGroup]="form">
+  <mat-toolbar class="title">
+    <button mat-icon-button class="textColor" type="button" (click)="cancel()">
+      <mat-icon>arrow_back_ios</mat-icon>
+    </button>
+    <span>PEDIDO</span>
+  </mat-toolbar>
+  <br />
+
+  <div class="secondary">
+    <mat-spinner
+      diameter="50"
+      *ngIf="loading"
+      class="spinner"
+      color="primary"
+    ></mat-spinner>
+  </div>
+  <div class="container">
+    <mat-card class="colorSecondary card" *ngIf="!error && !loading">
+      <mat-card
+        class="mat-elevation-z8 card-prop"
+        style="padding: 0%; margin-bottom: 20px"
+      >
+        <mat-card-header class="primary" style="padding: 10px">
+          <mat-icon style="font-size: 20px">shopping_cart</mat-icon>
+          <span> DETALLES DEL PEDIDO </span>
+        </mat-card-header>
+
+        <mat-grid-list cols="12" rowHeight="80px">
+          <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+            <mat-form-field appearance="outline" floatLabel="always">
+              <mat-label>FOLIO</mat-label>
+              <input [readonly]="true" matInput formControlName="folio" />
+              <mat-error *ngIf="form.invalid"
+                >Este campo es obligatorio</mat-error
+              >
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+            <mat-form-field appearance="outline" floatLabel="always">
+              <mat-label>CLIENTE</mat-label>
+              <input [readonly]="true" matInput formControlName="client" />
+              <mat-error *ngIf="form.invalid"
+                >Este campo es obligatorio</mat-error
+              >
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+            <mat-form-field appearance="outline" floatLabel="always">
+              <mat-label>LISTA DE PRECIO </mat-label>
+              <mat-select
+                [disabled]="true"
+                [formControl]="typePriceCtrl"
+                (selectionChange)="setTypePrice()"
+                #singleSelect
+                required
+              >
+                <mat-option>
+                  <ngx-mat-select-search
+                    placeholderLabel="Buscar..."
+                    [formControl]="typePriceFilterCtrl"
+                  >
+                  </ngx-mat-select-search>
+                </mat-option>
+                <mat-option
+                  *ngFor="let type_price of filteredTypePrice | async"
+                  [value]="type_price"
+                >
+                  {{ type_price.label! }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="colBig" [rowspan]="1">
+            <mat-form-field appearance="outline" floatLabel="always">
+              <mat-label>VENDEDOR </mat-label>
+              <mat-select
+                [disabled]="true"
+                [formControl]="userCtrl"
+                (selectionChange)="setUser()"
+                #singleSelect
+                required
+              >
+                <mat-option>
+                  <ngx-mat-select-search
+                    placeholderLabel="Buscar..."
+                    [formControl]="userFilterCtrl"
+                  >
+                  </ngx-mat-select-search>
+                </mat-option>
+                <mat-option
+                  *ngFor="let user of filteredUser | async"
+                  [value]="user"
+                >
+                  {{ user.name! }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="colBig" [rowspan]="2">
+            <mat-form-field appearance="outline" floatLabel="always">
+              <mat-label>COMENTARIOS</mat-label>
+              <textarea
+                matInput
+                formControlName="comments"
+                placeholder="Información..."
+                rows="6"
+              ></textarea>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="colBig" [rowspan]="1">
+            <mat-form-field appearance="outline" floatLabel="always">
+              <mat-label>METODO DE EMBARQUE </mat-label>
+              <mat-select
+                [formControl]="shippingMethodCtrl"
+                (selectionChange)="setShippingMethod()"
+                #singleSelect
+                required
+              >
+                <mat-option>
+                  <ngx-mat-select-search
+                    placeholderLabel="Buscar..."
+                    [formControl]="shippingMethodFilterCtrl"
+                  >
+                  </ngx-mat-select-search>
+                </mat-option>
+                <mat-option
+                  *ngFor="let shipping_method of filteredShippingMethod | async"
+                  [value]="shipping_method"
+                >
+                  {{ shipping_method.label! }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+            <mat-form-field appearance="outline" floatLabel="always">
+              <mat-label>FECHA DE ENTREGA</mat-label>
+              <input
+                matInput
+                [matDatepicker]="picker"
+                name="deadline"
+                formControlName="deadline"
+              />
+              <mat-hint class="textColor">MM/DD/YYYY</mat-hint>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <button
+              mat-icon-button
+              class="textColor"
+              type="button"
+              (click)="picker.open()"
+            >
+              <mat-icon>calendar_today</mat-icon>
+            </button>
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+            <mat-form-field appearance="outline" floatLabel="always">
+              <mat-label>REFERENCIA</mat-label>
+              <input matInput formControlName="reference" />
+              <mat-error *ngIf="form.invalid"
+                >Este campo es obligatorio</mat-error
+              >
+            </mat-form-field>
+          </mat-grid-tile>
+
+          <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+            <a
+              type="button"
+              class="btnPrimary"
+              mat-raised-button
+              href="https://sgp-web.nyc3.digitaloceanspaces.com/Inncaplast/{{
+                user.rfc
+              }}/{{ order.path_file }}"
+              target="_blank"
+            >
+              <mat-icon class="icon-size">description</mat-icon> VER ARCHIVO
+            </a>
+            <div class="item-spacer"></div>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </mat-card>
+      <mat-card
+        class="mat-elevation-z8 card-prop"
+        style="padding: 0%; margin-bottom: 20px"
+      >
+        <mat-card-header class="primary" style="padding: 10px">
+          <mat-icon style="font-size: 20px">widgets</mat-icon>
+          <span> PRODUCTOS </span>
+        </mat-card-header>
+        <mat-grid-list cols="12" rowHeight="80px">
+          <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+            <span>¿SON DOLARES?</span>
+            <a
+              *ngIf="form.value.is_dollars == true"
+              style="color: var(--primary)"
+            >
+              <mat-icon class="custom-size-animation">check_box</mat-icon>
+            </a>
+            <a
+              *ngIf="form.value.is_dollars == false"
+              style="color: var(--error)"
+            >
+              <mat-icon class="custom-size-animation"
+                >check_box_outline_blank</mat-icon
+              >
+            </a>
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+            <span *ngIf="form.value.is_dollars == true"
+              >TASA: $ {{ order.exchange_rate }}
+            </span>
+          </mat-grid-tile>
+        </mat-grid-list>
+
+        <div
+          class="table-container-small"
+          style="height: auto; width: 99%; margin: 0 auto"
+        >
+          <div class="overlay-loading" *ngIf="loading">
+            <div class="spinner-wrapper">
+              <mat-spinner
+                diameter="50"
+                *ngIf="loading"
+                class="spinner"
+                color="primary"
+              ></mat-spinner>
+            </div>
+          </div>
+          <table mat-table [dataSource]="dataProductsOrders" matSort>
+            <tr
+              mat-header-row
+              *matHeaderRowDef="displayedColumnsProductsOrders; sticky: true"
+            ></tr>
+            <tr
+              mat-row
+              *matRowDef="let row; columns: displayedColumnsProductsOrders"
+            ></tr>
+
+            <ng-container matColumnDef="code">
+              <th
+                mat-header-cell
+                class="primary"
+                *matHeaderCellDef
+                mat-sort-header="code"
+              >
+                CODIGO
+              </th>
+              <td mat-cell *matCellDef="let item" style="width: 15%">
+                {{ item.code }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="description">
+              <th
+                mat-header-cell
+                class="primary"
+                *matHeaderCellDef
+                mat-sort-header="description"
+              >
+                DESCRIPCIÓN
+              </th>
+              <td mat-cell *matCellDef="let item" style="width: 20%">
+                {{ item.description }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="price">
+              <th
+                mat-header-cell
+                class="primary"
+                *matHeaderCellDef
+                mat-sort-header="price"
+              >
+                PRECIO
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let item"
+                style="width: 15%; text-align: right; padding-right: 30px"
+              >
+                <div style="padding-right: 20%">
+                  {{ item.price | currency : "2" : "$" }}
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="total">
+              <th
+                mat-header-cell
+                class="primary"
+                *matHeaderCellDef
+                mat-sort-header="total"
+              >
+                TOTAL
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let item; let i = index"
+                style="width: 15%; text-align: right; padding-right: 30px"
+              >
+                {{ item.total | currency : "2" : "$" }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="amount">
+              <th
+                mat-header-cell
+                class="primary"
+                *matHeaderCellDef
+                mat-sort-header="amount"
+              >
+                CANTIDAD EN PEDIDO
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let item; let i = index"
+                style="width: 15%"
+              >
+                {{ item.amount }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="amount_departure">
+              <th
+                mat-header-cell
+                class="primary"
+                *matHeaderCellDef
+                mat-sort-header="amount_departure"
+              >
+                ENTREGADO
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let item; let i = index"
+                style="width: 10%"
+              >
+                {{ item.amount_departure }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="supply">
+              <th
+                mat-header-cell
+                class="primary"
+                *matHeaderCellDef
+                mat-sort-header="supply"
+              >
+                POR SURTIR
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let item; let i = index"
+                style="width: 10%"
+              >
+                {{ item.amount - item.amount_departure }}
+              </td>
+            </ng-container>
+          </table>
+        </div>
+        <br />
+      </mat-card>
+      <mat-grid-list cols="12" rowHeight="70px">
+        <mat-grid-tile [colspan]="12" [rowspan]="4">
+          <div class="item-spacer"></div>
+          <mat-card class="mat-elevation-z8 card-prop card-calculate">
+            <mat-card-header class="primary" style="padding: 10px">
+              <mat-icon style="font-size: 20px">attach_money</mat-icon>
+              <span> CALCULOS </span>
+            </mat-card-header>
+            <mat-grid-list cols="12" rowHeight="50px" style="margin-left: 10px">
+              <mat-grid-tile [colspan]="11" [rowspan]="1">
+                <span>SUBTOTAL: </span>
+                <div class="item-spacer"></div>
+                <span class="textColor">
+                  <b> {{ sub_total | currency : "2" : "$" }} </b></span
+                >
+              </mat-grid-tile>
+              <mat-grid-tile [colspan]="11" [rowspan]="1">
+                <span>IVA:</span>
+                <div class="item-spacer"></div>
+                <span class="textColor">
+                  <b> {{ tax | currency : "2" : "$" }} </b></span
+                >
+              </mat-grid-tile>
+              <mat-grid-tile [colspan]="11" [rowspan]="1">
+                <span>TOTAL: </span>
+                <div class="item-spacer"></div>
+                <span class="textColor">
+                  <b> {{ total | currency : "2" : "$" }}</b></span
+                >
+              </mat-grid-tile>
+            </mat-grid-list>
+          </mat-card>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card>
+    <mat-card *ngIf="error" class="colorSecondary">
+      <div class="error">
+        <mat-icon style="font-size: 50px" aria-hidden="false">lock</mat-icon>
+        <h1>{{ error_msg }}</h1>
+      </div>
+    </mat-card>
+  </div>
+</form>

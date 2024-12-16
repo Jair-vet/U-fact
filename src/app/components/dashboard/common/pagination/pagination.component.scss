@@ -1,0 +1,67 @@
+.container-pagination {
+    display: flex;
+    height: 30px;
+    padding: 5px;
+
+}
+
+.number-pages {
+    display: flex;
+
+}
+
+.button-pagination {
+    display: flex;
+    padding: 5px;
+    font-size: 20px;
+    background-color: aliceblue;
+    text-align: center;
+    align-items: center;
+    cursor: pointer;
+    flex-direction: column;
+
+}
+
+.button-pagination:hover {
+    background-color: var(--secondary);
+
+}
+
+
+.label-pagination {
+    font-size: 12px;
+    text-align: center;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+.input-pages {
+
+    width: 80px;
+    text-align: center;
+    align-items: center;
+}
+
+.total-pages {
+    border: 1px solid;
+    width: 50px;
+    font-size: 20px;
+    background-color: var(--primary);
+    color: aliceblue;
+    text-align: center;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    /* Firefox */
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

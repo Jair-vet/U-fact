@@ -1,0 +1,62 @@
+::ng-deep .mat-tab-label.mat-tab-label-active {
+    background-color: var(--primary);
+    color: aliceblue;
+
+}
+
+.mat-tab-group {
+    position: sticky;
+
+    z-index: 1;
+}
+
+.mat-button-disabled {
+
+    background-color: aliceblue !important;
+}
+
+.tab-content {
+    max-height: 545px;
+    min-height: 545PX;
+    /* Ajusta el valor según el tamaño de las pestañas */
+    overflow-y: auto;
+}
+
+
+.tab-icon {
+    margin-right: 15px;
+    font-size: 30px;
+}
+
+::ng-deep .mat-tab-group .mat-tab-label {
+    height: 60px !important;
+
+}
+
+.by-producing {
+    background-color: rgb(144, 6, 6);
+    color: aliceblue;
+}
+
+.producing {
+    background-color: rgb(190, 109, 4);
+    color: aliceblue;
+}
+
+.finished {
+    background-color: rgb(4, 129, 163);
+    color: aliceblue;
+}
+
+.received {
+    background-color: rgb(4, 163, 41);
+    color: aliceblue;
+}
+
+.automatic {
+    background-color: rgba(247, 206, 255, 0.735);
+}
+
+.manual {
+    background-color: rgba(255, 255, 212, 0.784);
+}

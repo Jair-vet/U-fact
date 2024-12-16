@@ -1,0 +1,43 @@
+::ng-deep .mat-dialog-container {
+    padding: 0px !important;
+    border-radius: 10px !important;
+}
+
+.input-money {
+    text-align: right;
+}
+
+/* Estilo para ocultar las flechas */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.total_pay {
+    background-color: rgb(13, 117, 62);
+    color: aliceblue;
+    font-weight: bolder;
+    padding: 5px;
+    border-radius: 10%;
+}
+
+.total {
+    background-color: var(--primary);
+    color: aliceblue;
+    font-weight: bolder;
+    padding: 5px;
+    border-radius: 10%;
+
+}
+
+.text-money {
+    color: var(--primary);
+    font-weight: bolder;
+    font-size: 14px;
+}
+
+.flex {
+    display: flex;
+    margin: 20px;
+}

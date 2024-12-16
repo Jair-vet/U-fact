@@ -1,0 +1,40 @@
+<mat-card>
+    <mat-card-header class="primary" style="padding:10px">
+        <mat-icon style="font-size:20px">library_books</mat-icon>
+        <span>
+            HISTORIAL DE PEDIDO
+        </span>
+    </mat-card-header>
+
+    <mat-stepper orientation="vertical" #stepper [selectedIndex]="currentStatus">
+        <mat-step [stepControl]="oneFormGroup" class="primary">
+            <ng-template matStepLabel>POR SURTIR</ng-template>
+            <ng-template matStepContent>
+                <p *ngFor="let item of list_status_one">{{item.date}} -- <i><b>{{item.user}}</b></i></p>
+            </ng-template>
+        </mat-step>
+        <mat-step [stepControl]="twoFormGroup">
+
+            <ng-template matStepLabel>CANCELADO</ng-template>
+            <ng-template matStepContent>
+                <p *ngFor="let item of list_status_two">{{item.date}} -- <i><b>{{item.user}}</b></i>
+                </p>
+            </ng-template>
+
+        </mat-step>
+        <mat-step [stepControl]="threeFormGroup">
+            <ng-template matStepLabel>SURTIENDO</ng-template>
+            <ng-template matStepContent>
+                <p *ngFor="let item of list_status_three">{{item.date}} -- <i><b>{{item.user}}</b></i></p>
+            </ng-template>
+        </mat-step>
+
+        <mat-step [stepControl]="fourFormGroup">
+            <ng-template matStepLabel>SURTIDO</ng-template>
+            <ng-template matStepContent>
+                <p *ngFor="let item of list_status_four">{{item.date}} -- <i><b>{{item.user}}</b></i></p>
+            </ng-template>
+        </mat-step>
+    </mat-stepper>
+
+</mat-card>

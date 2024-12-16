@@ -1,0 +1,37 @@
+.container-total {
+    display: flex;
+    height: 30px;
+    padding: 5px;
+
+}
+
+.tag-total {
+    display: flex;
+    font-size: 12px;
+
+}
+
+.total {
+    display: flex;
+    padding: 5px;
+    font-size: 12px;
+    background-color: aliceblue;
+    text-align: center;
+    align-items: center;
+    cursor: pointer;
+    flex-direction: column;
+
+}
+
+.tag {
+    display: flex;
+    padding: 5px;
+    font-size: 12px;
+
+    color: aliceblue;
+    text-align: center;
+    align-items: center;
+    cursor: pointer;
+    flex-direction: column;
+
+}

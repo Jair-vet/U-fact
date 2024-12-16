@@ -1,0 +1,32 @@
+<a class="card">
+    <button type="button" class="remove-document" (click)="getDocument(id)" style="color:var(--primary)" mat-icon-button
+        matTooltip="Remover Documento">
+        <mat-icon>cancel</mat-icon>
+    </button>
+    <img *ngIf="document.type != 3.1 && document.type != 4.1 "
+        src="https://sgp-web.nyc3.cdn.digitaloceanspaces.com/Inncaplast/Assets/pdf-logo.png" class="card__image"
+        alt="" />
+    <img *ngIf="document.type == 3.1 || document.type == 4.1"
+        src="https://sgp-web.nyc3.cdn.digitaloceanspaces.com/Inncaplast/Assets/xml-logo.png" class="card__image"
+        alt="" />
+    <div class="card__overlay">
+        <div class="card__header">
+
+
+            <div class="card__header-text">
+                <h3 class="card__title">{{document.name}}</h3>
+            </div>
+        </div>
+
+        <span class="card__description" *ngIf="document.type == 0">INFORME</span>
+        <span class="card__description" *ngIf="document.type == 1">NOTA DE VENTA</span>
+        <span class="card__description" *ngIf="document.type == 2">PACKING LIST</span>
+        <span class="card__description" *ngIf="document.type == 3">FACTURA</span>
+        <span class="card__description" *ngIf="document.type == 3.1 || document.type == 4.1">XML</span>
+        <span class="card__description" *ngIf="document.type == 4">COMPLEMENTO DE PAGO</span>
+        <span class="card__description" *ngIf="document.type == 5">PEDIDO</span>
+        <span class="card__description" *ngIf="document.type == 6">ORDEN DE COMPRA</span>
+        <span class="card__description" *ngIf="document.type == 7">COTIZACIÓN</span>
+
+    </div>
+</a>

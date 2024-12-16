@@ -1,0 +1,24 @@
+.to-authorize {
+    background-color: var(--other);
+    color: aliceblue;
+}
+
+.authorized {
+    background-color: var(--document_two);
+    color: aliceblue;
+}
+
+.receiving {
+    background-color: var(--secondary);
+    color: aliceblue;
+}
+
+.received {
+    background-color: var(--primary);
+    color: aliceblue;
+}
+
+.cancel {
+    background-color: var(--error);
+    color: aliceblue;
+}

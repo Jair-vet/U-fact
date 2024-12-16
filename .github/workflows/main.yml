@@ -1,0 +1,42 @@
+# name: deployment production
+
+# on:
+#   push:
+#     branches:
+#       - main
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout 🛎
+#         uses: actions/checkout@master
+        
+#       - name: Set up Node.js 👨🏻‍💻
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: 21
+#       - name: Install dependencies 👨🏻‍💻
+#         run: npm ci
+
+#       - name: Install Angular CLI 👨🏻‍💻
+#         run: npm install -g @angular/cli
+      
+#       - name: Build Angular app 🏗️
+#         run: ng build --configuration production
+#       - name: View dist folder contents 👀
+#         run: ls -l dist
+      
+#       - name: SETUP SSH  
+#         run: |
+#           mkdir -p ~/.ssh/
+#           echo "${{ secrets.SSH_PRIV_KEY }}" > ~/.ssh/id_rsa
+#           echo "${{ secrets.SSH_PUB_KEY }}" > ~/.ssh/id_rsa.pub
+#           chmod 600 ~/.ssh/id_rsa
+#           chmod 600 ~/.ssh/id_rsa.pub
+#           ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+      
+#       - name: copy builds to server
+#         run: |
+#           scp -r dist/ufact/* root@159.203.166.235:/var/www/html/sistemacia.com
+#           echo "** ¡Hola! Se ha realizado la conexión SSH correctamente. **"
+  

@@ -1,0 +1,56 @@
+::ng-deep .mat-tab-label.mat-tab-label-active {
+    background-color: var(--primary);
+    color: aliceblue;
+
+}
+
+.mat-tab-group {
+    position: sticky;
+
+    z-index: 1;
+}
+
+.period {
+    font-size: 15px;
+    font-weight: bolder;
+    color: var(--info);
+}
+
+
+.mat-tab-group {
+    height: calc(100vh - 210px);
+}
+
+
+.mat-button-disabled {
+
+    background-color: aliceblue !important;
+}
+
+.tab-content {
+    max-height: 465px;
+    min-height: 465PX;
+    /* Ajusta el valor según el tamaño de las pestañas */
+    overflow-y: auto;
+}
+
+
+.tab-icon {
+    margin-right: 15px;
+    font-size: 30px;
+}
+
+::ng-deep .mat-tab-group .mat-tab-label {
+    height: 60px !important;
+
+}
+
+.button-currency{
+    border-radius: 5px;
+    border: solid 5px var(--primary);
+    cursor: pointer;
+    height: 50px;
+    width: 50px;
+    margin-left: 5px !important;
+    font-size: 14px;
+}

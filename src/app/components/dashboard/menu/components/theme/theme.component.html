@@ -1,0 +1,27 @@
+<mat-card>
+    <mat-card-header class="primary" style="padding:10px">
+        <mat-icon style="font-size:20px">palette</mat-icon>
+        <span>
+            CAMBIAR TEMA
+        </span>
+    </mat-card-header>
+    <mat-grid-list cols="12" rowHeight="80px">
+        <mat-grid-tile [colspan]="12" [rowspan]="2">
+
+
+            <mat-form-field appearance="outline" style="width:90%" floatLabel="always">
+                <mat-label>TEMA</mat-label>
+                <input matInput type="color" class="primary" [value]="color" (change)="updateColor($event)">
+            </mat-form-field>
+
+        </mat-grid-tile>
+    </mat-grid-list>
+
+
+    <mat-dialog-actions>
+        <div class="item-spacer"></div>
+        <button type="button" mat-dialog-close style="margin: 5px ;" mat-raised-button color="basic">
+            <mat-icon class="size-icon">close</mat-icon>CERRAR
+        </button>
+    </mat-dialog-actions>
+</mat-card>

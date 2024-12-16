@@ -1,0 +1,47 @@
+<div class="mat-elevation-z8">
+
+    <div class="table-container-traceability">
+        <div class="overlay-loading" *ngIf="isDisabled">
+            <div class="spinner-wrapper">
+
+                <mat-spinner diameter="50" *ngIf="isDisabled" class="spinner" color="primary"></mat-spinner>
+            </div>
+        </div>
+        <table mat-table [dataSource]="dataSource" matSort>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <ng-container matColumnDef="number">
+                <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="number"> NUMERO
+                </th>
+                <td mat-cell *matCellDef="let item" style="width:10%"> {{item.serie}}{{item.number}} </td>
+            </ng-container>
+            <ng-container matColumnDef="date">
+                <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="date"> FECHA
+                </th>
+                <td mat-cell *matCellDef="let item" style="width:12%"> {{item.date}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell class="primary" *matHeaderCellDef>
+                    ACCIONES </th>
+                <td mat-cell *matCellDef="let item" style="width:10%; text-align: right; margin-right: 5px;">
+                    <a style="color:rgb(95, 12, 130)" (click)="getCertDataPDF(item)" matTooltip="Informe de Calida">
+                        <mat-icon class="custom-size-animation">verified_user</mat-icon>
+                    </a>
+                    <a *ngIf="!item.selected; else check_box" style="color:rgb(130, 16, 12)"
+                        (click)="select(item, true)">
+                        <mat-icon class="custom-size-animation">check_box_outline_blank</mat-icon>
+                    </a>
+                    <ng-template #check_box><a style="color:var(--primary)" (click)="select(item, false)">
+                            <mat-icon class="custom-size-animation">check_box</mat-icon>
+                        </a></ng-template>
+                </td>
+            </ng-container>
+        </table>
+    </div>
+
+
+
+</div>

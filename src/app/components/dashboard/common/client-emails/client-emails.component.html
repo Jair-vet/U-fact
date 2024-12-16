@@ -1,0 +1,102 @@
+<mat-card *ngIf="!error">
+    <form [formGroup]="form" (ngSubmit)="sendEmail()">
+        <mat-card-header class="primary" style="padding:10px">
+            <mat-icon style="font-size:20px">email</mat-icon>
+            <span>ENVIAR CORREO</span>
+            <div class="item-spacer"></div>
+            <span class="icon-close-modal" (click)="closeDialog()">&#10008;</span>
+        </mat-card-header>
+        <div *ngIf="loading" style="text-align: center;">
+            <span class="title-custom">ESTE PROCESO PUEDE SER TARDADO...</span>
+            <mat-spinner diameter="50" class="spinner" color="primary"></mat-spinner>
+
+        </div>
+
+        <mat-dialog-content *ngIf="!loading">
+            <mat-grid-list cols="12" rowHeight="80px">
+                <mat-grid-tile [colspan]="10" [rowspan]="1">
+                    <mat-form-field appearance="outline" floatLabel="always">
+                        <mat-label>ASUNTO</mat-label>
+                        <input matInput formControlName="subject">
+                        <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
+                    </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="2" [rowspan]="1">
+                    <button type="submit" class="btnPrimary"
+                        [disabled]="form.invalid || emails.length == 0 || documents.length == 0"
+                        style="margin-top: 10px;" mat-raised-button>
+                        <mat-icon class="icon-size">email</mat-icon>ENVIAR
+                    </button>
+                </mat-grid-tile>
+            </mat-grid-list>
+            <div class="mat-elevation-z8">
+                <div class="table-container-small-contacts">
+                    <div class="overlay-loading" *ngIf="loading">
+                        <div class="spinner-wrapper">
+                            <mat-spinner diameter="50" *ngIf="loading" class="spinner" color="primary"></mat-spinner>
+                        </div>
+                    </div>
+                    <table mat-table [dataSource]="dataContacts" matSort>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsContacts; sticky: true"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsContacts;"></tr>
+                        <ng-container matColumnDef="actions">
+                            <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="actions"></th>
+                            <td mat-cell *matCellDef="let contact" style="width:15%">
+                                <a *ngIf="!contact.selected; else check_box" style="color:rgb(130, 16, 12)"
+                                    (click)="select(contact, true)">
+                                    <mat-icon class="custom-size-animation">check_box_outline_blank</mat-icon>
+                                </a>
+                                <ng-template #check_box><a style="color:var(--primary)"
+                                        (click)="select(contact, false)">
+                                        <mat-icon class="custom-size-animation">check_box</mat-icon>
+                                    </a></ng-template>
+
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="email">
+                            <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="email"> CORREO </th>
+                            <td mat-cell *matCellDef="let contact" style="width:30%">
+                                {{contact.email }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="name"> NOMBRE </th>
+                            <td mat-cell *matCellDef="let contact" style="width:30%"> {{contact.name }} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="type">
+                            <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="type"> TIPO </th>
+                            <td mat-cell *matCellDef="let contact" style="width:25%"> {{contact.type}} </td>
+                        </ng-container>
+
+                    </table>
+                </div>
+            </div>
+            <br>
+            <mat-grid-list cols="12" rowHeight="200px">
+                <mat-grid-tile [colspan]="12" [rowspan]="1">
+                    <mat-form-field appearance="outline" floatLabel="always">
+                        <mat-label>MENSAJE</mat-label>
+                        <textarea matInput formControlName="body" style="text-align: start;" rows="6"></textarea>
+
+                        <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
+                    </mat-form-field>
+                </mat-grid-tile>
+                <mat-grid-tile *ngFor="let item of documents; let i = index;" [colspan]="colSmall" [rowspan]="1">
+                    <app-document-pdf [document]="item" [id]="i" (eventId)="deleteDocument($event)"></app-document-pdf>
+
+                </mat-grid-tile>
+            </mat-grid-list>
+        </mat-dialog-content>
+
+
+    </form>
+</mat-card>
+<mat-card *ngIf="error" class="colorSecondary">
+
+    <div class="error">
+        <mat-icon style="font-size: 50px" aria-hidden="false">lock</mat-icon>
+        <h1>{{error_msg}}</h1>
+    </div>
+
+</mat-card>

@@ -1,0 +1,14 @@
+mat-grid-tile .mat-figure {
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    opacity: 1;
+}
+
+app-bar-chart {
+    width: 100%;
+    height: 100%;
+}

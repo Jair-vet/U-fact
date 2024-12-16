@@ -1,0 +1,77 @@
+<!-- <div class="container-auth" title="Foto de Tima Miroshnichenko">
+  <div class="container-form" id="container-form">
+    <div class="form-container sign-in-container">
+      <mat-spinner diameter="50" style="margin-top:60%" *ngIf="loading" class="spinner" color="primary"></mat-spinner>
+      <form *ngIf="!loading" class="login" [formGroup]="form" (ngSubmit)="login()">
+        <h1>INICIA SESIÓN</h1>
+        <mat-form-field class="login_field" appearance="outline" floatLabel="always">
+          <mat-label>CORREO ELECTRONICO</mat-label>
+          <input matInput placeholder="" value="" formControlName="email">
+        </mat-form-field>
+        <mat-form-field class="login_field" appearance="outline" floatLabel="always">
+          <mat-label>CONTRASEÑA</mat-label>
+          <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
+        </mat-form-field>
+        <mat-checkbox formControlName="remember">¿RECORDAR CORREO?</mat-checkbox><br>
+        <button type="submit" mat-raised-button class="primary custom-size-animation" [disabled]="form.invalid">INICIAR
+          SESIÓN</button><br><br>
+        <div style="text-align:center; display: flex; align-items: center; justify-content: center; font-size: 8px;">
+          Inncaplast v1.25
+        </div>
+      </form>
+    </div>
+    <div class="overlay-container">
+      <div class="overlay">
+        <div class="overlay-panel overlay-right">
+          <a><img width="250px" class="custom-size-animation" src="assets/img/LogoB.png">
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+<div class="body">
+  <div class="container-auth">
+    <div class="screen">
+      <div class="screen__content">
+        <img src="https://sgp-web.nyc3.cdn.digitaloceanspaces.com/Inncaplast/Assets/Cia-Reduccio%CC%81n2%20(1).png"
+          class="logo" width="150px" alt="" />
+
+        <form class="login" [formGroup]="form" (ngSubmit)="login()">
+          <mat-form-field class="login__field" appearance="outline" floatLabel="always">
+            <mat-label>CORREO ELECTRONICO</mat-label>
+            <input matInput placeholder="" value="" formControlName="email" />
+          </mat-form-field>
+          <mat-form-field class="login__field" appearance="outline" floatLabel="always">
+            <mat-label>CONTRASEÑA</mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" />
+          </mat-form-field>
+          <mat-checkbox formControlName="remember">¿RECORDAR CORREO?</mat-checkbox><br />
+          <button *ngIf="!loading" class="button login__submit">
+            <span class="button__text">Iniciar Sesión</span>
+          </button>
+
+          <div class="spinner-login">
+            <mat-spinner *ngIf="loading" diameter="50" color="primary"></mat-spinner>
+          </div>
+          <div style="
+              text-align: center;
+              color: rgb(255, 255, 255);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 8px;
+            ">
+            CIA v2.2.5
+          </div>
+        </form>
+      </div>
+      <div class="screen__background">
+        <span class="screen__background__shape screen__background__shape4"></span>
+        <span class="screen__background__shape screen__background__shape3"></span>
+        <span class="screen__background__shape screen__background__shape2"></span>
+        <span class="screen__background__shape screen__background__shape1"></span>
+      </div>
+    </div>
+  </div>
+</div>
