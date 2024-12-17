@@ -9,8 +9,6 @@ import { FilterInvoiceState } from '../models/models-state/filter-invoice.state'
 import { filterInvoiceReducer } from './reducers/filter-invoices.reducers';
 import { FilterRequisitionState } from '../models/models-state/filter-requisition.state';
 import { filterRequisitionReducer } from './reducers/filter-requisitions.reducers';
-import { FilterPurchaseOrderState } from '../models/models-state/filter-purchase-order.state';
-import { filterPurchaseOrderReducer } from './reducers/filter-purchase-orders.reducers';
 import { FilterPaymentPluginState } from '../models/models-state/filter-payment-plugin.state';
 import { filterPaymentPluginReducer } from './reducers/filter-payments-plugins.reducers';
 import { FilterCreditNoteState } from '../models/models-state/filter-credit-note.state';
@@ -23,7 +21,6 @@ export interface AppState {
   filterPayment: FilterPaymentState;
   filterInvoice: FilterInvoiceState;
   filterRequisition: FilterRequisitionState;
-  filterPurchaseOrder: FilterPurchaseOrderState;
   filterPaymentPlugin: FilterPaymentPluginState;
   filterCreditNote: FilterCreditNoteState;
 }
@@ -33,7 +30,6 @@ export const ROOT_REDUCERS: ActionReducerMap<AppState> = {
   filterPayment: filterPaymentReducer,
   filterInvoice: filterInvoiceReducer,
   filterRequisition: filterRequisitionReducer,
-  filterPurchaseOrder: filterPurchaseOrderReducer,
   filterPaymentPlugin: filterPaymentPluginReducer,
   filterCreditNote: filterCreditNoteReducer,
 };

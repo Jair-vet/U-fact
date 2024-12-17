@@ -89,15 +89,7 @@ import { ClientEmailsComponent } from './common/client-emails/client-emails.comp
 import { DeparturesTraceabilityComponent } from './orders/components/traceability-components/departures-traceability/departures-traceability.component';
 import { CertificatesTraceabilityComponent } from './orders/components/traceability-components/certificates-traceability/certificates-traceability.component';
 import { DocumentPDFComponent } from './common/client-emails/components/document-pdf/document-pdf.component';
-import { PurchaseOrdersComponent } from './purchase-orders/purchase-orders.component';
-import { CreatePurchaseOrderComponent } from './purchase-orders/create-purchase-order/create-purchase-order.component';
-import { EditPurchaseOrderComponent } from './purchase-orders/edit-purchase-order/edit-purchase-order.component';
-import { ListProductsComponent } from './purchase-orders/components/list-products/list-products.component';
-import { ListRawMaterialsComponent } from './purchase-orders/components/list-raw-materials/list-raw-materials.component';
-import { ListProvidersComponent } from './purchase-orders/components/list-providers/list-providers.component';
-import { EditCurrentPurchaseOrderComponent } from './purchase-orders/components/edit-current-purchase-order/edit-current-purchase-order.component';
-import { HistoryPurchaseOrderComponent } from './purchase-orders/components/history-purchase-order/history-purchase-order.component';
-import { CatalogPurchaseOrdersComponent } from './store/components/catalog-purchase-orders/catalog-purchase-orders.component';
+// import { CatalogPurchaseOrdersComponent } from './store/components/catalog-purchase-orders/catalog-purchase-orders.component';
 import { EntriesToPurchaseOrderComponent } from './store/components/entries-to-purchase-order/entries-to-purchase-order.component';
 import { EntriesByPurchaseOrderComponent } from './store/components/entries-by-purchase-order/entries-by-purchase-order.component';
 import { EntriesToPurchaseOrderProductComponent } from './store/components/entries-to-purchase-order-product/entries-to-purchase-order-product.component';
@@ -210,15 +202,7 @@ import { CreateBankComponent } from './banks/create-bank/create-bank.component';
     DeparturesTraceabilityComponent,
     CertificatesTraceabilityComponent,
     DocumentPDFComponent,
-    PurchaseOrdersComponent,
-    CreatePurchaseOrderComponent,
-    EditPurchaseOrderComponent,
-    ListProductsComponent,
-    ListRawMaterialsComponent,
-    ListProvidersComponent,
-    EditCurrentPurchaseOrderComponent,
-    HistoryPurchaseOrderComponent,
-    CatalogPurchaseOrdersComponent,
+    // CatalogPurchaseOrdersComponent,
     EntriesToPurchaseOrderComponent,
     EntriesByPurchaseOrderComponent,
     EntriesToPurchaseOrderProductComponent,

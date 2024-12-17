@@ -126,10 +126,6 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
 
-          <a mat-list-item (click)="changeRoute('/dashboard/entries/purchase-orders')">
-            <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">receipt_long</mat-icon>
-            <div class="textColorMenu">ORDENES DE COMPRA</div>
-          </a>
           <a mat-list-item (click)="changeRoute('/dashboard/entries')">
             <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">handyman</mat-icon>
             <div class="textColorMenu">ORDENES DE FABRICACIÓN</div>
@@ -171,27 +167,6 @@
           <a mat-list-item (click)="changeRoute('/dashboard/orders')">
             <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">list</mat-icon>
             <div class="textColorMenu">LISTA DE PEDIDOS</div>
-          </a>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header style="justify-content: left">
-            <mat-panel-title>
-              <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">receipt_long
-              </mat-icon>
-              <div class="textColorMenu">ORDENES DE COMPRA</div>
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-
-          <a mat-list-item (click)="changeRoute('/dashboard/purchase-orders')">
-            <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">list</mat-icon>
-            <div class="textColorMenu">LISTA DE ORDENES</div>
-          </a>
-          <a mat-list-item (click)="
-              changeRoute('/dashboard/purchase-orders/create-purchase-order')
-            ">
-            <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">add</mat-icon>
-            <div class="textColorMenu">AGREGAR ORDEN</div>
           </a>
         </mat-expansion-panel>
 

@@ -42,10 +42,6 @@ export class PurchaseOrderService {
         formData.append('samples', JSON.stringify(samples))
         return this.http.post(url, formData, this.headers).pipe(map((resp: any) => resp.message))
     }
-    addPurchaseOrders(purchase_orders: PurchaseOrder[]) {
-        let url = `${base_url}/${this.path}/`
-        return this.http.post(url, { purchase_orders: purchase_orders }, this.headers).pipe(map((resp: any) => resp.message));
-    }
     entryToProducts(product: ProductRawMaterial, purchaseOrder: PurchaseOrder) {
         let url = `${base_url}/${this.path}/entries/products`
         return this.http.post(url, { quantity_to_received: product.quantity_to_received, id_product: product.id_record, id_product_purchase: product.id, id_purchase_order: purchaseOrder.id }, this.headers).pipe(map((resp: any) => resp));
@@ -58,14 +54,6 @@ export class PurchaseOrderService {
         const url = `${base_url}/${this.path}/entries/delete`;
         return this.http.put(url, { id }, this.headers).pipe(map((resp: any) => resp));
     }
-    cancelPurchaseOrder(id_purchase: number) {
-        let url = `${base_url}/${this.path}/cancel`
-        return this.http.post(url, { id_purchase }, this.headers).pipe(map((resp: any) => resp.message));
-    }
-    authorizedPurchaseOrder(id_purchase: number) {
-        let url = `${base_url}/${this.path}/authorized`
-        return this.http.post(url, { id_purchase }, this.headers).pipe(map((resp: any) => resp.message));
-    }
     getRawMaterials() {
         let url = `${base_url}/${this.path}/catalog/inventory/raw-materials/`
         return this.http.get<ProductRawMaterial[]>(url, this.headers).pipe(map((resp: any) => resp.data));
@@ -73,10 +61,6 @@ export class PurchaseOrderService {
     getProducts() {
         let url = `${base_url}/${this.path}/catalog/inventory/products/`
         return this.http.get<ProductRawMaterial[]>(url, this.headers).pipe(map((resp: any) => resp.data));
-    }
-    getPurchaseOrders(id_status: string, page: number) {
-        let url = `${base_url}/${this.path}/${id_status}/${page}`
-        return this.http.get<PurchaseOrder[]>(url, this.headers).pipe(map((resp: any) => resp.data));
     }
     getPurchaseOrdersToEntries() {
         let url = `${base_url}/${this.path}/to/entries`

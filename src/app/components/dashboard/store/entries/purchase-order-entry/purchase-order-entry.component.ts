@@ -4,14 +4,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { PurchaseOrder } from 'src/app/models/purchase-order.model';
 import { PurchaseOrderService } from 'src/app/services/purchase-order.service';
-import { HistoryPurchaseOrderComponent } from '../../../purchase-orders/components/history-purchase-order/history-purchase-order.component';
 import { EntriesToPurchaseOrderProductComponent } from '../../components/entries-to-purchase-order-product/entries-to-purchase-order-product.component';
 import { EntriesToPurchaseOrderComponent } from '../../components/entries-to-purchase-order/entries-to-purchase-order.component';
 import { PdfViewComponent } from '../../components/pdf-view/pdf-view.component';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { setIdStatusPurchaseOrders, setPagePurchaseOrders, setSearchPurchaseOrders } from 'src/app/state/actions/filter-purchase-order.actions';
-import { selectIdStatusPurchaseOrder, selectPagePurchaseOrder, selectSearchPurchaseOrder } from 'src/app/state/selectors/filter-purchase-order.selector';
+
 
 @Component({
   selector: 'app-purchase-order-entry',
@@ -85,37 +84,10 @@ export class PurchaseOrderEntryComponent implements OnInit {
         }
       }
     })
-    this.search = this.store.select(selectSearchPurchaseOrder)
-    this.statusState = this.store.select(selectIdStatusPurchaseOrder)
-    this.pageState = this.store.select(selectPagePurchaseOrder)
   }
 
   loadData() {
     this.loading = true
-    this._purchaseOrderService.getPurchaseOrders(this.idType, this.numberPage).subscribe({
-      next: (resp) => {
-
-        this.totalPages = resp.total_pages
-        this.dataSource = new MatTableDataSource(resp.data);
-      },
-      complete: () => {
-        this.applySearch()
-      },
-      error: (err) => {
-        this.loading = false
-        this.error = true
-        this.error_msg = err.error.message
-      },
-
-    })
-  }
-  openHistory(purchase: PurchaseOrder) {
-    const dialogRef = this.dialog.open(HistoryPurchaseOrderComponent, {
-      width: this.modalWidth,
-      height: 'auto',
-      data: purchase
-    })
-
   }
 
   changePage(newPage: number) {
