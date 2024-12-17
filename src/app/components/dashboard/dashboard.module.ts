@@ -106,8 +106,7 @@ import { CreditNotesComponent } from './credit-note/credit-notes/credit-notes.co
 import { CreateCreditNoteComponent } from './credit-note/create-credit-note/create-credit-note.component';
 import { SalesReturnsComponent } from './store/entries/sales-returns/sales-returns.component';
 import { CatalogAvailableInventoryComponent } from './store/components/catalog-available-inventory/catalog-available-inventory.component';
-import { AccountsReceivableComponent } from './treasury/accounts-receivable/accounts-receivable.component';
-import { SalesNotesPayableComponent } from './treasury/components/sales-notes-payable/sales-notes-payable.component';
+// import { SalesNotesPayableComponent } from './treasury/components/sales-notes-payable/sales-notes-payable.component';
 import { InvoicesBalanceComponent } from './treasury/components/invoices-balance/invoices-balance.component';
 import { BanksComponent } from './banks/banks.component';
 import { CreateBankComponent } from './banks/create-bank/create-bank.component';
@@ -216,8 +215,7 @@ import { CreateBankComponent } from './banks/create-bank/create-bank.component';
     CreateCreditNoteComponent,
     SalesReturnsComponent,
     CatalogAvailableInventoryComponent,
-    AccountsReceivableComponent,
-    SalesNotesPayableComponent,
+    // SalesNotesPayableComponent,
     InvoicesBalanceComponent,
     BanksComponent,
     CreateBankComponent

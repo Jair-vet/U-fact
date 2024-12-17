@@ -50,7 +50,6 @@ import { AddOrderRequisitionComponent } from './production/add-order-requisition
 import { KardexEntriesDeparturesComponent } from './store/products/kardex-entries-departures/kardex-entries-departures.component';
 import { CreditNotesComponent } from './credit-note/credit-notes/credit-notes.component';
 import { SalesReturnsComponent } from './store/entries/sales-returns/sales-returns.component';
-import { AccountsReceivableComponent } from './treasury/accounts-receivable/accounts-receivable.component';
 import { BanksComponent } from './banks/banks.component';
 import { CreateBankComponent } from './banks/create-bank/create-bank.component';
 
@@ -150,7 +149,6 @@ const routes: Routes = [
 
       { path: 'payments-plugins', component: PaymentsPluginsComponent },
       { path: 'payments', component: PaymentsComponent },
-      { path: 'accounts-receivable', component: AccountsReceivableComponent },
       {
         path: 'payments/payment-plugin/:id_payment',
         component: PaymentPluginComponent,
