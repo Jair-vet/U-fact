@@ -46,12 +46,8 @@ import { PaymentPluginComponent } from './treasury/payment-plugin/payment-plugin
 import { PaymentsPluginsComponent } from './invoices/payments-plugins/payments-plugins.component';
 import { SeeOrderComponent } from './orders/see-order/see-order.component';
 import { TraceabilityComponent } from './orders/traceability/traceability.component';
-import { PurchaseOrdersComponent } from './purchase-orders/purchase-orders.component';
-import { CreatePurchaseOrderComponent } from './purchase-orders/create-purchase-order/create-purchase-order.component';
-import { EditPurchaseOrderComponent } from './purchase-orders/edit-purchase-order/edit-purchase-order.component';
 import { AddOrderRequisitionComponent } from './production/add-order-requisition/add-order-requisition.component';
 import { KardexEntriesDeparturesComponent } from './store/products/kardex-entries-departures/kardex-entries-departures.component';
-import { PurchaseOrderEntryComponent } from './store/entries/purchase-order-entry/purchase-order-entry.component';
 import { CreditNotesComponent } from './credit-note/credit-notes/credit-notes.component';
 import { CreateCreditNoteComponent } from './credit-note/create-credit-note/create-credit-note.component';
 import { SalesReturnsComponent } from './store/entries/sales-returns/sales-returns.component';
@@ -73,10 +69,7 @@ const routes: Routes = [
       { path: 'clients/edit-client/:id', component: EditClientComponent },
 
       { path: 'entries', component: EntriesComponent },
-      {
-        path: 'entries/purchase-orders',
-        component: PurchaseOrderEntryComponent,
-      },
+
       { path: 'entries/generate-entry/:id', component: CreateEntryComponent },
       { path: 'entries/detail-entry/:id', component: DetailEntryComponent },
       { path: 'entries/sales-returns', component: SalesReturnsComponent },
@@ -140,16 +133,6 @@ const routes: Routes = [
       { path: 'orders/see-order/:id', component: SeeOrderComponent },
       { path: 'orders/products-order/:id', component: ProductsOrderComponent },
 
-      { path: 'purchase-orders', component: PurchaseOrdersComponent },
-      {
-        path: 'purchase-orders/edit-purchase-order/:id',
-        component: EditPurchaseOrderComponent,
-      },
-      {
-        path: 'purchase-orders/create-purchase-order',
-        component: CreatePurchaseOrderComponent,
-      },
-
       { path: 'production', component: ProductionComponent },
       {
         path: 'production/add-requisition',
@@ -180,7 +163,7 @@ const routes: Routes = [
         path: 'payments/details-balance-client/:id_client',
         component: DetailsBalanceClientComponent,
       },
-      // ! Eliminar
+
     ],
   },
 ];
