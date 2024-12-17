@@ -25,10 +25,6 @@ export class AccountBalanceService {
       },
     };
   }
-  getAccountsPays() {
-    const url = `${base_url}/${this.path}/account-pay`;
-    return this.http.get<any>(url, this.headers).pipe(map((resp: any) => resp.data));
-  }
   getBalance(id_client: string, dateStart: Date, dateEnd: Date, id_type_currency: number) {
     const url = `${base_url}/${this.path}/${id_client}`;
     return this.http

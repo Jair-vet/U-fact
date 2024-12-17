@@ -126,10 +126,6 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
 
-          <a mat-list-item (click)="changeRoute('/dashboard/entries/purchase-orders')">
-            <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">receipt_long</mat-icon>
-            <div class="textColorMenu">ORDENES DE COMPRA</div>
-          </a>
           <a mat-list-item (click)="changeRoute('/dashboard/entries')">
             <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">handyman</mat-icon>
             <div class="textColorMenu">ORDENES DE FABRICACIÓN</div>
@@ -221,12 +217,6 @@
           </a>
 
         </mat-expansion-panel>
-        <a mat-list-item (click)="changeRoute('/dashboard/accounts-pays')">
-          <mat-icon class="textColor custom-size-animation"
-            style="margin-right: 10px; color: var(--success); font-size: 24px;">
-            monetization_on</mat-icon>
-          <div class="textColorMenu">COBRANZA</div>
-        </a>
       </mat-nav-list>
     </div>
   </mat-sidenav>

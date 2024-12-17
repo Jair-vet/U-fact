@@ -49,10 +49,7 @@ import { TraceabilityComponent } from './orders/traceability/traceability.compon
 import { AddOrderRequisitionComponent } from './production/add-order-requisition/add-order-requisition.component';
 import { KardexEntriesDeparturesComponent } from './store/products/kardex-entries-departures/kardex-entries-departures.component';
 import { CreditNotesComponent } from './credit-note/credit-notes/credit-notes.component';
-import { CreateCreditNoteComponent } from './credit-note/create-credit-note/create-credit-note.component';
 import { SalesReturnsComponent } from './store/entries/sales-returns/sales-returns.component';
-import { AccountsReceivableComponent } from './treasury/accounts-receivable/accounts-receivable.component';
-import { AccountsPaysComponent } from './treasury/accounts-pays/accounts-pays.component';
 import { BanksComponent } from './banks/banks.component';
 import { CreateBankComponent } from './banks/create-bank/create-bank.component';
 
@@ -69,7 +66,6 @@ const routes: Routes = [
       { path: 'clients/edit-client/:id', component: EditClientComponent },
 
       { path: 'entries', component: EntriesComponent },
-
       { path: 'entries/generate-entry/:id', component: CreateEntryComponent },
       { path: 'entries/detail-entry/:id', component: DetailEntryComponent },
       { path: 'entries/sales-returns', component: SalesReturnsComponent },
@@ -153,8 +149,6 @@ const routes: Routes = [
 
       { path: 'payments-plugins', component: PaymentsPluginsComponent },
       { path: 'payments', component: PaymentsComponent },
-      { path: 'accounts-receivable', component: AccountsReceivableComponent },
-      { path: 'accounts-pays', component: AccountsPaysComponent },
       {
         path: 'payments/payment-plugin/:id_payment',
         component: PaymentPluginComponent,
@@ -163,7 +157,6 @@ const routes: Routes = [
         path: 'payments/details-balance-client/:id_client',
         component: DetailsBalanceClientComponent,
       },
-
     ],
   },
 ];
