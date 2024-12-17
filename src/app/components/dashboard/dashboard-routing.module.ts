@@ -51,7 +51,6 @@ import { KardexEntriesDeparturesComponent } from './store/products/kardex-entrie
 import { CreditNotesComponent } from './credit-note/credit-notes/credit-notes.component';
 import { SalesReturnsComponent } from './store/entries/sales-returns/sales-returns.component';
 import { AccountsReceivableComponent } from './treasury/accounts-receivable/accounts-receivable.component';
-import { AccountsPaysComponent } from './treasury/accounts-pays/accounts-pays.component';
 import { BanksComponent } from './banks/banks.component';
 import { CreateBankComponent } from './banks/create-bank/create-bank.component';
 
@@ -152,7 +151,6 @@ const routes: Routes = [
       { path: 'payments-plugins', component: PaymentsPluginsComponent },
       { path: 'payments', component: PaymentsComponent },
       { path: 'accounts-receivable', component: AccountsReceivableComponent },
-      { path: 'accounts-pays', component: AccountsPaysComponent },
       {
         path: 'payments/payment-plugin/:id_payment',
         component: PaymentPluginComponent,

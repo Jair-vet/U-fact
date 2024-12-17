@@ -89,7 +89,6 @@ import { ClientEmailsComponent } from './common/client-emails/client-emails.comp
 import { DeparturesTraceabilityComponent } from './orders/components/traceability-components/departures-traceability/departures-traceability.component';
 import { CertificatesTraceabilityComponent } from './orders/components/traceability-components/certificates-traceability/certificates-traceability.component';
 import { DocumentPDFComponent } from './common/client-emails/components/document-pdf/document-pdf.component';
-// import { CatalogPurchaseOrdersComponent } from './store/components/catalog-purchase-orders/catalog-purchase-orders.component';
 import { EntriesToPurchaseOrderComponent } from './store/components/entries-to-purchase-order/entries-to-purchase-order.component';
 import { EntriesByPurchaseOrderComponent } from './store/components/entries-by-purchase-order/entries-by-purchase-order.component';
 import { EntriesToPurchaseOrderProductComponent } from './store/components/entries-to-purchase-order-product/entries-to-purchase-order-product.component';
@@ -109,14 +108,12 @@ import { SalesReturnsComponent } from './store/entries/sales-returns/sales-retur
 import { CatalogAvailableInventoryComponent } from './store/components/catalog-available-inventory/catalog-available-inventory.component';
 import { AccountsReceivableComponent } from './treasury/accounts-receivable/accounts-receivable.component';
 import { SalesNotesPayableComponent } from './treasury/components/sales-notes-payable/sales-notes-payable.component';
-import { AccountsPaysComponent } from './treasury/accounts-pays/accounts-pays.component';
 import { InvoicesBalanceComponent } from './treasury/components/invoices-balance/invoices-balance.component';
 import { BanksComponent } from './banks/banks.component';
 import { CreateBankComponent } from './banks/create-bank/create-bank.component';
 
 @NgModule({
   declarations: [
-    AccountsPaysComponent,
     InvoicesComponent,
     AddRawMaterialIntoProductComponent,
     DashboardComponent,
@@ -202,7 +199,6 @@ import { CreateBankComponent } from './banks/create-bank/create-bank.component';
     DeparturesTraceabilityComponent,
     CertificatesTraceabilityComponent,
     DocumentPDFComponent,
-    // CatalogPurchaseOrdersComponent,
     EntriesToPurchaseOrderComponent,
     EntriesByPurchaseOrderComponent,
     EntriesToPurchaseOrderProductComponent,

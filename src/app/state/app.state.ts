@@ -13,7 +13,6 @@ import { FilterPaymentPluginState } from '../models/models-state/filter-payment-
 import { filterPaymentPluginReducer } from './reducers/filter-payments-plugins.reducers';
 import { FilterCreditNoteState } from '../models/models-state/filter-credit-note.state';
 import { filterCreditNoteReducer } from './reducers/filter-credit-note.reducers';
-import { FilterDeliveryState } from '../models/models-state/filter-delivery.state';
 
 export interface AppState {
   filterSaleNote: FilterSaleNoteState;
