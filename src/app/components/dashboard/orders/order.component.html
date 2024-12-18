@@ -122,11 +122,6 @@
                 matTooltip="HISTORIAL">
                 <mat-icon class="custom-size-animation">history</mat-icon>
               </a>
-              <a *ngIf="!inactive && item.id_status != 2" class="btnAction"
-                routerLink="/dashboard/orders/products-order/{{ item.id }}" style="color: var(--document_one)"
-                matTooltip="SURTIR">
-                <mat-icon class="custom-size-animation">double_arrow</mat-icon>
-              </a>
               <a *ngIf="!inactive" class="btnAction" style="color: var(--success)" (click)="openCatalogDepartures(item)"
                 matTooltip="VER SALIDAS">
                 <mat-icon class="custom-size-animation">unarchive</mat-icon>

@@ -17,7 +17,6 @@ import { ProvidersComponent } from './providers/providers.component';
 import { CreateProviderComponent } from './providers/create-provider/create-provider.component';
 import { EditProviderComponent } from './providers/edit-provider/edit-provider.component';
 import { ListPricesComponent } from './list-prices/list-prices.component';
-import { RawMaterialsComponent } from './store/raw-materials/raw-materials.component';
 import { CreateRawMaterialComponent } from './store/raw-materials/create-raw-material/create-raw-material.component';
 import { EditRawMaterialComponent } from './store/raw-materials/edit-raw-material/edit-raw-material.component';
 import { CatalogFamiliesComponent } from './store/raw-materials/components/catalog-families/catalog-families.component';
@@ -89,9 +88,6 @@ import { ClientEmailsComponent } from './common/client-emails/client-emails.comp
 import { DeparturesTraceabilityComponent } from './orders/components/traceability-components/departures-traceability/departures-traceability.component';
 import { CertificatesTraceabilityComponent } from './orders/components/traceability-components/certificates-traceability/certificates-traceability.component';
 import { DocumentPDFComponent } from './common/client-emails/components/document-pdf/document-pdf.component';
-import { EntriesToPurchaseOrderComponent } from './store/components/entries-to-purchase-order/entries-to-purchase-order.component';
-import { EntriesByPurchaseOrderComponent } from './store/components/entries-by-purchase-order/entries-by-purchase-order.component';
-import { EntriesToPurchaseOrderProductComponent } from './store/components/entries-to-purchase-order-product/entries-to-purchase-order-product.component';
 import { PaginationComponent } from './common/pagination/pagination.component';
 import { AddOrderRequisitionComponent } from './production/add-order-requisition/add-order-requisition.component';
 import { TotalTagComponent } from './common/total-tag/total-tag.component';
@@ -101,15 +97,14 @@ import { DetailDepartureSaleComponent } from './store/products/see-entry-departu
 import { DetailEntryPurchaseComponent } from './store/products/see-entry-departure/detail-entry-purchase/detail-entry-purchase.component';
 import { DetailEntryProductionComponent } from './store/products/see-entry-departure/detail-entry-production/detail-entry-production.component';
 import { BarChartComponent } from './common/bar-chart/bar-chart.component';
-import { PurchaseOrderEntryComponent } from './store/entries/purchase-order-entry/purchase-order-entry.component';
 import { CreditNotesComponent } from './credit-note/credit-notes/credit-notes.component';
 import { CreateCreditNoteComponent } from './credit-note/create-credit-note/create-credit-note.component';
 import { SalesReturnsComponent } from './store/entries/sales-returns/sales-returns.component';
 import { CatalogAvailableInventoryComponent } from './store/components/catalog-available-inventory/catalog-available-inventory.component';
-// import { SalesNotesPayableComponent } from './treasury/components/sales-notes-payable/sales-notes-payable.component';
 import { InvoicesBalanceComponent } from './treasury/components/invoices-balance/invoices-balance.component';
 import { BanksComponent } from './banks/banks.component';
 import { CreateBankComponent } from './banks/create-bank/create-bank.component';
+import { RawMaterialsComponent } from './store/raw-materials/raw-materials.component';
 
 @NgModule({
   declarations: [
@@ -198,9 +193,6 @@ import { CreateBankComponent } from './banks/create-bank/create-bank.component';
     DeparturesTraceabilityComponent,
     CertificatesTraceabilityComponent,
     DocumentPDFComponent,
-    EntriesToPurchaseOrderComponent,
-    EntriesByPurchaseOrderComponent,
-    EntriesToPurchaseOrderProductComponent,
     PaginationComponent,
     AddOrderRequisitionComponent,
     TotalTagComponent,
@@ -210,12 +202,10 @@ import { CreateBankComponent } from './banks/create-bank/create-bank.component';
     DetailEntryPurchaseComponent,
     DetailEntryProductionComponent,
     BarChartComponent,
-    PurchaseOrderEntryComponent,
     CreditNotesComponent,
     CreateCreditNoteComponent,
     SalesReturnsComponent,
     CatalogAvailableInventoryComponent,
-    // SalesNotesPayableComponent,
     InvoicesBalanceComponent,
     BanksComponent,
     CreateBankComponent
