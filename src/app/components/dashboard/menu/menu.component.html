@@ -67,10 +67,6 @@
             <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">list</mat-icon>
             <div class="textColorMenu">LISTA DE PRECIOS</div>
           </a>
-          <a mat-list-item (click)="changeRoute('/dashboard/raw-materials')">
-            <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">grain</mat-icon>
-            <div class="textColorMenu">PRODUCTOS MP</div>
-          </a>
           <a mat-list-item (click)="changeRoute('/dashboard/products')">
             <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">widgets</mat-icon>
             <div class="textColorMenu">PRODUCTOS TERMINADOS</div>
@@ -89,33 +85,12 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
 
-          <a mat-list-item (click)="changeRoute('/dashboard/raw-materials')">
-            <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">grain</mat-icon>
-            <div class="textColorMenu">PRODUCTOS MP</div>
-          </a>
           <a mat-list-item (click)="changeRoute('/dashboard/products')">
             <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">widgets</mat-icon>
             <div class="textColorMenu">PRODUCTOS TERMINADOS</div>
           </a>
         </mat-expansion-panel>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header style="justify-content: left">
-            <mat-panel-title>
-              <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">factory
-              </mat-icon>
-              <div class="textColorMenu">PRODUCCIÓN</div>
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-
-          <a mat-list-item (click)="changeRoute('/dashboard/production')">
-            <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">list</mat-icon>
-            <div class="textColorMenu">LISTA DE REQUISICIONES</div>
-          </a>
-          <a mat-list-item (click)="changeRoute('/dashboard/production/add-requisition')">
-            <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">add</mat-icon>
-            <div class="textColorMenu">AGREGAR REQUISICIÓN</div>
-          </a>
-        </mat-expansion-panel>
+        
         <mat-expansion-panel>
           <mat-expansion-panel-header style="justify-content: left">
             <mat-panel-title>
@@ -125,11 +100,6 @@
               <div class="textColorMenu">ENTRADAS</div>
             </mat-panel-title>
           </mat-expansion-panel-header>
-
-          <a mat-list-item (click)="changeRoute('/dashboard/entries')">
-            <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">handyman</mat-icon>
-            <div class="textColorMenu">ORDENES DE FABRICACIÓN</div>
-          </a>
 
           <a mat-list-item (click)="changeRoute('/dashboard/entries/sales-returns')">
             <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">assignment_return</mat-icon>
@@ -152,21 +122,6 @@
           <a mat-list-item (click)="changeRoute('/dashboard/orders/create-order')">
             <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">add</mat-icon>
             <div class="textColorMenu">AGREGAR PEDIDO</div>
-          </a>
-        </mat-expansion-panel>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header style="justify-content: left">
-            <mat-panel-title>
-              <mat-icon class="textColor custom-size-animation"
-                style="margin-right: 10px; color: var(--error)">unarchive
-              </mat-icon>
-              <div class="textColorMenu">SALIDAS</div>
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-
-          <a mat-list-item (click)="changeRoute('/dashboard/orders')">
-            <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">list</mat-icon>
-            <div class="textColorMenu">LISTA DE PEDIDOS</div>
           </a>
         </mat-expansion-panel>
 
@@ -207,13 +162,6 @@
           <a mat-list-item (click)="changeRoute('/dashboard/payments')">
             <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">monetization_on</mat-icon>
             <div class="textColorMenu">PAGOS</div>
-          </a>
-          <a mat-list-item (click)="changeRoute('/dashboard/accounts-receivable')">
-            <span class="material-symbols-outlined textColor custom-size-animation"
-              style="margin-right: 10px; color: var(--success); font-size: 24px">
-              approval_delegation
-            </span>
-            <div class="textColorMenu">CUENTAS POR COBRAR</div>
           </a>
 
         </mat-expansion-panel>
