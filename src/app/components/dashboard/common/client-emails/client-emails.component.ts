@@ -12,8 +12,8 @@ import { Invoice } from 'src/app/models/invoice.model';
 import { Order } from 'src/app/models/order.model';
 import { PaymentPlugin } from 'src/app/models/payment-plugin.model';
 import { Provider } from 'src/app/models/provider.model';
-import { PurchaseOrder } from 'src/app/models/purchase-order.model';
-import { QuotationRequest } from 'src/app/models/quotation-request.model';
+// import { PurchaseOrder } from 'src/app/models/purchase-order.model';
+// import { QuotationRequest } from 'src/app/models/quotation-request.model';
 import { ClientService } from 'src/app/services/client.service';
 import { ContactService } from 'src/app/services/contact.service';
 import { ProviderService } from 'src/app/services/provider.service';
@@ -171,7 +171,7 @@ export class ClientEmailsComponent implements OnInit {
       this.form.controls['title'].setValue('COMPLEMENTOS DE PAGO')
     }
     else if (this.data.type == 'purchase-order') {
-      this.loadPurchaseOrder(this.data.data.purchase)
+      // this.loadPurchaseOrder(this.data.data.purchase)
 
       this.form.controls['body'].setValue(this.getBodyEmail((`${this.data.data.purchase.folio}`), false, true))
       this.form.controls['subject'].setValue('ORDEN DE COMPRA')
@@ -180,7 +180,7 @@ export class ClientEmailsComponent implements OnInit {
 
     else if (this.data.type == 'quotation-request') {
 
-      this.loadQuotationRequest(this.data.data.quotations_request)
+      // this.loadQuotationRequest(this.data.data.quotations_request)
 
       this.form.controls['body'].setValue(this.getBodyEmail((`${this.data.data.quotations_request.folio}`), false, false))
       this.form.controls['subject'].setValue('COTIZACIÓN')
@@ -197,14 +197,14 @@ export class ClientEmailsComponent implements OnInit {
     this.loadOrder(this.data.data.order)
   }
 
-  loadPurchaseOrder(purchase: PurchaseOrder) {
-    const document = new DocumentPDF('', purchase.folio, 6, purchase.id)
-    this.addDocument(document)
-  }
-  loadQuotationRequest(quotation_request: QuotationRequest) {
-    const document = new DocumentPDF('', quotation_request.folio, 7, quotation_request.id)
-    this.addDocument(document)
-  }
+  // loadPurchaseOrder(purchase: PurchaseOrder) {
+  //   const document = new DocumentPDF('', purchase.folio, 6, purchase.id)
+  //   this.addDocument(document)
+  // }
+  // loadQuotationRequest(quotation_request: QuotationRequest) {
+  //   const document = new DocumentPDF('', quotation_request.folio, 7, quotation_request.id)
+  //   this.addDocument(document)
+  // }
 
 
   loadOrder(orders: Order[]) {

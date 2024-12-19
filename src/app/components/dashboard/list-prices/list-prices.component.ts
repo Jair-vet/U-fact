@@ -6,12 +6,10 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { JoyrideService } from 'ngx-joyride';
-import { RawMaterial } from 'src/app/models/raw-material.model';
 
 
 import { HelpService } from 'src/app/services/help.service';
 import { ListPriceService } from 'src/app/services/list-price.service';
-import { RawMaterialService } from 'src/app/services/raw-material.service';
 import { RoutingService } from 'src/app/services/routing.service';
 import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';
@@ -87,73 +85,73 @@ export class ListPricesComponent implements OnInit {
 
 
 
-  inactiveRecord(record: RawMaterial) {
-
-    Swal.fire({
-      title: 'DESACTIVAR',
-      text: '¿ESTAS SEGURO DE DESACTIVAR EL REGISTRO ' + record.description.toString() + ' CON NUMERO [' + record.id!.toString() + ']',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'CONFIRMAR',
-      cancelButtonText: 'CANCELAR',
-      confirmButtonColor: '#58B1F7',
-      reverseButtons: true
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this._listPriceService.delete(record.id!.toString()).subscribe({
-          next: (resp) => {
-            Swal.fire({ title: 'OK', text: resp, icon: 'success', confirmButtonColor: '#58B1F7', heightAuto: false })
-          },
-          complete: () => {
-            this.loadData();
-          },
-          error: (err) => {
-            console.log(err)
-            Swal.fire({ title: 'ERROR', text: err.error.message, icon: 'error', confirmButtonColor: '#58B1F7', heightAuto: false })
-          },
-
-        })
-      }
-    })
-  }
+//   inactiveRecord(record: RawMaterial) {
+// 
+//     Swal.fire({
+//       title: 'DESACTIVAR',
+//       text: '¿ESTAS SEGURO DE DESACTIVAR EL REGISTRO ' + record.description.toString() + ' CON NUMERO [' + record.id!.toString() + ']',
+//       icon: 'warning',
+//       showCancelButton: true,
+//       confirmButtonText: 'CONFIRMAR',
+//       cancelButtonText: 'CANCELAR',
+//       confirmButtonColor: '#58B1F7',
+//       reverseButtons: true
+//     }).then((result) => {
+//       if (result.isConfirmed) {
+//         this._listPriceService.delete(record.id!.toString()).subscribe({
+//           next: (resp) => {
+//             Swal.fire({ title: 'OK', text: resp, icon: 'success', confirmButtonColor: '#58B1F7', heightAuto: false })
+//           },
+//           complete: () => {
+//             this.loadData();
+//           },
+//           error: (err) => {
+//             console.log(err)
+//             Swal.fire({ title: 'ERROR', text: err.error.message, icon: 'error', confirmButtonColor: '#58B1F7', heightAuto: false })
+//           },
+// 
+//         })
+//       }
+//     })
+//   }
 
   changeStateInactive(state: boolean) {
     this.inactive = state
     this.changeData()
   }
 
-  restore(record: RawMaterial) {
-
-    Swal.fire({
-      title: 'RESTAURAR',
-      text: '¿ESTAS SEGURO DE RESTAURAR EL REGISTRO ' + record.description + ' CON NUMERO [' + record.id!.toString() + ']',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'RESTARURAR',
-      cancelButtonText: 'CANCELAR',
-      confirmButtonColor: '#58B1F7',
-      reverseButtons: true,
-      heightAuto: false
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this._listPriceService.restore(record.id!.toString()).subscribe({
-          next: (resp) => {
-            Swal.fire({ title: 'REGISTRO RESTAURADO', text: resp, icon: 'success', confirmButtonColor: '#58B1F7', heightAuto: false })
-          },
-          complete: () => {
-            this.loadData();
-          },
-          error: (err) => {
-            console.log(err)
-            Swal.fire({ title: 'ERROR', text: 'HA OCURRIDO UN ERROR INTENTANDO RESTAURAR EL REGISTRO', icon: 'error', confirmButtonColor: '#58B1F7', heightAuto: false })
-          },
-
-        })
-      }
-    })
-
-
-  }
+//   restore(record: RawMaterial) {
+// 
+//     Swal.fire({
+//       title: 'RESTAURAR',
+//       text: '¿ESTAS SEGURO DE RESTAURAR EL REGISTRO ' + record.description + ' CON NUMERO [' + record.id!.toString() + ']',
+//       icon: 'warning',
+//       showCancelButton: true,
+//       confirmButtonText: 'RESTARURAR',
+//       cancelButtonText: 'CANCELAR',
+//       confirmButtonColor: '#58B1F7',
+//       reverseButtons: true,
+//       heightAuto: false
+//     }).then((result) => {
+//       if (result.isConfirmed) {
+//         this._listPriceService.restore(record.id!.toString()).subscribe({
+//           next: (resp) => {
+//             Swal.fire({ title: 'REGISTRO RESTAURADO', text: resp, icon: 'success', confirmButtonColor: '#58B1F7', heightAuto: false })
+//           },
+//           complete: () => {
+//             this.loadData();
+//           },
+//           error: (err) => {
+//             console.log(err)
+//             Swal.fire({ title: 'ERROR', text: 'HA OCURRIDO UN ERROR INTENTANDO RESTAURAR EL REGISTRO', icon: 'error', confirmButtonColor: '#58B1F7', heightAuto: false })
+//           },
+// 
+//         })
+//       }
+//     })
+// 
+// 
+//   }
 
 
 

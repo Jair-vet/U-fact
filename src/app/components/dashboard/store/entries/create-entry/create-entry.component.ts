@@ -47,7 +47,7 @@ export class CreateEntryComponent implements OnInit {
   activeIndex = 0
   message_wait = 'ESPERA POR FAVOR ESTE PROCESO TARDARA UNOS MINUTOS'
 
-  constructor(private _routingService: RoutingService, private _purchaseOrderService: PurchaseOrderService, private _sampleService: SampleService, private _entryService: EntryService, private _route: ActivatedRoute, private _computerTableService: ComputerTableService, private breakpointObserver: BreakpointObserver, private _router: Router, private _formBuider: FormBuilder) {
+  constructor(private _routingService: RoutingService, private _sampleService: SampleService, private _entryService: EntryService, private _route: ActivatedRoute, private _computerTableService: ComputerTableService, private breakpointObserver: BreakpointObserver, private _router: Router, private _formBuider: FormBuilder) {
     this.breakpointObserver.observe([
       Breakpoints.XSmall,
       Breakpoints.Small,
@@ -125,20 +125,6 @@ export class CreateEntryComponent implements OnInit {
         },
       })
     } else {
-
-      this._purchaseOrderService.addSampleToEntry(this.form.value.comments, this.dataSourceComputerTable.data, this.id_entry, this.entry.id_product.toString(), this.image, this.form.value.invoice_number, this.form.value.invoice_attachment).subscribe({
-        next: (resp) => {
-          Swal.fire({ title: 'OK', text: resp, icon: 'success', confirmButtonColor: '#58B1F7', heightAuto: false })
-        },
-        complete: () => {
-
-          this.loadData(false)
-        },
-        error: (err) => {
-          Swal.fire({ title: 'ERROR', text: err.error.message, icon: 'error', confirmButtonColor: '#58B1F7', heightAuto: false })
-          this.loading = false
-        },
-      })
 
     }
   }
@@ -256,21 +242,6 @@ export class CreateEntryComponent implements OnInit {
         },
       })
     } else {
-      this._purchaseOrderService.deleteEntry(this.id_entry).subscribe({
-        next: (resp) => {
-          Swal.fire({ title: 'OK', text: resp.message, icon: 'success', confirmButtonColor: '#58B1F7', heightAuto: false })
-        },
-        complete: () => {
-          this.loading = false
-          this._router.navigateByUrl(`${this.path}`)
-
-        },
-        error: (err) => {
-          Swal.fire({ title: 'ERROR', text: err.error.message, icon: 'error', confirmButtonColor: '#58B1F7', heightAuto: false })
-          this.loading = false
-
-        },
-      })
     }
 
   }

@@ -58,11 +58,6 @@
             </mat-icon> -->
             <div class="textColorMenu">CLIENTES</div>
           </a>
-          <a mat-list-item (click)="changeRoute('/dashboard/providers')">
-            <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">local_shipping</mat-icon>
-            <div class="textColorMenu">PROVEEDORES</div>
-          </a>
-
           <a mat-list-item (click)="changeRoute('/dashboard/list-prices')">
             <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">list</mat-icon>
             <div class="textColorMenu">LISTA DE PRECIOS</div>
@@ -74,20 +69,6 @@
           <a mat-list-item (click)="changeRoute('/dashboard/banks')">
             <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">account_balance</mat-icon>
             <div class="textColorMenu">BANCOS</div>
-          </a>
-        </mat-expansion-panel>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header style="justify-content: left">
-            <mat-panel-title>
-              <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">inventory
-              </mat-icon>
-              <div class="textColorMenu">ALMACEN</div>
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-
-          <a mat-list-item (click)="changeRoute('/dashboard/products')">
-            <mat-icon class="textColor custom-size-animation" style="margin-right: 10px">widgets</mat-icon>
-            <div class="textColorMenu">PRODUCTOS TERMINADOS</div>
           </a>
         </mat-expansion-panel>
         

@@ -7,13 +7,11 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { JoyrideService } from 'ngx-joyride';
 import { BankAccount } from 'src/app/models/bank-account.model';
-import { RawMaterial } from 'src/app/models/raw-material.model';
 import { BankAccountService } from 'src/app/services/bank-account.service';
 
 
 import { HelpService } from 'src/app/services/help.service';
 import { ListPriceService } from 'src/app/services/list-price.service';
-import { RawMaterialService } from 'src/app/services/raw-material.service';
 import { RoutingService } from 'src/app/services/routing.service';
 import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';

@@ -27,7 +27,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { BooleanInput } from '@angular/cdk/coercion';
 import { CatalogMeasuresComponent } from '../components/catalog-measures/catalog-measures.component';
 import { CatalogMoldsComponent } from '../components/catalog-molds/catalog-molds.component';
-import { AddRawMaterialIntoProductComponent } from '../../components/add-raw-material-into-product/add-raw-material-into-product.component';
 import { environment } from 'src/environments/environment';
 
 const clearFields = environment.clearFields;
@@ -304,15 +303,6 @@ export class CreateProductComponent implements OnInit {
     } else {
       this._productService.total =
         this.form.value.amount_pieces * this.form.value.weight_pieces;
-      console.log(this._productService.total);
-      const dialogRef = this.dialog.open(AddRawMaterialIntoProductComponent, {
-        disableClose: false,
-        width: '100%',
-        maxHeight: 'auto',
-      });
-      dialogRef.afterClosed().subscribe((result) => {
-        this.loadRawMaterialsProducts();
-      });
     }
   }
 

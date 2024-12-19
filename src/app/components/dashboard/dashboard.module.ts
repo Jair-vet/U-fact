@@ -13,18 +13,10 @@ import { SettingsComponent } from './settings/settings.component';
 
 import { InstallCsdComponent } from './settings/components/install-csd/install-csd.component';
 import { AddUserComponent } from './settings/components/add-user/add-user.component';
-import { ProvidersComponent } from './providers/providers.component';
-import { CreateProviderComponent } from './providers/create-provider/create-provider.component';
-import { EditProviderComponent } from './providers/edit-provider/edit-provider.component';
 import { ListPricesComponent } from './list-prices/list-prices.component';
-import { CreateRawMaterialComponent } from './store/raw-materials/create-raw-material/create-raw-material.component';
-import { EditRawMaterialComponent } from './store/raw-materials/edit-raw-material/edit-raw-material.component';
-import { CatalogFamiliesComponent } from './store/raw-materials/components/catalog-families/catalog-families.component';
-import { CatalogSubFamiliesComponent } from './store/raw-materials/components/catalog-sub-families/catalog-sub-families.component';
 import { CatalogTradenamesComponent } from './store/components/catalog-tradenames/catalog-tradenames.component';
 import { CreateListPriceComponent } from './list-prices/create-list-price/create-list-price.component';
 import { EditListPriceComponent } from './list-prices/edit-list-price/edit-list-price.component';
-import { PaymentsSaleNoteComponent } from './invoices/components/payments-sale-note/payments-sale-note.component';
 import { UsersComponent } from './users/users.component';
 import { CreateUserComponent } from './users/create-user/create-user.component';
 import { CreateOrderComponent } from './orders/create-order/create-order.component';
@@ -40,7 +32,6 @@ import { DetailsRequisitionProductsComponent } from './production/details-requis
 import { OrderHistoryComponent } from './orders/components/order-history/order-history.component';
 import { RequisitionHistoryComponent } from './production/components/requisition-history/requisition-history.component';
 import { EntriesComponent } from './store/entries/entries.component';
-import { AddRawMaterialIntoProductComponent } from './store/components/add-raw-material-into-product/add-raw-material-into-product.component';
 import { EditProductComponent } from './store/products/edit-product/edit-product.component';
 import { CreateProductComponent } from './store/products/create-product/create-product.component';
 import { ProductComponent } from './store/products/product.component';
@@ -104,12 +95,11 @@ import { CatalogAvailableInventoryComponent } from './store/components/catalog-a
 import { InvoicesBalanceComponent } from './treasury/components/invoices-balance/invoices-balance.component';
 import { BanksComponent } from './banks/banks.component';
 import { CreateBankComponent } from './banks/create-bank/create-bank.component';
-import { RawMaterialsComponent } from './store/raw-materials/raw-materials.component';
+import { PaymentsSaleNoteComponent } from './invoices/components/payments-sale-note/payments-sale-note.component';
 
 @NgModule({
   declarations: [
     InvoicesComponent,
-    AddRawMaterialIntoProductComponent,
     DashboardComponent,
     HomeComponent,
     ClientsComponent,
@@ -119,17 +109,10 @@ import { RawMaterialsComponent } from './store/raw-materials/raw-materials.compo
     CatalogProductsComponent,
     CatalogClientsComponent,
     SettingsComponent,
-    ProvidersComponent,
-    CreateProviderComponent,
-    EditProviderComponent,
     InstallCsdComponent,
     AddUserComponent,
     ListPricesComponent,
-    RawMaterialsComponent,
-    CreateRawMaterialComponent,
-    EditRawMaterialComponent,
     ThemeComponent,
-    CatalogSubFamiliesComponent,
     CatalogTradenamesComponent,
     CreateListPriceComponent,
     EditListPriceComponent,
@@ -152,7 +135,6 @@ import { RawMaterialsComponent } from './store/raw-materials/raw-materials.compo
     CreateProductComponent,
     ProductComponent,
     CatalogSatComponent,
-    CatalogFamiliesComponent,
     CatalogFamiliesProductsComponent,
     CatalogRequisitionsComponent,
     SettingsComputerTableComponent,
