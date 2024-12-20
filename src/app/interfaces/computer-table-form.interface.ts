@@ -8,4 +8,4 @@ export interface ComputerTableInterface {
     minimum: string,
     average: string,
     maximum: string
-}
+} 

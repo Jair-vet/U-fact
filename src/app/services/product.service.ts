@@ -36,8 +36,9 @@ export class ProductService {
     };
   }
 
-  create(product: ProductInterface, computer_tables: ComputerTableInterface[]) {
+  create(product: ProductInterface) {
     const url = `${base_url}/${this.path}/`;
+    console.log("id_sat_unit enviado:", product.id_sat_unit);
     return this.http
       .post(
         url,
@@ -58,17 +59,11 @@ export class ProductService {
           id_tradename: product.id_tradename,
           id_mold: product.id_mold,
           mold: product.mold,
-          id_measure: product.id_measure,
-          measure: product.measure,
-          weight_pieces: product.weight_pieces,
-          amount_pieces: product.amount_pieces,
           part_number: product.part_number,
           is_comercial_product: product.is_comercial_product,
+          amount_pieces: product. amount_pieces,
           is_dollars: product.is_dollars,
           tariff_fraction: product.tariff_fraction,
-          unit_custom: product.unit_custom,
-          computer_tables,
-          raw_materials_products: this.raw_materials_products,
         },
         this.headers
       )
@@ -98,17 +93,10 @@ export class ProductService {
           id_tradename: product.id_tradename,
           id_mold: product.id_mold,
           mold: product.mold,
-          id_measure: product.id_measure,
-          measure: product.measure,
-          weight_pieces: product.weight_pieces,
-          amount_pieces: product.amount_pieces,
           part_number: product.part_number,
           is_comercial_product: product.is_comercial_product,
           is_dollars: product.is_dollars,
           tariff_fraction: product.tariff_fraction,
-          unit_custom: product.unit_custom,
-          computer_tables,
-          raw_materials_products: this.raw_materials_products,
         },
         this.headers
       )

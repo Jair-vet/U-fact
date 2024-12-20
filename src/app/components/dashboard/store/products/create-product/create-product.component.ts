@@ -25,7 +25,6 @@ import { ProductService } from 'src/app/services/product.service';
 import { CatalogSatComponent } from '../../components/catalog-sat/catalog-sat.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { BooleanInput } from '@angular/cdk/coercion';
-import { CatalogMeasuresComponent } from '../components/catalog-measures/catalog-measures.component';
 import { CatalogMoldsComponent } from '../components/catalog-molds/catalog-molds.component';
 import { environment } from 'src/environments/environment';
 
@@ -49,28 +48,9 @@ export class CreateProductComponent implements OnInit {
   public filteredSatUnit: ReplaySubject<SatUnit[]> = new ReplaySubject<
     SatUnit[]
   >(1);
-  displayedColumnsComputerTable: string[] = [
-    'type',
-    'characteristics',
-    'units',
-    'minimum',
-    'average',
-    'maximum',
-    'actions',
-  ];
-  displayedColumnsRawMaterials: string[] = [
-    'number',
-    'code',
-    'description',
-    'amount',
-    'actions',
-  ];
-  dataComputerTable!: MatTableDataSource<any>;
-  dataRawMaterialsProducts!: MatTableDataSource<any>;
   isDisabled: BooleanInput = false;
   is_comercial: boolean = false;
   dataFromClipBoard!: any;
-  dataComputerTableAux!: any;
   colBig!: number;
   colXBig!: number;
   colMedium!: number;
@@ -163,9 +143,7 @@ export class CreateProductComponent implements OnInit {
       family_product: ['', Validators.required],
       sub_family_product: ['', Validators.required],
       id_family_product: ['0'],
-      measure: ['', Validators.required],
-      id_measure: ['0'],
-      mold: ['', Validators.required],
+      mold: [''],
       id_mold: ['0'],
       is_comercial_product: [false, Validators.required],
       is_dollars: [false, Validators.required],
@@ -181,19 +159,10 @@ export class CreateProductComponent implements OnInit {
           Validators.required,
         ],
       ],
-      weight_pieces: [
-        '0.0',
-        [
-          Validators.pattern('[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)'),
-          Validators.required,
-        ],
-      ],
       tariff_fraction: [''],
-      unit_custom: ['']
     });
   }
 
-  /*, amount_pieces, weight_pieces */
 
   openCatalogFamilyProducts(): void {
     const dialogRef = this.dialog.open(CatalogFamiliesProductsComponent, {
@@ -261,50 +230,7 @@ export class CreateProductComponent implements OnInit {
       }
     });
   }
-
-  openCatalogMeasures(): void {
-    const dialogRef = this.dialog.open(CatalogMeasuresComponent, {
-      disableClose: false,
-      width: '100%',
-      height: 'auto',
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      this.form.controls['measure'].setValue(result.label);
-      this.form.controls['id_measure'].setValue(result.id);
-    });
-  }
-
-  openCatalogMolds(): void {
-    const dialogRef = this.dialog.open(CatalogMoldsComponent, {
-      disableClose: false,
-      width: '100%',
-      height: 'auto',
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result != '') {
-        this.form.controls['mold'].setValue(result.label);
-        this.form.controls['id_mold'].setValue(result.id);
-      }
-    });
-  }
-
-  openAddRawMaterialIntoProduct(): void {
-    if (
-      this.form.value.amount_pieces <= 0 ||
-      this.form.value.weight_pieces <= 0
-    ) {
-      Swal.fire({
-        title: 'ERROR',
-        text: 'LAS PIEZAS NO CORRESPONDEN A UN VALOR VALIDO',
-        icon: 'error',
-        confirmButtonColor: '#58B1F7',
-        heightAuto: false,
-      });
-    } else {
-      this._productService.total =
-        this.form.value.amount_pieces * this.form.value.weight_pieces;
-    }
-  }
+  
 
   clearFields() {
     if (clearFields) {
@@ -326,8 +252,6 @@ export class CreateProductComponent implements OnInit {
         family_product: '',
         sub_family_product: '',
         id_family_product: '0',
-        measure: '',
-        id_measure: '0',
         mold: '',
         id_mold: '0',
         minimum_inventory: '0',
@@ -335,70 +259,16 @@ export class CreateProductComponent implements OnInit {
         is_dollars: false,
         id_sub_family_product: '0',
         amount_pieces: '0.0',
-        weight_pieces: '0.0',
+        // weight_pieces: '0.0',
         tariff_fraction: ''
       });
       this.satUnitCtrl.reset();
       this.changeTypeProduct();
-      this.deleteAllData();
       this._productService.raw_materials_products = [];
-      this.dataRawMaterialsProducts = new MatTableDataSource(
-        this._productService.raw_materials_products
-      );
     }
   }
 
-  async fillTable() {
-    const data = await navigator.clipboard.readText();
-    /*const data = `1	2	3	5	1	2
-    1	2	3	5	1	2
-    1	2	3	5	1	2
-    1	2	3	5	1	2
-    1	2	3	5	1	2
-    1	2	3	5	1	2`*/
-    interface Row {
-      [key: string]: number | string;
-    }
-    const rows: string[][] = data.split('\n').map((row) => row.split('\t'));
-    const json: Row[] = [];
-    let key = '';
-    for (const row of rows) {
-      const jsonRow: Row = {};
-      for (let i = 0; i < row.length; i++) {
-        const value = isNaN(Number(row[i])) ? row[i] : Number(row[i]);
-        key =
-          i == 0
-            ? 'type'
-            : i == 1
-              ? 'characteristics'
-              : i == 2
-                ? 'units'
-                : i == 3
-                  ? 'minimum'
-                  : i == 4
-                    ? 'average'
-                    : i == 5
-                      ? 'maximum'
-                      : 'other';
-        if (row.length == 6) {
-          jsonRow[key] = value;
-        }
-      }
-      console.log(jsonRow);
-      if (jsonRow['characteristics'] != undefined) {
-        json.push(jsonRow);
-      }
-    }
-    console.log(json);
-    this.dataFromClipBoard = json;
-    this.dataComputerTableAux = this.dataFromClipBoard;
-    this.dataComputerTable = new MatTableDataSource(this.dataFromClipBoard);
-  }
-
-  deleteAllData() {
-    this.dataComputerTableAux = [];
-    this.dataComputerTable = new MatTableDataSource();
-  }
+  
   openCatalogTradenames(): void {
     const dialogRef = this.dialog.open(CatalogTradenamesComponent, {
       disableClose: false,
@@ -447,28 +317,13 @@ export class CreateProductComponent implements OnInit {
     this.form.controls['tariff_fraction'].updateValueAndValidity();
   }
 
-  setMoldOrMeasure(is_mold: boolean) {
-    console.log(is_mold);
-    is_mold
-      ? this.form.controls['id_mold'].setValue(0)
-      : this.form.controls['id_measure'].setValue(0);
-  }
-
   setUnitSat() {
     this.form.controls['id_sat_unit'].setValue(this.satUnitCtrl.value.id);
   }
 
-  deleteComputerTable(index: number) {
-    this.dataComputerTableAux = this.dataFromClipBoard;
-    this.dataComputerTableAux.splice(index, 1);
-    this.dataComputerTable = new MatTableDataSource(this.dataComputerTableAux);
-  }
 
   deleteRawMaterialProduct(index: number) {
     this._productService.raw_materials_products.splice(index, 1);
-    this.dataRawMaterialsProducts = new MatTableDataSource(
-      this._productService.raw_materials_products
-    );
   }
   changeImage(event: any): any {
     const file = event.target.files[0];
@@ -493,171 +348,144 @@ export class CreateProductComponent implements OnInit {
   }
 
   createProduct() {
-    console.log(this.dataComputerTableAux);
-    if (
-      this.satUnitCtrl.value != undefined &&
-      this.dataComputerTableAux.length > 0
-    ) {
-      this.loading = true;
-
-      if (this.isChangeImage) {
-        this._uploadService
-          .uploadImage(this.image, this._userService.user.rfc, 'Products', '')
-          .then((img) => {
-            if (img != false) {
-              this.form.controls['image'].setValue(img);
-              this.form.controls['id_company'].setValue(
-                this._userService.user.id_company
-              );
-              this._productService
-                .create(this.form.value, this.dataComputerTableAux)
-                .subscribe({
-                  next: (resp) => {
-                    Swal.fire({
-                      title: 'AGREGAR PRODUCTO',
-                      text: '¿DESEAS SEGUIR AGREGANDO PRODUCTOS O REGRESAR AL LISTADO?',
-                      icon: 'question',
-                      showCancelButton: true,
-                      confirmButtonText: 'CONTINUAR AGREGANDO',
-                      cancelButtonText: 'SALIR',
-                      confirmButtonColor: '#58B1F7',
-                      reverseButtons: true,
-                      heightAuto: false,
-                    }).then((result) => {
-                      console.log(result);
-                      if (!result.isConfirmed) {
-                        this._productService.raw_materials_products = [];
-                        Swal.fire({
-                          title: 'OK',
-                          text: resp,
-                          icon: 'success',
-                          confirmButtonColor: '#58B1F7',
-                          heightAuto: false,
-                        });
-                        this._router.navigateByUrl(this.path);
-                      } else {
-                        this.clearFields();
-                        Swal.fire({
-                          title: 'OK',
-                          text: resp,
-                          icon: 'success',
-                          confirmButtonColor: '#58B1F7',
-                          heightAuto: false,
-                        });
-                      }
-                    });
-                  },
-                  error: (err) => {
-                    this.loading = false;
-                    Swal.fire({
-                      title: 'ERROR',
-                      text: err.error.message,
-                      icon: 'error',
-                      confirmButtonColor: '#58B1F7',
-                      heightAuto: false,
-                    });
-                  },
-                  complete: () => {
-                    this.loading = false;
-                  },
-                });
-            } else {
-              this.loading = false;
-              Swal.fire({
-                title: 'ERROR',
-                text: 'NO SE HA PODIDO ACTUALIZAR LA IMAGEN',
-                icon: 'error',
-                confirmButtonColor: '#58B1F7',
-                heightAuto: false,
-              });
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-            this.loading = false;
-            Swal.fire({
-              title: 'ERROR',
-              text: 'NO SE HA PODIDO SUBIR LA IMAGEN',
-              icon: 'error',
-              confirmButtonColor: '#58B1F7',
-              heightAuto: false,
-            });
-          });
-      } else {
-        this.form.controls['id_company'].setValue(
-          this._userService.user.id_company
-        );
-        this._productService
-          .create(this.form.value, this.dataComputerTableAux)
-          .subscribe({
-            next: (resp) => {
-              Swal.fire({
-                title: 'AGREGAR PRODUCTO',
-                text: '¿DESEAS SEGUIR AGREGANDO PRODUCTOS O REGRESAR AL LISTADO?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'CONTINUAR AGREGANDO',
-                cancelButtonText: 'SALIR',
-                confirmButtonColor: '#58B1F7',
-                reverseButtons: true,
-                heightAuto: false,
-              }).then((result) => {
-                console.log(result);
-                if (!result.isConfirmed) {
-                  this._productService.raw_materials_products = [];
-                  Swal.fire({
-                    title: 'OK',
-                    text: resp,
-                    icon: 'success',
-                    confirmButtonColor: '#58B1F7',
-                    heightAuto: false,
-                  });
-                  this._router.navigateByUrl(this.path);
-                } else {
-                  this.clearFields();
-                  Swal.fire({
-                    title: 'OK',
-                    text: resp,
-                    icon: 'success',
-                    confirmButtonColor: '#58B1F7',
-                    heightAuto: false,
-                  });
-                }
-              });
-            },
-            error: (err) => {
-              console.log(err.error);
-              this.loading = false;
-              Swal.fire({
-                title: 'ERROR',
-                text: err.error.message,
-                icon: 'error',
-                confirmButtonColor: '#58B1F7',
-                heightAuto: false,
-              });
-            },
-            complete: () => {
-              this.loading = false;
-              console.log('completado');
-            },
-          });
-      }
-    } else {
+    if (this.form.invalid) {
       Swal.fire({
-        title: 'ERROR',
-        text: 'LA TABLA INFORMATICA NO HA SIDO LLENADA O FALTAN CAMPOS POR INGRESAR',
+        title: 'Error',
+        text: 'Por favor, complete todos los campos requeridos.',
         icon: 'error',
         confirmButtonColor: '#58B1F7',
         heightAuto: false,
       });
+      return;
     }
-  }
+  
+    this.loading = true;
 
-  loadRawMaterialsProducts() {
-    this.dataRawMaterialsProducts = new MatTableDataSource(
-      this._productService.raw_materials_products
-    );
-  }
+    this.clearFields();
+
+    if (this.isChangeImage) {
+      this._uploadService
+        .uploadImage(this.image, this._userService.user.rfc, 'Products', '')
+        .then((img) => {
+          if (img != false) {
+            this.form.controls['image'].setValue(img);
+            this.form.controls['id_company'].setValue(
+              this._userService.user.id_company
+            );
+            this._productService
+              .create(this.form.value)
+              .subscribe({
+                next: (resp) => {
+                  Swal.fire({
+                    title: 'AGREGAR PRODUCTO',
+                    text: '¿DESEAS SEGUIR AGREGANDO PRODUCTOS O REGRESAR AL LISTADO?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'CONTINUAR AGREGANDO',
+                    cancelButtonText: 'SALIR',
+                    confirmButtonColor: '#58B1F7',
+                    reverseButtons: true,
+                    heightAuto: false,
+                  }).then((result) => {
+                    console.log(result);
+                  });
+                },
+                error: (err) => {
+                  this.loading = false;
+                  Swal.fire({
+                    title: 'ERROR',
+                    text: err.error.message,
+                    icon: 'error',
+                    confirmButtonColor: '#58B1F7',
+                    heightAuto: false,
+                  });
+                },
+                complete: () => {
+                  this.loading = false;
+                },
+              });
+          } else {
+            this.loading = false;
+            Swal.fire({
+              title: 'ERROR',
+              text: 'NO SE HA PODIDO ACTUALIZAR LA IMAGEN',
+              icon: 'error',
+              confirmButtonColor: '#58B1F7',
+              heightAuto: false,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          this.loading = false;
+          Swal.fire({
+            title: 'ERROR',
+            text: 'NO SE HA PODIDO SUBIR LA IMAGEN',
+            icon: 'error',
+            confirmButtonColor: '#58B1F7',
+            heightAuto: false,
+          });
+        });
+    } else {
+      this.form.controls['id_company'].setValue(
+        this._userService.user.id_company
+      );
+      this._productService
+        .create(this.form.value, )
+        .subscribe({
+          next: (resp) => {
+            Swal.fire({
+              title: 'AGREGAR PRODUCTO',
+              text: '¿DESEAS SEGUIR AGREGANDO PRODUCTOS O REGRESAR AL LISTADO?',
+              icon: 'question',
+              showCancelButton: true,
+              confirmButtonText: 'CONTINUAR AGREGANDO',
+              cancelButtonText: 'SALIR',
+              confirmButtonColor: '#58B1F7',
+              reverseButtons: true,
+              heightAuto: false,
+            }).then((result) => {
+              console.log(result);
+              if (!result.isConfirmed) {
+                this._productService.raw_materials_products = [];
+                Swal.fire({
+                  title: 'OK',
+                  text: resp,
+                  icon: 'success',
+                  confirmButtonColor: '#58B1F7',
+                  heightAuto: false,
+                });
+                this._router.navigateByUrl(this.path);
+              } else {
+                this.clearFields();
+                Swal.fire({
+                  title: 'OK',
+                  text: resp,
+                  icon: 'success',
+                  confirmButtonColor: '#58B1F7',
+                  heightAuto: false,
+                });
+              }
+            });
+          },
+          error: (err) => {
+            console.log(err.error);
+            this.loading = false;
+            Swal.fire({
+              title: 'ERROR',
+              text: err.error.message,
+              icon: 'error',
+              confirmButtonColor: '#58B1F7',
+              heightAuto: false,
+            });
+          },
+          complete: () => {
+            this.loading = false;
+            console.log('completado');
+          },
+        });
+      }
+    }
 
   loadUnits() {
     this._satService.getUnitSat().subscribe({
@@ -665,7 +493,6 @@ export class CreateProductComponent implements OnInit {
         this.units = resp;
       },
       complete: () => {
-        this.loadRawMaterialsProducts();
         this.loading = false;
         this.loadComponentSelectUnitSat();
       },

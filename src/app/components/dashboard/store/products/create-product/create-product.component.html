@@ -5,7 +5,7 @@
     </button>
     <span>PRODUCTO TERMINADO</span>
     <div class="item-spacer"></div>
-    <button type="submit" class="btnPrimary" [disabled]="form.invalid" mat-raised-button
+    <button type="submit" class="btnPrimary"  mat-raised-button
       style="height: 80%; margin-top: 10px">
       <mat-icon class="icon-size">save</mat-icon>GUARDAR
     </button>
@@ -24,26 +24,25 @@
         </mat-card-header>
 
         <mat-grid-list cols="12" rowHeight="80px">
+           <!-- Checkbox para producto comercial -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
-            <mat-checkbox (change)="changeTypeProduct()" formControlName="is_comercial_product">¿PRODUCTO
-              COMERCIAL?</mat-checkbox>
+            <mat-checkbox (change)="changeTypeProduct()" formControlName="is_comercial_product">¿PRODUCTO COMERCIAL?</mat-checkbox>
           </mat-grid-tile>
+          <!-- Campo de proveedor -->
           <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>PROVEEDOR</mat-label>
               <input [readonly]="true" matInput formControlName="tradename" />
-              <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
+              <mat-error *ngIf="form.get('tradename')?.invalid">Este campo es obligatorio</mat-error>
             </mat-form-field>
           </mat-grid-tile>
-
           <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
             <button type="button" (click)="openCatalogTradenames()" mat-raised-button class="btnPrimary">
-              <mat-icon class="size-icon">library_books</mat-icon> NOMBRES
-              COMERCIALES
+              <mat-icon class="size-icon">library_books</mat-icon> NOMBRES COMERCIALES
             </button>
-            <div class="item-spacer"></div>
           </mat-grid-tile>
 
+          <!-- Imagen del producto -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="4">
             <div class="center-image">
               <img [src]="imageTemp" height="200" class="logo" />
@@ -57,21 +56,26 @@
             </div>
             <input accept=".jpg, .png" hidden (change)="changeImage($event)" #imageInput type="file" id="file" />
           </mat-grid-tile>
+
+          <!-- Codigo Interno -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>CODIGO INTERNO</mat-label>
               <input matInput formControlName="code" />
-              <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
+              <mat-error *ngIf="form.get('code')?.invalid">Este campo es obligatorio</mat-error>
             </mat-form-field>
           </mat-grid-tile>
+
+          <!-- Descripcion -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="2">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>DESCRIPCIÓN</mat-label>
               <textarea matInput formControlName="description" placeholder="Información..." rows="6"></textarea>
-              <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
+              <mat-error *ngIf="form.get('description')?.invalid">Este campo es obligatorio</mat-error>
             </mat-form-field>
           </mat-grid-tile>
 
+          <!-- Unidad SAT -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>UNIDAD </mat-label>
@@ -99,11 +103,13 @@
               <mat-icon class="size-icon">library_books</mat-icon>CATALOGO
             </button>
           </mat-grid-tile>
+
+          <!-- Familia del Producto -->
           <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>FAMILIA DE PRODUCTO</mat-label>
-              <input matInput formControlName="family_product" name="family_product" />
-              <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
+              <input matInput formControlName="family_product" />
+              <mat-error *ngIf="form.get('family_product')?.invalid">Este campo es obligatorio</mat-error>
             </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
@@ -112,11 +118,13 @@
             </button>
             <div class="item-spacer"></div>
           </mat-grid-tile>
+
+          <!-- SUB Familia del Producto -->
           <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>SUB FAMILIA DE PRODUCTO</mat-label>
-              <input matInput formControlName="sub_family_product" name="sub_family_product" />
-              <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
+              <input matInput formControlName="sub_family_product" />
+              <mat-error *ngIf="form.get('sub_family_product')?.invalid">Este campo es obligatorio</mat-error>
             </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
@@ -125,262 +133,63 @@
             </button>
             <div class="item-spacer"></div>
           </mat-grid-tile>
-          <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
-            <mat-form-field appearance="outline" floatLabel="always">
-              <mat-label>MEDIDAS</mat-label>
-              <input (change)="setMoldOrMeasure(false)" matInput formControlName="measure" name="measure" />
-              <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
-            <button type="button" (click)="openCatalogMeasures()" mat-raised-button class="btnPrimary">
-              <mat-icon class="size-icon">library_books</mat-icon> MEDIDAS
-            </button>
-            <div class="item-spacer"></div>
-          </mat-grid-tile>
+
+          <!-- Número de Parte -->
           <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>NUMERO DE PARTE</mat-label>
               <input matInput formControlName="part_number" name="part_number" />
-              <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
+              <mat-error *ngIf="form.get('part_number')?.invalid">Este campo es obligatorio</mat-error>
             </mat-form-field>
           </mat-grid-tile>
 
+          <!-- Número de Piezas por Caja -->
           <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>NUMERO DE PIEZAS POR CAJA</mat-label>
               <input matInput formControlName="amount_pieces" style="text-align: right" />
-              <mat-error *ngIf="form.invalid">Ingresa solo números</mat-error>
+              <mat-error *ngIf="form.get('amount_pieces')?.invalid">Ingresa solo números</mat-error>
             </mat-form-field>
           </mat-grid-tile>
+
+         <!-- Inventario Mínimo -->
           <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>INVENTARIO MINIMO</mat-label>
               <input matInput formControlName="minimum_inventory" style="text-align: right" />
-              <mat-error *ngIf="form.invalid">Ingresa solo números enteros</mat-error>
+              <mat-error *ngIf="form.get('minimum_inventory')?.invalid">Ingresa solo números enteros</mat-error>
             </mat-form-field>
           </mat-grid-tile>
+
+          <!-- Costo sin IVA -->
           <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <span *ngIf="!form.value.is_dollars" matPrefix> MXN $&nbsp;</span>
               <span *ngIf="form.value.is_dollars" matPrefix> USD $&nbsp;</span>
               <mat-label>COSTO SIN IVA</mat-label>
               <input matInput formControlName="price_without_iva" style="text-align: right" />
-              <mat-error *ngIf="form.invalid">Ingresa solo números</mat-error>
+              <mat-error *ngIf="form.get('price_without_iva')?.invalid">Ingresa solo números</mat-error>
             </mat-form-field>
           </mat-grid-tile>
+
+          <!-- Dólares -->
           <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
-            <mat-checkbox (change)="changeDollars()" formControlName="is_dollars">¿SON DOLARES?</mat-checkbox>
+            <mat-checkbox (change)="changeDollars()" formControlName="is_dollars">¿SON DÓLARES?</mat-checkbox>
           </mat-grid-tile>
+
+         <!-- Fracción Arancelaria -->
           <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>FRACCIÓN ARANCELARIA</mat-label>
               <input matInput formControlName="tariff_fraction" />
-              <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
+              <mat-error *ngIf="form.get('tariff_fraction')?.invalid">Este campo es obligatorio</mat-error>
             </mat-form-field>
           </mat-grid-tile>
-          <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
-            <mat-form-field appearance="outline" floatLabel="always">
-              <mat-label>UNIDAD ADUANA</mat-label>
-              <input matInput formControlName="unit_custom" />
-              <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
-            </mat-form-field>
-          </mat-grid-tile>
+
         </mat-grid-list>
       </mat-card>
-      <mat-card class="mat-elevation-z8 card-prop" style="padding: 0%; margin-bottom: 20px">
-        <mat-card-header class="primary" style="padding: 10px">
-          <mat-icon style="font-size: 20px">info</mat-icon>
-          <span> TABLA INFORMATICA DE PRODUCTO </span>
-        </mat-card-header>
-        <mat-grid-list cols="12" rowHeight="80px">
-          <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
-            <div class="item-spacer"></div>
-            <button type="button" (click)="fillTable()" class="btnPrimary" mat-raised-button>
-              <mat-icon class="icon-size">save</mat-icon>PEGAR DATOS
-            </button>
-          </mat-grid-tile>
-          <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
-            <div class="item-spacer"></div>
-            <button type="button" (click)="deleteAllData()" class="btnPrimary btnDanger" mat-raised-button>
-              <mat-icon class="icon-size">delete_forever</mat-icon>BORRAR TODO
-            </button>
-          </mat-grid-tile>
-        </mat-grid-list>
-        <div class="table-container-small" style="height: auto; width: 99%; margin: 0 auto">
-          <div class="overlay-loading" *ngIf="loading">
-            <div class="spinner-wrapper">
-              <mat-spinner diameter="50" *ngIf="loading" class="spinner" color="primary"></mat-spinner>
-            </div>
-          </div>
-          <table mat-table [dataSource]="dataComputerTable" matSort>
-            <tr mat-header-row *matHeaderRowDef="displayedColumnsComputerTable; sticky: true"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumnsComputerTable"></tr>
-            <ng-container matColumnDef="type">
-              <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="type">
-                TIPO
-              </th>
-              <td mat-cell *matCellDef="let computerTable" style="width: 15%">
-                {{ computerTable.type }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="characteristics">
-              <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="characteristics">
-                CARACTERISTICAS
-              </th>
-              <td mat-cell *matCellDef="let computerTable" style="width: 30%">
-                {{ computerTable.characteristics }}
-              </td>
-            </ng-container>
 
-            <ng-container matColumnDef="units">
-              <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="units">
-                UNIDADES
-              </th>
-              <td mat-cell *matCellDef="let computerTable" style="width: 10%">
-                {{ computerTable.units }}
-              </td>
-            </ng-container>
 
-            <ng-container matColumnDef="minimum">
-              <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="minimum">
-                MINIMO
-              </th>
-              <td mat-cell *matCellDef="let computerTable" style="width: 10%">
-                {{ computerTable.minimum }}
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="average">
-              <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="average">
-                PROMEDIO
-              </th>
-              <td mat-cell *matCellDef="let computerTable" style="width: 15%">
-                {{ computerTable.average }}
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="maximum">
-              <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="maximum">
-                MAXIMO
-              </th>
-              <td mat-cell *matCellDef="let computerTable" style="width: 10%">
-                {{ computerTable.maximum }}
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="actions">
-              <th mat-header-cell class="primary" *matHeaderCellDef>
-                ACCIONES
-              </th>
-              <td mat-cell *matCellDef="let computerTable; let i = index" style="width: 10%; text-align: right">
-                <a class="btnAction" style="color: rgb(193, 32, 32)" matTooltip="ELIMINAR"
-                  (click)="deleteComputerTable(i)">
-                  <mat-icon class="custom-size-animation">delete</mat-icon>
-                </a>
-              </td>
-            </ng-container>
-          </table>
-        </div>
-        <br />
-      </mat-card>
-
-      <mat-card class="mat-elevation-z8 card-prop" style="padding: 0%; margin-bottom: 20px">
-        <mat-card-header class="primary" style="padding: 10px">
-          <mat-icon style="font-size: 20px">widgets</mat-icon>
-          <span> PIEZAS Y PESO DEL PRODUCTO </span>
-        </mat-card-header>
-        <mat-grid-list cols="12" rowHeight="80px">
-          <mat-grid-tile *ngIf="!is_comercial" [colspan]="colSmall" [rowspan]="1">
-            <mat-form-field appearance="outline" floatLabel="always">
-              <mat-label>MOLDE</mat-label>
-              <input matInput (change)="setMoldOrMeasure(true)" formControlName="mold" name="mold" />
-              <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile *ngIf="!is_comercial" [colspan]="colSmall" [rowspan]="1">
-            <button type="button" (click)="openCatalogMolds()" mat-raised-button class="btnPrimary">
-              <mat-icon class="size-icon">library_books</mat-icon> MOLDES
-            </button>
-            <div class="item-spacer"></div>
-          </mat-grid-tile>
-          <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
-            <mat-form-field appearance="outline" floatLabel="always">
-              <mat-label>PESO POR PIEZA EN GRAMOS</mat-label>
-              <input matInput formControlName="weight_pieces" style="text-align: right" />
-              <mat-error *ngIf="form.invalid">Ingresa solo números</mat-error>
-            </mat-form-field>
-          </mat-grid-tile>
-
-          <mat-grid-tile *ngIf="!is_comercial" [colspan]="colMedium" [rowspan]="1">
-            <button type="button" (click)="openAddRawMaterialIntoProduct()" mat-raised-button class="btnPrimary">
-              <mat-icon class="size-icon">add</mat-icon> AGREGAR MATERIA PRIMA
-            </button>
-            <div class="item-spacer"></div>
-          </mat-grid-tile>
-        </mat-grid-list>
-
-        <div *ngIf="!is_comercial" class="table-container-small" style="height: auto; width: 99%; margin: 0 auto">
-          <div class="overlay-loading" *ngIf="loading">
-            <div class="spinner-wrapper">
-              <mat-spinner diameter="50" *ngIf="loading" class="spinner" color="primary"></mat-spinner>
-            </div>
-          </div>
-          <table mat-table [dataSource]="dataRawMaterialsProducts" matSort>
-            <tr mat-header-row *matHeaderRowDef="displayedColumnsRawMaterials; sticky: true"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumnsRawMaterials"></tr>
-
-            <ng-container matColumnDef="number">
-              <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="number">
-                NUMERO
-              </th>
-              <td mat-cell *matCellDef="let dataRawMaterialsProducts" style="width: 15%">
-                {{ dataRawMaterialsProducts.number }}
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="code">
-              <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="code">
-                CODIGO
-              </th>
-              <td mat-cell *matCellDef="let dataRawMaterialsProducts" style="width: 30%">
-                {{ dataRawMaterialsProducts.code }}
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="description">
-              <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="description">
-                DESCRIPCION
-              </th>
-              <td mat-cell *matCellDef="let dataRawMaterialsProducts" style="width: 10%">
-                {{ dataRawMaterialsProducts.description }}
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="amount">
-              <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="amount">
-                CANTIDAD
-              </th>
-              <td mat-cell *matCellDef="let dataRawMaterialsProducts" style="width: 10%">
-                {{ dataRawMaterialsProducts.amount }}
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="actions">
-              <th mat-header-cell class="primary" *matHeaderCellDef>
-                ACCIONES
-              </th>
-              <td mat-cell *matCellDef="let contact; let i = index" (click)="deleteRawMaterialProduct(i)"
-                style="width: 10%; text-align: right">
-                <a class="btnAction" style="color: rgb(193, 32, 32)" matTooltip="ELIMINAR">
-                  <mat-icon class="custom-size-animation">delete</mat-icon>
-                </a>
-              </td>
-            </ng-container>
-          </table>
-        </div>
-        <br />
-      </mat-card>
     </mat-card>
   </div>
 </form>

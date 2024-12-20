@@ -12,7 +12,6 @@ import { Entry } from 'src/app/models/entry.model';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 import { RoutingService } from 'src/app/services/routing.service';
-import { PurchaseOrderService } from 'src/app/services/purchase-order.service';
 const clearFields = environment.clearFields;
 
 @Component({
