@@ -16,9 +16,7 @@ import Swal from 'sweetalert2';
 import { UploadService } from 'src/app/services/upload.service';
 import { CatalogFamiliesProductsComponent } from '../components/catalog-families/catalog-families.component';
 import { CatalogSubFamiliesProductsComponent } from '../components/catalog-sub-families/catalog-sub-families.component';
-import { CatalogTradenamesComponent } from '../../components/catalog-tradenames/catalog-tradenames.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { HelpService } from 'src/app/services/help.service';
 import { FamilyRawMaterial } from 'src/app/models/family-raw-material.model';
 import { FamilyProductService } from 'src/app/services/family-product.service';
 import { ProductService } from 'src/app/services/product.service';
@@ -129,13 +127,11 @@ export class CreateProductComponent implements OnInit {
       });
 
     this.form = this._formBuider.group({
-      id_tradename: [''],
       image: [''],
       id_sat_unit: [''],
       id_company: [''],
       id_code_prod_service: [''],
       code_prod_service: ['', Validators.required],
-      tradename: ['', Validators.required],
       part_number: ['', Validators.required],
       code: ['', Validators.required],
       description: ['', Validators.required],
@@ -143,22 +139,8 @@ export class CreateProductComponent implements OnInit {
       family_product: ['', Validators.required],
       sub_family_product: ['', Validators.required],
       id_family_product: ['0'],
-      mold: [''],
-      id_mold: ['0'],
-      is_comercial_product: [false, Validators.required],
       is_dollars: [false, Validators.required],
       id_sub_family_product: ['0'],
-      minimum_inventory: [
-        '0',
-        [Validators.pattern('^[0-9]+$'), Validators.required],
-      ],
-      amount_pieces: [
-        '0.0',
-        [
-          Validators.pattern('[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)'),
-          Validators.required,
-        ],
-      ],
       tariff_fraction: [''],
     });
   }
@@ -238,13 +220,11 @@ export class CreateProductComponent implements OnInit {
       this.image = null;
       this.isChangeImage = false;
       this.form.reset({
-        id_tradename: '',
         image: '',
         id_sat_unit: '',
         id_company: '',
         id_code_prod_service: '',
         code_prod_service: '',
-        tradename: '',
         part_number: '',
         code: '',
         description: '',
@@ -252,53 +232,18 @@ export class CreateProductComponent implements OnInit {
         family_product: '',
         sub_family_product: '',
         id_family_product: '0',
-        mold: '',
-        id_mold: '0',
-        minimum_inventory: '0',
-        is_comercial_product: false,
         is_dollars: false,
         id_sub_family_product: '0',
-        amount_pieces: '0.0',
-        // weight_pieces: '0.0',
         tariff_fraction: ''
       });
       this.satUnitCtrl.reset();
-      this.changeTypeProduct();
-      this._productService.raw_materials_products = [];
     }
   }
 
-  
-  openCatalogTradenames(): void {
-    const dialogRef = this.dialog.open(CatalogTradenamesComponent, {
-      disableClose: false,
-      width: '100%',
-      height: 'auto',
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log(result);
-      if (result != '') {
-        this.form.controls['tradename'].setValue(result.name);
-        this.form.controls['id_tradename'].setValue(result.id);
-      }
-    });
-  }
+
 
   cancel() {
     this._router.navigateByUrl(this.path);
-  }
-
-  changeTypeProduct() {
-    this.is_comercial = this.form.value.is_comercial_product;
-    if (this.is_comercial) {
-      this.form.controls['id_mold'].setValue(0);
-      this.form.controls['mold'].setValue('');
-      this.form.controls['mold'].clearValidators();
-      this.form.controls['mold'].updateValueAndValidity();
-    } else {
-      this.form.controls['mold'].setValidators(Validators.required);
-      this.form.controls['mold'].updateValueAndValidity();
-    }
   }
 
 
@@ -321,10 +266,6 @@ export class CreateProductComponent implements OnInit {
     this.form.controls['id_sat_unit'].setValue(this.satUnitCtrl.value.id);
   }
 
-
-  deleteRawMaterialProduct(index: number) {
-    this._productService.raw_materials_products.splice(index, 1);
-  }
   changeImage(event: any): any {
     const file = event.target.files[0];
     this.image = file;
@@ -545,7 +486,6 @@ export class CreateProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this._productService.raw_materials_products = [];
     this.loadUnits();
   }
 }

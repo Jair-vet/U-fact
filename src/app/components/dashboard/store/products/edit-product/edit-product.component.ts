@@ -1,10 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import {FormBuilder,FormControl,FormGroup,Validators,} from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelect } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,22 +8,16 @@ import { SatUnit } from 'src/app/models/sat.model';
 import { SatService } from 'src/app/services/sat.service';
 import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';
-
 import { UploadService } from 'src/app/services/upload.service';
 import { CatalogFamiliesProductsComponent } from '../components/catalog-families/catalog-families.component';
 import { CatalogSubFamiliesProductsComponent } from '../components/catalog-sub-families/catalog-sub-families.component';
-import { CatalogTradenamesComponent } from '../../components/catalog-tradenames/catalog-tradenames.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { HelpService } from 'src/app/services/help.service';
-
 import { FamilyRawMaterial } from 'src/app/models/family-raw-material.model';
 import { FamilyProductService } from 'src/app/services/family-product.service';
 import { ProductService } from 'src/app/services/product.service';
 import { CatalogSatComponent } from '../../components/catalog-sat/catalog-sat.component';
-import { MatTableDataSource } from '@angular/material/table';
 import { BooleanInput } from '@angular/cdk/coercion';
-import { CatalogMeasuresComponent } from '../components/catalog-measures/catalog-measures.component';
-import { CatalogMoldsComponent } from '../components/catalog-molds/catalog-molds.component';
 import { Product } from 'src/app/models/product.model';
 
 @Component({
@@ -51,24 +40,6 @@ export class EditProductComponent implements OnInit {
   public filteredSatUnit: ReplaySubject<SatUnit[]> = new ReplaySubject<
     SatUnit[]
   >(1);
-  displayedColumnsComputerTable: string[] = [
-    'type',
-    'characteristics',
-    'units',
-    'minimum',
-    'average',
-    'maximum',
-    'actions',
-  ];
-  displayedColumnsRawMaterials: string[] = [
-    'number',
-    'code',
-    'description',
-    'amount',
-    'actions',
-  ];
-  dataComputerTable!: MatTableDataSource<any>;
-  dataRawMaterialsProducts!: MatTableDataSource<any>;
   isDisabled: BooleanInput = false;
   is_comercial: boolean = false;
   dataFromClipBoard!: any;
@@ -157,13 +128,11 @@ export class EditProductComponent implements OnInit {
 
     this.form = this._formBuider.group({
       id: ['', Validators.required],
-      id_tradename: [''],
       image: [''],
       id_sat_unit: [''],
       id_company: [''],
       id_code_prod_service: [''],
       code_prod_service: ['', Validators.required],
-      tradename: ['', Validators.required],
       part_number: ['', Validators.required],
       code: ['', Validators.required],
       description: ['', Validators.required],
@@ -171,33 +140,9 @@ export class EditProductComponent implements OnInit {
       family_product: ['', Validators.required],
       sub_family_product: ['', Validators.required],
       id_family_product: ['0'],
-      measure: ['', Validators.required],
-      id_measure: ['0'],
-      mold: ['', Validators.required],
-      id_mold: ['0'],
-      is_comercial_product: [false, Validators.required],
       is_dollars: [false, Validators.required],
       tariff_fraction: [''],
-      unit_custom: [''],
       id_sub_family_product: ['0'],
-      minimum_inventory: [
-        '0',
-        [Validators.pattern('^[0-9]+$'), Validators.required],
-      ],
-      amount_pieces: [
-        '0.0',
-        [
-          Validators.pattern('[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)'),
-          Validators.required,
-        ],
-      ],
-      weight_pieces: [
-        '0.0',
-        [
-          Validators.pattern('[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)'),
-          Validators.required,
-        ],
-      ],
     });
 
     this.idProduct = this._route.snapshot.paramMap.get('id') || '0';
@@ -270,50 +215,6 @@ export class EditProductComponent implements OnInit {
     });
   }
 
-  openCatalogMeasures(): void {
-    const dialogRef = this.dialog.open(CatalogMeasuresComponent, {
-      disableClose: true,
-      width: '100%',
-      height: 'auto',
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      this.form.controls['measure'].setValue(result.label);
-      this.form.controls['id_measure'].setValue(result.id);
-    });
-  }
-
-  openCatalogMolds(): void {
-    const dialogRef = this.dialog.open(CatalogMoldsComponent, {
-      disableClose: false,
-      width: '100%',
-      height: 'auto',
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result != '') {
-        this.form.controls['mold'].setValue(result.label);
-        this.form.controls['id_mold'].setValue(result.id);
-      }
-    });
-  }
-
-  openAddRawMaterialIntoProduct(): void {
-    if (
-      this.form.value.amount_pieces <= 0 ||
-      this.form.value.weight_pieces <= 0
-    ) {
-      Swal.fire({
-        title: 'ERROR',
-        text: 'LAS PIEZAS NO CORRESPONDEN A UN VALOR VALIDO',
-        icon: 'error',
-        confirmButtonColor: '#58B1F7',
-        heightAuto: false,
-      });
-    } else {
-      this._productService.total =
-        this.form.value.amount_pieces * this.form.value.weight_pieces;
-    }
-  }
-
   changeDollars() {
     if (this.form.value.is_dollars) {
       // Set validators when is_dollars is true
@@ -368,28 +269,13 @@ export class EditProductComponent implements OnInit {
     this.form.controls['id_code_prod_service'].setValue(
       this.product.id_code_prod_service
     );
-    this.form.controls['mold'].setValue(this.product.mold);
-    this.form.controls['id_mold'].setValue(this.product.id_mold);
-    this.form.controls['measure'].setValue(this.product.measure);
-    this.form.controls['id_measure'].setValue(this.product.id_measure);
-    this.form.controls['tradename'].setValue(this.product.tradename);
-    this.form.controls['id_tradename'].setValue(this.product.id_tradename);
     this.form.controls['price_without_iva'].setValue(
       this.product.price_without_iva.toString()
     );
     this.form.controls['image'].setValue(this.product.image);
     this.form.controls['part_number'].setValue(this.product.part_number);
-    this.form.controls['amount_pieces'].setValue(this.product.amount_pieces);
-    this.form.controls['minimum_inventory'].setValue(
-      this.product.minimum_inventory
-    );
-    this.form.controls['is_comercial_product'].setValue(
-      this.product.is_comercial_product
-    );
     this.form.controls['is_dollars'].setValue(this.product.is_dollars);
     this.form.controls['tariff_fraction'].setValue(this.product.tariff_fraction)
-    this.form.controls['unit_custom'].setValue(this.product.unit_custom)
-    this.form.controls['weight_pieces'].setValue(this.product.weight_pieces);
     if (this.product.image != '') {
       this.imageTemp = this._productService.getImage(
         this._userService.user.rfc,
@@ -399,111 +285,18 @@ export class EditProductComponent implements OnInit {
       this.imageTemp = './assets/img/no-image.png';
     }
     this.satUnitCtrl.setValue(this.units[this.product.id_sat_unit - 1]);
-    this._productService.raw_materials_products =
-      this.product.raw_materials_products;
-    this.dataFromClipBoard = this.product.computer_tables;
-    this.dataComputerTableAux = this.product.computer_tables;
-    this.dataComputerTable = new MatTableDataSource(this.dataComputerTableAux);
-    this.loadRawMaterialsProducts();
-    this.changeTypeProduct();
     this.loading = false;
-  }
-
-  async fillTable() {
-    const data = await navigator.clipboard.readText();
-    interface Row {
-      [key: string]: number | string;
-    }
-    const rows: string[][] = data.split('\n').map((row) => row.split('\t'));
-    const json: Row[] = [];
-    let key = '';
-    for (const row of rows) {
-      const jsonRow: Row = {};
-      for (let i = 0; i < row.length; i++) {
-        const value = isNaN(Number(row[i])) ? row[i] : Number(row[i]);
-        key =
-          i == 0
-            ? 'type'
-            : i == 1
-              ? 'characteristics'
-              : i == 2
-                ? 'units'
-                : i == 3
-                  ? 'minimum'
-                  : i == 4
-                    ? 'average'
-                    : i == 5
-                      ? 'maximum'
-                      : 'other';
-        jsonRow[key] = value;
-      }
-      json.push(jsonRow);
-    }
-    this.dataFromClipBoard = json;
-    this.dataComputerTableAux = this.dataFromClipBoard;
-    this.dataComputerTable = new MatTableDataSource(this.dataFromClipBoard);
-  }
-
-  deleteAllData() {
-    this.dataComputerTable = new MatTableDataSource();
-  }
-  openCatalogTradenames(): void {
-    const dialogRef = this.dialog.open(CatalogTradenamesComponent, {
-      disableClose: false,
-      width: '100%',
-      height: 'auto',
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log(result);
-      if (result != '') {
-        this.form.controls['tradename'].setValue(result.name);
-        this.form.controls['id_tradename'].setValue(result.id);
-      }
-    });
   }
 
   cancel() {
     this._router.navigateByUrl(this.path);
   }
 
-  changeTypeProduct() {
-    this.is_comercial = this.form.value.is_comercial_product;
-    if (this.is_comercial) {
-      this.form.controls['id_mold'].setValue(0);
-      this.form.controls['mold'].setValue('');
-      this.form.controls['mold'].clearValidators();
-      this.form.controls['mold'].updateValueAndValidity();
-    } else {
-      this.form.controls['mold'].setValidators(Validators.required);
-      this.form.controls['mold'].updateValueAndValidity();
-      this.form.controls['mold'].setValue(this.product.mold);
-      this.form.controls['id_mold'].setValue(this.product.id_mold);
-    }
-  }
-
-  setMoldOrMeasure(is_mold: boolean) {
-    console.log(is_mold);
-    is_mold
-      ? this.form.controls['id_mold'].setValue(0)
-      : this.form.controls['id_measure'].setValue(0);
-  }
 
   setUnitSat() {
     this.form.controls['id_sat_unit'].setValue(this.satUnitCtrl.value.id);
   }
 
-  deleteComputerTable(index: number) {
-    this.dataComputerTableAux = this.dataFromClipBoard;
-    this.dataComputerTableAux.splice(index, 1);
-    this.dataComputerTable = new MatTableDataSource(this.dataComputerTableAux);
-  }
-
-  deleteRawMaterialProduct(index: number) {
-    this._productService.raw_materials_products.splice(index, 1);
-    this.dataRawMaterialsProducts = new MatTableDataSource(
-      this._productService.raw_materials_products
-    );
-  }
   changeImage(event: any): any {
     const file = event.target.files[0];
     this.image = file;
@@ -546,7 +339,6 @@ export class EditProductComponent implements OnInit {
                 .update(this.form.value, this.dataFromClipBoard)
                 .subscribe({
                   next: (resp) => {
-                    this._productService.raw_materials_products = [];
                     Swal.fire({
                       title: 'OK',
                       text: resp,
@@ -600,7 +392,6 @@ export class EditProductComponent implements OnInit {
           .update(this.form.value, this.dataFromClipBoard)
           .subscribe({
             next: (resp) => {
-              this._productService.raw_materials_products = [];
               Swal.fire({
                 title: 'OK',
                 text: resp,
@@ -636,12 +427,6 @@ export class EditProductComponent implements OnInit {
         heightAuto: false,
       });
     }
-  }
-
-  loadRawMaterialsProducts() {
-    this.dataRawMaterialsProducts = new MatTableDataSource(
-      this._productService.raw_materials_products
-    );
   }
 
   loadUnits() {

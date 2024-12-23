@@ -24,26 +24,8 @@
         </mat-card-header>
 
         <mat-grid-list cols="12" rowHeight="80px">
-           <!-- Checkbox para producto comercial -->
-          <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
-            <mat-checkbox (change)="changeTypeProduct()" formControlName="is_comercial_product">¿PRODUCTO COMERCIAL?</mat-checkbox>
-          </mat-grid-tile>
-          <!-- Campo de proveedor -->
-          <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
-            <mat-form-field appearance="outline" floatLabel="always">
-              <mat-label>PROVEEDOR</mat-label>
-              <input [readonly]="true" matInput formControlName="tradename" />
-              <mat-error *ngIf="form.get('tradename')?.invalid">Este campo es obligatorio</mat-error>
-            </mat-form-field>
-          </mat-grid-tile>
-          <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
-            <button type="button" (click)="openCatalogTradenames()" mat-raised-button class="btnPrimary">
-              <mat-icon class="size-icon">library_books</mat-icon> NOMBRES COMERCIALES
-            </button>
-          </mat-grid-tile>
-
           <!-- Imagen del producto -->
-          <mat-grid-tile [colspan]="colMedium" [rowspan]="4">
+          <mat-grid-tile [colspan]="colMedium" [rowspan]="2">
             <div class="center-image">
               <img [src]="imageTemp" height="200" class="logo" />
               <div class="overlay">
@@ -143,23 +125,6 @@
             </mat-form-field>
           </mat-grid-tile>
 
-          <!-- Número de Piezas por Caja -->
-          <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
-            <mat-form-field appearance="outline" floatLabel="always">
-              <mat-label>NUMERO DE PIEZAS POR CAJA</mat-label>
-              <input matInput formControlName="amount_pieces" style="text-align: right" />
-              <mat-error *ngIf="form.get('amount_pieces')?.invalid">Ingresa solo números</mat-error>
-            </mat-form-field>
-          </mat-grid-tile>
-
-         <!-- Inventario Mínimo -->
-          <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
-            <mat-form-field appearance="outline" floatLabel="always">
-              <mat-label>INVENTARIO MINIMO</mat-label>
-              <input matInput formControlName="minimum_inventory" style="text-align: right" />
-              <mat-error *ngIf="form.get('minimum_inventory')?.invalid">Ingresa solo números enteros</mat-error>
-            </mat-form-field>
-          </mat-grid-tile>
 
           <!-- Costo sin IVA -->
           <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
