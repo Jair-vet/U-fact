@@ -16,6 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CatalogAvailableInventoryComponent } from '../components/catalog-available-inventory/catalog-available-inventory.component';
 import { CatalogEntriesComponent } from '../components/catalog-entries/catalog-entries.component';
 import { RoutingService } from 'src/app/services/routing.service';
+import { SatService } from 'src/app/services/sat.service';
 
 @Component({
   selector: 'app-product',
@@ -26,9 +27,10 @@ import { RoutingService } from 'src/app/services/routing.service';
 export class ProductComponent implements OnInit {
   loading: boolean = false
   inactive: boolean = false
-  displayedColumns: string[] = ['code', 'description', 'store_inventory', 'requested_inventory', 'entries', 'departures', 'actions'];
+  displayedColumns: string[] = ['code', 'price-without-iva', 'unity', 'description', 'actions'];
   dataSource!: MatTableDataSource<any>;
   isDisabled: BooleanInput = false
+  satUnits: any[] = [];
   colBig!: number;
   colMedium!: number;
   modalWidth!: string
@@ -40,7 +42,17 @@ export class ProductComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private readonly joyrideService: JoyrideService, private dialog: MatDialog, private _helpService: HelpService, private _router: Router, private breakpointObserver: BreakpointObserver, private _productService: ProductService, private _userService: UserService, private _routingService: RoutingService) {
+  constructor(
+    private readonly joyrideService: JoyrideService, 
+    private dialog: MatDialog, 
+    private _helpService: HelpService,
+    private _router: Router, 
+    private breakpointObserver: BreakpointObserver, 
+    private _productService: ProductService, 
+    private _userService: UserService, 
+    private _routingService: RoutingService,
+    private _satService: SatService
+  ) {
     this._helpService.helpClient()
     this.breakpointObserver.observe([
       Breakpoints.XSmall,
@@ -110,30 +122,7 @@ export class ProductComponent implements OnInit {
     })
   }
 
-  openEntries(product: Product) {
-
-    const dialogRef = this.dialog.open(CatalogEntriesComponent, {
-      disableClose: false,
-      width: this.modalWidth,
-      height: 'auto',
-      data: { data: { id_product: product.id } }
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result != undefined) {
-        console.log(result)
-        if (result.id_status == 1) {
-          this._routingService.setRouting(`dashboard/entries/detail-entry/${result.id}`, `dashboard/products`)
-          this._router.navigateByUrl(`dashboard/entries/detail-entry/${result.id}`)
-        } else if (result.id_status == 3) {
-          this._routingService.setRouting(`dashboard/entries/generate-entry/${result.id}`, `dashboard/products`)
-          this._router.navigateByUrl(`dashboard/entries/generate-entry/${result.id}`)
-        } else {
-          Swal.fire({ title: 'ERROR', text: 'LA ENTRADA HA SIDO RECHAZADA', icon: 'error', confirmButtonColor: '#58B1F7', heightAuto: false })
-        }
-      }
-    });
-
-  }
+  
   seeBoxes(product: Product) {
 
     const dialogRef = this.dialog.open(CatalogAvailableInventoryComponent, {
@@ -164,25 +153,6 @@ export class ProductComponent implements OnInit {
   }
 
 
-
-  reportProducts() {
-    this.loading = true
-    this._productService.getReportProducts(this.inactive).subscribe({
-      next: (resp) => {
-        console.log(resp)
-        this.printFile(resp)
-
-      },
-      complete: () => {
-        this.loading = false
-      },
-      error: (err) => {
-        this.loading = false
-        Swal.fire({ title: 'ERROR', text: err.error.message, icon: 'error', confirmButtonColor: '#58B1F7', heightAuto: false })
-
-      },
-    })
-  }
 
   restore(record: Product) {
     Swal.fire({
@@ -246,30 +216,49 @@ export class ProductComponent implements OnInit {
     this.loadData();
   }
 
-
-  loadData() {
-    this.loading = true
-    this._productService.getAllData(this._userService.user.getIdCompany.toString(), this.inactive).subscribe({
-      next: (resp) => {
-        this.dataSource = new MatTableDataSource(resp);
-        this.loading = false
-      },
-      complete: () => {
-
-        this.dataSource.sort = this.sort;
-        this.isDisabled = false
-
+  loadSatUnits() {
+    this._satService.getUnitSat().subscribe({
+      next: (response) => {
+        this.satUnits = response;  // Guardamos las unidades SAT
+        this.loadData();  // Cargar los productos después de obtener las unidades SAT
       },
       error: (err) => {
-        this.loading = false
-        console.log(err)
+        console.error('Error al obtener unidades SAT', err);
+      }
+    });
+  }
+
+
+  loadData() {
+    this.loading = true;
+    this._productService.getAllData(this._userService.user.getIdCompany.toString(), this.inactive).subscribe({
+      next: (resp) => {
+        // Procesamos los productos y les asignamos el nombre de la unidad SAT
+        const productsWithNames = resp.map((product: Product) => {
+          const satUnit = this.satUnits.find(unit => unit.id === product.id_sat_unit);  // Buscamos la unidad correspondiente
+          if (satUnit) {
+            product.name_unit_sat = satUnit.name;  // Asignamos el nombre de la unidad al producto
+            product.code_unit_sat = satUnit.code;  // Asignamos el código de la unidad al producto (si es necesario)
+          } else {
+            product.name_unit_sat = 'Unidad no encontrada';  // Si no se encuentra la unidad, asignamos un valor por defecto
+            product.code_unit_sat = '';  // Dejar el código vacío si no se encuentra la unidad
+          }
+          return product;
+        });
+
+        this.dataSource = new MatTableDataSource(productsWithNames);  // Asignamos los productos con nombre a la tabla
+        this.loading = false;
       },
-    })
+      error: (err) => {
+        this.loading = false;
+        console.log(err);
+      },
+    });
   }
 
 
   ngOnInit(): void {
-    this.loadData();
+    this.loadSatUnits();
   }
 
 

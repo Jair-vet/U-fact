@@ -36,7 +36,6 @@ import { EditProductComponent } from './store/products/edit-product/edit-product
 import { CreateProductComponent } from './store/products/create-product/create-product.component';
 import { ProductComponent } from './store/products/product.component';
 import { CatalogMoldsComponent } from './store/products/components/catalog-molds/catalog-molds.component';
-import { CatalogMeasuresComponent } from './store/products/components/catalog-measures/catalog-measures.component';
 import { CatalogSubFamiliesProductsComponent } from './store/products/components/catalog-sub-families/catalog-sub-families.component';
 import { CatalogSatComponent } from './store/components/catalog-sat/catalog-sat.component';
 import { CatalogFamiliesProductsComponent } from './store/products/components/catalog-families/catalog-families.component';
@@ -117,7 +116,6 @@ import { PaymentsSaleNoteComponent } from './invoices/components/payments-sale-n
     CreateListPriceComponent,
     EditListPriceComponent,
     CatalogMoldsComponent,
-    CatalogMeasuresComponent,
     CatalogSubFamiliesProductsComponent,
     UsersComponent,
     CreateUserComponent,

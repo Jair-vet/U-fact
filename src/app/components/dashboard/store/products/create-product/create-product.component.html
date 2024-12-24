@@ -3,7 +3,7 @@
     <button mat-icon-button class="textColor" type="button" (click)="cancel()">
       <mat-icon>arrow_back_ios</mat-icon>
     </button>
-    <span>PRODUCTO TERMINADO</span>
+    <span>AGREGAR PRODUCTO</span>
     <div class="item-spacer"></div>
     <button type="submit" class="btnPrimary"  mat-raised-button
       style="height: 80%; margin-top: 10px">
@@ -24,36 +24,12 @@
         </mat-card-header>
 
         <mat-grid-list cols="12" rowHeight="80px">
-          <!-- Imagen del producto -->
-          <mat-grid-tile [colspan]="colMedium" [rowspan]="2">
-            <div class="center-image">
-              <img [src]="imageTemp" height="200" class="logo" />
-              <div class="overlay">
-                <div class="text">
-                  <button type="button" (click)="imageInput.click()" class="btnSecondary" mat-raised-button>
-                    <mat-icon class="icon-size">cloud_upload</mat-icon>SUBIR
-                  </button>
-                </div>
-              </div>
-            </div>
-            <input accept=".jpg, .png" hidden (change)="changeImage($event)" #imageInput type="file" id="file" />
-          </mat-grid-tile>
-
           <!-- Codigo Interno -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>CODIGO INTERNO</mat-label>
               <input matInput formControlName="code" />
               <mat-error *ngIf="form.get('code')?.invalid">Este campo es obligatorio</mat-error>
-            </mat-form-field>
-          </mat-grid-tile>
-
-          <!-- Descripcion -->
-          <mat-grid-tile [colspan]="colMedium" [rowspan]="2">
-            <mat-form-field appearance="outline" floatLabel="always">
-              <mat-label>DESCRIPCIÓN</mat-label>
-              <textarea matInput formControlName="description" placeholder="Información..." rows="6"></textarea>
-              <mat-error *ngIf="form.get('description')?.invalid">Este campo es obligatorio</mat-error>
             </mat-form-field>
           </mat-grid-tile>
 
@@ -72,7 +48,24 @@
               </mat-select>
             </mat-form-field>
           </mat-grid-tile>
-          <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
+
+          <!-- Imagen del producto -->
+          <mat-grid-tile [colspan]="colMedium" [rowspan]="3">
+            <div class="center-image">
+              <img [src]="imageTemp" height="200" class="logo" />
+              <div class="overlay">
+                <div class="text">
+                  <button type="button" (click)="imageInput.click()" class="btnSecondary" mat-raised-button>
+                    <mat-icon class="icon-size">cloud_upload</mat-icon>SUBIR
+                  </button>
+                </div>
+              </div>
+            </div>
+            <input accept=".jpg, .png" hidden (change)="changeImage($event)" #imageInput type="file" id="file" />
+          </mat-grid-tile>
+
+          <!-- PRODUCTO SAT -->
+          <mat-grid-tile [colspan]="colBig" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>PRODUCTO SAT</mat-label>
               <input [readonly]="true" matInput formControlName="code_prod_service" minlength="8" maxlength="8" />
@@ -87,7 +80,7 @@
           </mat-grid-tile>
 
           <!-- Familia del Producto -->
-          <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
+          <mat-grid-tile [colspan]="colBig" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>FAMILIA DE PRODUCTO</mat-label>
               <input matInput formControlName="family_product" />
@@ -95,14 +88,14 @@
             </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
-            <button type="button" (click)="openCatalogFamilyProducts()" mat-raised-button class="btnPrimary">
-              <mat-icon class="size-icon">library_books</mat-icon> FAMILIAS
+            <button type="button" (click)="openCatalogFamilyProducts()" style="width: 100%; margin: 5px" mat-raised-button class="btnPrimary">
+              <mat-icon class="size-icon">library_books</mat-icon> FAMILIAS 
             </button>
             <div class="item-spacer"></div>
           </mat-grid-tile>
 
           <!-- SUB Familia del Producto -->
-          <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
+          <mat-grid-tile [colspan]="colBig" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>SUB FAMILIA DE PRODUCTO</mat-label>
               <input matInput formControlName="sub_family_product" />
@@ -110,14 +103,23 @@
             </mat-form-field>
           </mat-grid-tile>
           <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
-            <button type="button" (click)="openCatalogSubFamilyProducts()" mat-raised-button class="btnPrimary">
+            <button type="button" (click)="openCatalogSubFamilyProducts()" style="width: 100%; margin: 5px" mat-raised-button class="btnPrimary">
               <mat-icon class="size-icon">library_books</mat-icon> SUB-FAMILIAS
             </button>
             <div class="item-spacer"></div>
           </mat-grid-tile>
 
+          <!-- Descripcion -->
+          <mat-grid-tile [colspan]="colMedium" [rowspan]="3">
+            <mat-form-field appearance="outline" floatLabel="always">
+              <mat-label>DESCRIPCIÓN</mat-label>
+              <textarea matInput formControlName="description" placeholder="Información..." rows="9"></textarea>
+              <mat-error *ngIf="form.get('description')?.invalid">Este campo es obligatorio</mat-error>
+            </mat-form-field>
+          </mat-grid-tile>
+
           <!-- Número de Parte -->
-          <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
+          <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>NUMERO DE PARTE</mat-label>
               <input matInput formControlName="part_number" name="part_number" />
@@ -125,9 +127,8 @@
             </mat-form-field>
           </mat-grid-tile>
 
-
           <!-- Costo sin IVA -->
-          <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
+          <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <span *ngIf="!form.value.is_dollars" matPrefix> MXN $&nbsp;</span>
               <span *ngIf="form.value.is_dollars" matPrefix> USD $&nbsp;</span>
@@ -137,23 +138,21 @@
             </mat-form-field>
           </mat-grid-tile>
 
-          <!-- Dólares -->
-          <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
-            <mat-checkbox (change)="changeDollars()" formControlName="is_dollars">¿SON DÓLARES?</mat-checkbox>
-          </mat-grid-tile>
-
-         <!-- Fracción Arancelaria -->
-          <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
+          <!-- Fracción Arancelaria -->
+          <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>FRACCIÓN ARANCELARIA</mat-label>
               <input matInput formControlName="tariff_fraction" />
               <mat-error *ngIf="form.get('tariff_fraction')?.invalid">Este campo es obligatorio</mat-error>
             </mat-form-field>
           </mat-grid-tile>
-
+           
+          <!-- Dólares -->
+            <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
+            <mat-checkbox (change)="changeDollars()" formControlName="is_dollars">¿SON DÓLARES?</mat-checkbox>
+          </mat-grid-tile>
         </mat-grid-list>
       </mat-card>
-
 
     </mat-card>
   </div>
