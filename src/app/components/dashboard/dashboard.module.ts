@@ -14,7 +14,6 @@ import { SettingsComponent } from './settings/settings.component';
 import { InstallCsdComponent } from './settings/components/install-csd/install-csd.component';
 import { AddUserComponent } from './settings/components/add-user/add-user.component';
 import { ListPricesComponent } from './list-prices/list-prices.component';
-import { CatalogTradenamesComponent } from './store/components/catalog-tradenames/catalog-tradenames.component';
 import { CreateListPriceComponent } from './list-prices/create-list-price/create-list-price.component';
 import { EditListPriceComponent } from './list-prices/edit-list-price/edit-list-price.component';
 import { UsersComponent } from './users/users.component';
@@ -25,13 +24,7 @@ import { CatalogProductsComponent } from './orders/components/catalog-products/c
 import { CatalogClientsComponent } from './orders/components/catalog-clients/catalog-clients.component';
 import { EditOrderComponent } from './orders/edit-order/edit-order.component';
 import { EditUserComponent } from './users/edit-user/edit-user.component';
-import { ProductionComponent } from './production/production.component';
-import { CatalogProductsRequisitionsComponent } from './production/components/catalog-products-requisitions/catalog-products-requisitions.component';
-import { EditRequisitionComponent } from './production/edit-requisition/edit-requisition.component';
-import { DetailsRequisitionProductsComponent } from './production/details-requisition-products/details-requisition-products.component';
 import { OrderHistoryComponent } from './orders/components/order-history/order-history.component';
-import { RequisitionHistoryComponent } from './production/components/requisition-history/requisition-history.component';
-import { EntriesComponent } from './store/entries/entries.component';
 import { EditProductComponent } from './store/products/edit-product/edit-product.component';
 import { CreateProductComponent } from './store/products/create-product/create-product.component';
 import { ProductComponent } from './store/products/product.component';
@@ -41,17 +34,12 @@ import { CatalogSatComponent } from './store/components/catalog-sat/catalog-sat.
 import { CatalogFamiliesProductsComponent } from './store/products/components/catalog-families/catalog-families.component';
 import { CatalogRequisitionsComponent } from './store/components/catalog-requisitions/catalog-requisitions.component';
 import { SettingsComputerTableComponent } from './store/components/settings-computer-table/settings-computer-table.component';
-import { CreateEntryComponent } from './store/entries/create-entry/create-entry.component';
-import { DetailEntryComponent } from './store/entries/detail-entry/detail-entry.component';
 import { ProductRequisitionHistoryComponent } from './store/components/product-requisition-history/product-requisition-history.component';
 import { ThemeComponent } from './menu/components/theme/theme.component';
 import { EditPhraseComponent } from './menu/components/edit-phrase/edit-phrase.component';
-import { CatalogEntriesComponent } from './store/components/catalog-entries/catalog-entries.component';
 import { PdfViewComponent } from './store/components/pdf-view/pdf-view.component';
 import { ProductsOrderComponent } from './orders/products-order/products-order.component';
-import { SuplyProductsComponent } from './orders/components/suply-products/suply-products.component';
 import { CatalogDeparturesComponent } from './orders/components/catalog-departures/catalog-departures.component';
-import { DetailOrderProductionComponent } from './store/entries/detail-order-production/detail-order-production.component';
 import { SalesNotesComponent } from './invoices/sales-notes/sales-notes.component';
 import { PaymentsComponent } from './treasury/payments/payments.component';
 import { CreatePaymentComponent } from './treasury/components/create-payment/create-payment.component';
@@ -79,7 +67,6 @@ import { DeparturesTraceabilityComponent } from './orders/components/traceabilit
 import { CertificatesTraceabilityComponent } from './orders/components/traceability-components/certificates-traceability/certificates-traceability.component';
 import { DocumentPDFComponent } from './common/client-emails/components/document-pdf/document-pdf.component';
 import { PaginationComponent } from './common/pagination/pagination.component';
-import { AddOrderRequisitionComponent } from './production/add-order-requisition/add-order-requisition.component';
 import { TotalTagComponent } from './common/total-tag/total-tag.component';
 import { KardexEntriesDeparturesComponent } from './store/products/kardex-entries-departures/kardex-entries-departures.component';
 import { SeeEntryDepartureComponent } from './store/products/see-entry-departure/see-entry-departure.component';
@@ -89,7 +76,6 @@ import { DetailEntryProductionComponent } from './store/products/see-entry-depar
 import { BarChartComponent } from './common/bar-chart/bar-chart.component';
 import { CreditNotesComponent } from './credit-note/credit-notes/credit-notes.component';
 import { CreateCreditNoteComponent } from './credit-note/create-credit-note/create-credit-note.component';
-import { SalesReturnsComponent } from './store/entries/sales-returns/sales-returns.component';
 import { CatalogAvailableInventoryComponent } from './store/components/catalog-available-inventory/catalog-available-inventory.component';
 import { InvoicesBalanceComponent } from './treasury/components/invoices-balance/invoices-balance.component';
 import { BanksComponent } from './banks/banks.component';
@@ -112,7 +98,6 @@ import { PaymentsSaleNoteComponent } from './invoices/components/payments-sale-n
     AddUserComponent,
     ListPricesComponent,
     ThemeComponent,
-    CatalogTradenamesComponent,
     CreateListPriceComponent,
     EditListPriceComponent,
     CatalogMoldsComponent,
@@ -123,12 +108,6 @@ import { PaymentsSaleNoteComponent } from './invoices/components/payments-sale-n
     OrderComponent,
     EditOrderComponent,
     EditUserComponent,
-    ProductionComponent,
-    CatalogProductsRequisitionsComponent,
-    EditRequisitionComponent,
-    DetailsRequisitionProductsComponent,
-    RequisitionHistoryComponent,
-    EntriesComponent,
     EditProductComponent,
     CreateProductComponent,
     ProductComponent,
@@ -136,16 +115,11 @@ import { PaymentsSaleNoteComponent } from './invoices/components/payments-sale-n
     CatalogFamiliesProductsComponent,
     CatalogRequisitionsComponent,
     SettingsComputerTableComponent,
-    CreateEntryComponent,
-    DetailEntryComponent,
     ProductRequisitionHistoryComponent,
     EditPhraseComponent,
-    CatalogEntriesComponent,
     PdfViewComponent,
     ProductsOrderComponent,
-    SuplyProductsComponent,
     CatalogDeparturesComponent,
-    DetailOrderProductionComponent,
     SalesNotesComponent,
     PaymentsComponent,
     CreatePaymentComponent,
@@ -174,7 +148,6 @@ import { PaymentsSaleNoteComponent } from './invoices/components/payments-sale-n
     CertificatesTraceabilityComponent,
     DocumentPDFComponent,
     PaginationComponent,
-    AddOrderRequisitionComponent,
     TotalTagComponent,
     KardexEntriesDeparturesComponent,
     SeeEntryDepartureComponent,
@@ -184,7 +157,6 @@ import { PaymentsSaleNoteComponent } from './invoices/components/payments-sale-n
     BarChartComponent,
     CreditNotesComponent,
     CreateCreditNoteComponent,
-    SalesReturnsComponent,
     CatalogAvailableInventoryComponent,
     InvoicesBalanceComponent,
     BanksComponent,

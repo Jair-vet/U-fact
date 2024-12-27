@@ -2,15 +2,8 @@ import { BooleanInput } from '@angular/cdk/coercion';
 import { Component, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Requisition } from 'src/app/models/requisition.model';
-import { RequisitionService } from 'src/app/services/requisition.service';
-import { RequisitionHistoryComponent } from '../../../production/components/requisition-history/requisition-history.component';
-
 import { MatDialog } from '@angular/material/dialog';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-
-
-
 
 
 
@@ -36,7 +29,7 @@ export class CatalogRequisitionsComponent {
   }
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private dialog: MatDialog, private _requisitionsService: RequisitionService, private breakpointObserver: BreakpointObserver) {
+  constructor(private dialog: MatDialog,  private breakpointObserver: BreakpointObserver) {
 
     this.breakpointObserver.observe([
       Breakpoints.XSmall,
@@ -77,35 +70,5 @@ export class CatalogRequisitionsComponent {
   }
   loadData() {
     this.loading = true
-    this._requisitionsService.getOrdersProduction().subscribe({
-      next: (resp) => {
-        this.dataSource = new MatTableDataSource(resp);
-        console.log(resp)
-        console.log('REQUISICIONES')
-      },
-      complete: () => {
-        this.loading = false
-        this.dataSource.sort = this.sort;
-
-        this.isDisabled = false
-      },
-      error: (err) => {
-        this.loading = false
-        console.log(err)
-      },
-
-    })
-  }
-  openRequisitionHistory(item: Requisition): void {
-    console.log(item)
-    const dialogRef = this.dialog.open(RequisitionHistoryComponent, {
-      width: this.modalWidth,
-      height: 'auto',
-      data: { data: item }
-    })
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('El diálogo se cerró');
-      console.log('Resultado:', result);
-    });
   }
 }

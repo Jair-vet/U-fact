@@ -14,7 +14,6 @@ import Swal from 'sweetalert2';
 import { PdfViewComponent } from '../components/pdf-view/pdf-view.component';
 import { MatDialog } from '@angular/material/dialog';
 import { CatalogAvailableInventoryComponent } from '../components/catalog-available-inventory/catalog-available-inventory.component';
-import { CatalogEntriesComponent } from '../components/catalog-entries/catalog-entries.component';
 import { RoutingService } from 'src/app/services/routing.service';
 import { SatService } from 'src/app/services/sat.service';
 

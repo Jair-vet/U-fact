@@ -11,7 +11,6 @@ import {
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { InventoryInterface } from 'src/app/interfaces/inventory-form.interface';
 import { Invoice } from 'src/app/models/invoice.model';
 import { PaymentPlugin } from 'src/app/models/payment-plugin.model';
 import { User } from 'src/app/models/user.model';

@@ -96,18 +96,6 @@
                                 {{item.amount - item.amount_departure}}
                             </td>
                         </ng-container>
-                        <ng-container matColumnDef="suply">
-                            <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="suply">
-                                SURTIENDO</th>
-                            <td mat-cell *matCellDef="let item;let i = index;" style="width:10%">
-                                <span class="suply-number">{{calculateCurrentSuply(item)}}</span>
-                                <a class="btnAction" (click)="openSuply(item)" style="color:rgb(18, 98, 144)"
-                                    matTooltip="EDITAR SURTIMIENTO">
-                                    <mat-icon class="custom-size-animation">edit</mat-icon>
-                                </a>
-
-                            </td>
-                        </ng-container>
                     </table>
                 </div><br>
 

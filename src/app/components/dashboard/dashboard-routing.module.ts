@@ -16,15 +16,10 @@ import { EditListPriceComponent } from './list-prices/edit-list-price/edit-list-
 import { UsersComponent } from './users/users.component';
 import { CreateUserComponent } from './users/create-user/create-user.component';
 import { EditUserComponent } from './users/edit-user/edit-user.component';
-import { EntriesComponent } from './store/entries/entries.component';
-import { CreateEntryComponent } from './store/entries/create-entry/create-entry.component';
-import { DetailEntryComponent } from './store/entries/detail-entry/detail-entry.component';
-import { DetailOrderProductionComponent } from './store/entries/detail-order-production/detail-order-production.component';
 import { SalesNotesComponent } from './invoices/sales-notes/sales-notes.component';
 import { InvoicesComponent } from './invoices/invoices/invoices.component';
 import { KardexEntriesDeparturesComponent } from './store/products/kardex-entries-departures/kardex-entries-departures.component';
 import { CreditNotesComponent } from './credit-note/credit-notes/credit-notes.component';
-import { SalesReturnsComponent } from './store/entries/sales-returns/sales-returns.component';
 import { BanksComponent } from './banks/banks.component';
 import { CreateBankComponent } from './banks/create-bank/create-bank.component';
 import { PaymentsComponent } from './treasury/payments/payments.component';
@@ -43,12 +38,6 @@ const routes: Routes = [
 
       { path: 'clients/create-client', component: CreateClientComponent },
       { path: 'clients/edit-client/:id', component: EditClientComponent },
-
-      { path: 'entries', component: EntriesComponent },
-      { path: 'entries/generate-entry/:id', component: CreateEntryComponent },
-      { path: 'entries/detail-entry/:id', component: DetailEntryComponent },
-      { path: 'entries/sales-returns', component: SalesReturnsComponent },
-      { path: 'store/detail-order-production/:id', component: DetailOrderProductionComponent },
 
       { path: 'products', component: ProductComponent },
       { path: 'products/create-product', component: CreateProductComponent },

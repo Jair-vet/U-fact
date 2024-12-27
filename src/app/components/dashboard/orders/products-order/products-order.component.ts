@@ -10,7 +10,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { BooleanInput } from '@angular/cdk/coercion';
 import { OrderService } from 'src/app/services/order.service';
 import { ProductOrder } from 'src/app/models/product-order.model';
-import { SuplyProductsComponent } from '../components/suply-products/suply-products.component';
 import { DepartureInventory } from 'src/app/models/departure_inventory.model';
 import { DepartureService } from 'src/app/services/departure.service';
 import { CatalogDeparturesComponent } from '../components/catalog-departures/catalog-departures.component';
@@ -164,26 +163,6 @@ export class ProductsOrderComponent implements OnInit {
     }
     return false
   }
-
-
-  async openSuply(product_order: ProductOrder): Promise<void> {
-    const response = await this.loadData()
-
-    if (response[0] && this.validateBoxesToAdd(product_order)) {
-      this.data = { data: product_order, departure_inventory: this.departure_inventory }
-      const dialogRef = this.dialog.open(SuplyProductsComponent, {
-        width: this.modalWidth,
-        height: 'auto',
-        data: this.data
-      })
-      dialogRef.componentInstance.dataChange.subscribe((updatedData) => {
-        this.departure_inventory = updatedData.departure_inventory
-      });
-    } else {
-      Swal.fire({ title: 'ERROR', text: 'ESTE PRODUCTO YA FUE ENTREGADO', icon: 'error', confirmButtonColor: '#58B1F7', heightAuto: false })
-    }
-  }
-
 
   openCatalogDepartures() {
     this.data = { id_order: this.idOrder }
