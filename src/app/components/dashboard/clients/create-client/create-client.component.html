@@ -1,24 +1,16 @@
 <form [formGroup]="form" (ngSubmit)="createClient()">
-
-
+  <!-- Barra para guardar -->
   <mat-toolbar class="title">
     <button mat-icon-button class="textColor" type="button" (click)="cancel()">
       <mat-icon>arrow_back_ios</mat-icon>
     </button>
-
-
     <span>CLIENTE</span>
     <div class="item-spacer"></div>
-
-
     <button type="submit" [ngClass]="{'btnPrimary':true, 'blink_me' : !form.invalid }" [disabled]="form.invalid"
       style="height:80%; margin-top: 10px;" mat-raised-button>
       <mat-icon class="icon-size">save</mat-icon>GUARDAR
     </button>
-
-
   </mat-toolbar> <br>
-
   <div class="secondary">
     <mat-spinner diameter="50" *ngIf="loading" class="spinner" color="primary"></mat-spinner>
   </div>
@@ -26,8 +18,7 @@
   <div class="container">
 
     <mat-card *ngIf="!loading && !error" class="card colorSecondary">
-
-
+      <!-- Datos Fiscales -->
       <mat-card class="mat-elevation-z8 card-prop" style="padding:0%; margin-bottom: 20px;">
         <mat-card-header class="primary" style="padding:10px">
           <mat-icon style="font-size:20px">receipt</mat-icon>
@@ -35,8 +26,9 @@
             DATOS FISCALES
           </span>
         </mat-card-header>
-
         <mat-grid-list cols="12" rowHeight="80px">
+
+          <!-- Residencia -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>RESIDENCIA</mat-label>
@@ -48,6 +40,8 @@
               <mat-error *ngIf="form.invalid">Ingresar un Residencia valida para el tipo de regimen</mat-error>
             </mat-form-field>
           </mat-grid-tile>
+
+          <!-- Codigo de País -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>CODIGO DE PAÍS</mat-label>
@@ -63,6 +57,7 @@
             </mat-form-field>
           </mat-grid-tile>
 
+          <!-- ID Tributario -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1" *ngIf="form.value.id_residence == '2'">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>ID TRIBUTARIO</mat-label>
@@ -71,6 +66,7 @@
             </mat-form-field>
           </mat-grid-tile>
 
+          <!-- Direccion Completa -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1" *ngIf="form.value.id_residence == '2'">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>DIRECCION COMPLETA</mat-label>
@@ -78,6 +74,8 @@
               <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
             </mat-form-field>
           </mat-grid-tile>
+
+          <!-- Regimen Fiscal -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>REGIMEN FISCAL</mat-label>
@@ -95,6 +93,7 @@
             </mat-form-field>
           </mat-grid-tile>
 
+          <!-- Razón Social -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>RAZÓN SOCIAL O NOMBRE</mat-label>
@@ -103,6 +102,7 @@
             </mat-form-field>
           </mat-grid-tile>
 
+          <!-- Nombre Comercial -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label> NOMBRE COMERCIAL</mat-label>
@@ -111,8 +111,7 @@
             </mat-form-field>
           </mat-grid-tile>
 
-
-
+          <!-- R.F.C -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>R.F.C</mat-label>
@@ -121,6 +120,7 @@
             </mat-form-field>
           </mat-grid-tile>
 
+          <!-- Codigo Postal -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>CÓDIGO POSTAL</mat-label>
@@ -128,6 +128,8 @@
                 [maxlength]="5" [minlength]="5" [readonly]="waitValidatePostalCode">
             </mat-form-field>
           </mat-grid-tile>
+
+          <!-- Estado -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1" *ngIf="form.value.id_residence == '2'">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>ESTADO</mat-label>
@@ -135,6 +137,8 @@
                 [maxlength]="5" [readonly]="waitValidatePostalCode">
             </mat-form-field>
           </mat-grid-tile>
+
+          <!-- Colonia -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1" *ngIf="form.value.id_residence != '2'">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>COLONIA</mat-label>
@@ -151,6 +155,7 @@
             </mat-form-field>
           </mat-grid-tile>
 
+          <!-- Municipio -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1" *ngIf="form.value.id_residence != '2'">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>MUNICIPIO</mat-label>
@@ -166,7 +171,7 @@
             </mat-form-field>
           </mat-grid-tile>
 
-
+          <!-- Estado -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1" *ngIf="form.value.id_residence != '2'">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>ESTADO</mat-label>
@@ -182,6 +187,7 @@
             </mat-form-field>
           </mat-grid-tile>
 
+          <!-- Domicilio -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>DOMICILIO</mat-label>
@@ -190,6 +196,7 @@
             </mat-form-field>
           </mat-grid-tile>
 
+          <!-- Numero Exterior -->
           <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>NUM. EXT</mat-label>
@@ -198,6 +205,7 @@
             </mat-form-field>
           </mat-grid-tile>
 
+          <!-- Numero Interior -->
           <mat-grid-tile [colspan]="colSmall" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>NUM. INT</mat-label>
@@ -207,6 +215,8 @@
           </mat-grid-tile>
         </mat-grid-list>
       </mat-card>
+
+      <!-- Datos Generales -->
       <mat-card class="mat-elevation-z8 card-prop" style="padding:0px; margin-bottom: 20px;">
         <mat-card-header class="primary" style="padding:10px">
           <mat-icon style="font-size:20px">location_on</mat-icon>
@@ -215,6 +225,8 @@
           </span>
         </mat-card-header>
         <mat-grid-list cols="12" rowHeight="80px" style="padding:10px">
+          
+          <!-- Nombre -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>NOMBRE</mat-label>
@@ -222,6 +234,8 @@
               <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
             </mat-form-field>
           </mat-grid-tile>
+          
+          <!-- Telefono -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>TELEFONO</mat-label>
@@ -229,6 +243,8 @@
               <mat-error *ngIf="form.invalid">Ingresar una cadena de diez números</mat-error>
             </mat-form-field>
           </mat-grid-tile>
+          
+          <!-- Correo -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>CORREO</mat-label>
@@ -236,10 +252,10 @@
               <mat-error *ngIf="formContact.invalid">Ingresa un correo electronico valido</mat-error>
             </mat-form-field>
           </mat-grid-tile>
-
         </mat-grid-list>
       </mat-card>
 
+      <!-- Opciones de Precio y Vendedor -->
       <mat-card class="mat-elevation-z8 card-prop" style="padding:0%; margin-bottom: 20px;">
         <mat-card-header class="primary" style="padding:10px">
           <mat-icon style="font-size:20px">attach_money</mat-icon>
@@ -281,10 +297,10 @@
               </mat-select>
             </mat-form-field>
           </mat-grid-tile>
-
         </mat-grid-list>
-
       </mat-card>
+
+      <!-- Comentarios y Credito -->
       <mat-card class="mat-elevation-z8 card-prop" style="padding:0%; margin-bottom: 20px;">
         <mat-card-header class="primary" style="padding:10px">
           <mat-icon style="font-size:20px">receipt</mat-icon>
@@ -292,11 +308,9 @@
             COMENTARIOS Y CREDITO
           </span>
         </mat-card-header>
-
         <mat-grid-list cols="12" rowHeight="80px">
 
-
-
+          <!-- Credito -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>CREDITO</mat-label>
@@ -306,7 +320,7 @@
             </mat-form-field>
           </mat-grid-tile>
 
-
+          <!-- Dias de Credito -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>DÍAS DE CREDITO</mat-label>
@@ -315,18 +329,18 @@
             </mat-form-field>
           </mat-grid-tile>
 
+          <!-- Comentarios -->
           <mat-grid-tile [colspan]="colMedium" [rowspan]="2">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>COMENTARIOS</mat-label>
               <textarea matInput formControlName="comments" rows="6"></textarea>
-
               <mat-error *ngIf="form.invalid">Este campo es obligatorio</mat-error>
             </mat-form-field>
           </mat-grid-tile>
-
-
         </mat-grid-list>
       </mat-card>
+      
+      <!-- Datos de Contacto -->
       <mat-card class="mat-elevation-z8 card-prop" style="padding:0%; margin-bottom: 20px;">
         <mat-card-header class="primary" style="padding:10px">
           <mat-icon style="font-size:20px">contact_phone</mat-icon>
@@ -336,6 +350,7 @@
         </mat-card-header>
         <mat-grid-list cols="12" rowHeight="80px">
           <form [formGroup]="formContact" (ngSubmit)="createContact()">
+            <!-- Nombre -->
             <mat-grid-tile [colspan]="colBig" [rowspan]="1">
               <mat-form-field appearance="outline" floatLabel="always">
                 <mat-label>NOMBRE</mat-label>
@@ -344,11 +359,10 @@
               </mat-form-field>
             </mat-grid-tile>
 
+            <!-- Tipo de Contacto -->
             <mat-grid-tile [colspan]="colMedium" [rowspan]="3">
               <mat-list>
-
                 <mat-label><b>TIPO DE CONTACTO:</b> </mat-label>
-
                 <mat-radio-group formControlName="id_type_email" aria-labelledby="radio-group-label"
                   class="radio-group ">
                   <mat-list>
@@ -368,6 +382,8 @@
                 </mat-radio-group>
               </mat-list>
             </mat-grid-tile>
+
+            <!-- Telefono -->
             <mat-grid-tile [colspan]="colBig" [rowspan]="1">
               <mat-form-field appearance="outline" floatLabel="always">
                 <mat-label>TELEFONO</mat-label>
@@ -375,6 +391,8 @@
                 <mat-error *ngIf="form.invalid">Ingresar una cadena de diez números</mat-error>
               </mat-form-field>
             </mat-grid-tile>
+            
+            <!-- Correo -->
             <mat-grid-tile [colspan]="colBig" [rowspan]="1">
               <mat-form-field appearance="outline" floatLabel="always">
                 <mat-label>CORREO</mat-label>
@@ -383,8 +401,8 @@
               </mat-form-field>
             </mat-grid-tile>
 
+            <!-- Agregar otro Contacto -->
             <mat-grid-tile [colspan]="12" [rowspan]="1">
-
               <div class="item-spacer"></div>
               <button type="submit" class="btnPrimary" [disabled]="formContact.invalid" mat-raised-button>
                 <mat-icon>add</mat-icon>AGREGAR CONTACTO
@@ -395,15 +413,12 @@
               <div class="table-container-small">
                 <div class="overlay-loading" *ngIf="loading">
                   <div class="spinner-wrapper">
-
                     <mat-spinner diameter="50" *ngIf="loadingContacts" class="spinner" color="primary"></mat-spinner>
                   </div>
                 </div>
                 <table mat-table [dataSource]="dataContacts" matSort>
-
                   <tr mat-header-row *matHeaderRowDef="displayedColumnsContacts; sticky: true"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumnsContacts;"></tr>
-
                   <ng-container matColumnDef="name">
                     <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="name"> NOMBRE </th>
                     <td mat-cell *matCellDef="let contact" style="width:25%"> {{contact.name }} </td>
@@ -421,10 +436,7 @@
 
                   <ng-container matColumnDef="type">
                     <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="type"> TIPO </th>
-                    <td mat-cell *matCellDef="let contact" style="width:10%"> {{contact.id_type_email == '1' ? '¿QUIEN
-                      PAGA?' :
-                      contact.id_type_email == '2' ? '¿QUIEN RECIBE?' : contact.id_type_email == '3' ? '¿QUIEN COMPRA?'
-                      : 'OTRO'}} </td>
+                    <td mat-cell *matCellDef="let contact" style="width:10%"> {{contact.id_type_email == '1' ? '¿QUIEN PAGA?' : contact.id_type_email == '2' ? '¿QUIEN RECIBE?' : contact.id_type_email == '3' ? '¿QUIEN COMPRA?': 'OTRO'}} </td>
                   </ng-container>
 
                   <ng-container matColumnDef="actions">
@@ -453,11 +465,6 @@
         <h1>{{error_msg}}</h1>
       </div>
     </mat-card>
-
-
-
-
-
 
   </div>
 </form>
