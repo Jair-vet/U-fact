@@ -81,6 +81,7 @@ import { InvoicesBalanceComponent } from './treasury/components/invoices-balance
 import { BanksComponent } from './banks/banks.component';
 import { CreateBankComponent } from './banks/create-bank/create-bank.component';
 import { PaymentsSaleNoteComponent } from './invoices/components/payments-sale-note/payments-sale-note.component';
+import { PriceProductsComponent } from './clients/components/price-list-component/price-list-component';
 
 @NgModule({
   declarations: [
@@ -160,7 +161,8 @@ import { PaymentsSaleNoteComponent } from './invoices/components/payments-sale-n
     CatalogAvailableInventoryComponent,
     InvoicesBalanceComponent,
     BanksComponent,
-    CreateBankComponent
+    CreateBankComponent,
+    PriceProductsComponent
 
   ],
   imports: [CommonModule, DashboardRoutingModule, SharedModule],

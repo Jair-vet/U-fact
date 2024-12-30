@@ -2,6 +2,7 @@ import { BooleanInput } from '@angular/cdk/coercion';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSelect } from '@angular/material/select';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -23,6 +24,8 @@ import { UploadService } from 'src/app/services/upload.service';
 import { UserService } from 'src/app/services/user.service';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
+import { PriceProductsComponent } from '../components/price-list-component/price-list-component';
+import { ListRequestProduct } from 'src/app/models/list-request-product.model';
 
 const clearFields = environment.clearFields
 
@@ -36,13 +39,15 @@ export class CreateClientComponent implements OnInit {
   error: boolean = false
   error_msg: string = ''
   loadingContacts = false
-
+  modalWidth: string = '';
+  products: any[] = [];
   displayedColumnsContacts: string[] = ['name', 'email', 'telephone', 'type', 'actions'];
   dataContacts!: MatTableDataSource<any>;
   form: FormGroup
   formContact: FormGroup
   contacts: Contact[] = []
   residences: Residence[] = []
+  dataProducts!: MatTableDataSource<any>;
 
 
   code_countries!: CodeCountry[]
@@ -95,7 +100,19 @@ export class CreateClientComponent implements OnInit {
   minRFC: number = 10
   maxRFC: number = 10
 
-  constructor(private _listPriceService: ListPriceService, private _helpService: HelpService, private breakpointObserver: BreakpointObserver, private _formBuider: FormBuilder, private _router: Router, private _userService: UserService, private _clientService: ClientService, private _satService: SatService, private _uploadService: UploadService, private _catalogService: CatalogService) {
+  constructor(
+    private _listPriceService: ListPriceService, 
+    private _helpService: HelpService, 
+    private breakpointObserver: BreakpointObserver, 
+    private _formBuider: FormBuilder, 
+    private _router: Router, 
+    private _userService: UserService, 
+    private _clientService: ClientService, 
+    private _satService: SatService, 
+    private _uploadService: UploadService,
+    private _catalogService: CatalogService,
+    private dialog: MatDialog,
+  ) {
     this._helpService.helpCreateClient()
     this.breakpointObserver.observe([
       Breakpoints.XSmall,
@@ -540,7 +557,6 @@ export class CreateClientComponent implements OnInit {
     this._userService.getSellers(this._userService.user.id_company.toString()).subscribe({
       next: (resp) => {
         this.users = resp
-        console.log(resp)
       },
       complete: () => {
         this.loadCodeCountries()
@@ -577,7 +593,6 @@ export class CreateClientComponent implements OnInit {
     this._catalogService.getResidences().subscribe({
       next: (resp) => {
         this.residences = resp
-        console.log(resp)
       },
       complete: () => {
         this.loadTaxRegimes()
@@ -654,6 +669,42 @@ export class CreateClientComponent implements OnInit {
       },
     });
   }
+
+  loadProducts() {
+    this.dataProducts = new MatTableDataSource(this.products);
+  }
+
+  deleteProduct(product: ListRequestProduct) {
+    this.products = this.products.filter((item) => item.id !== product.id);
+    this.loadProducts();
+  }
+
+  openCatalogProducts() {
+    this._listPriceService.getAllData(this._userService.user.id_company.toString(), false).subscribe({
+      next: (resp) => {
+        this.listPrices = resp
+        console.log(this.listPrices);
+        const dialogRef = this.dialog.open(PriceProductsComponent, {
+          width: `${this.modalWidth}`,
+          height: 'auto',
+          data: {
+            selectedProducts: this.products, 
+            listPrice: this.listPrices,      
+          },
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            console.log('Seleccionados:', result);
+          }
+        });
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  }
+  
 
   ngOnInit(): void {
     this.loadResidences()
