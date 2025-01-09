@@ -264,8 +264,38 @@ export class CreateClientComponent implements OnInit {
       this.loading = false
 
     } else {
-      this._clientService.createClient(this.form.value.name, this.form.value.tradename, this.form.value.rfc, this.form.value.representative, this.form.value.id_residence === 1 ? this.statesCtrl.value : this.form.value.state, this.form.value.id_residence === 1 ? this.municipalitiesCtrl.value.municipality : '', this.form.value.id_residence === 1 ? this.suburbsCtrl.value.suburb : '', this.form.value.postal_code, this.form.value.address, this.form.value.num_ext, this.form.value.num_int, this.form.value.telephone, this.form.value.email,
-        this._userService.user.id_company.toString(), this.taxRegimesCtrl.value.id.toString(), this.listPricesCtrl.value.id.toString(), this.userCtrl.value.id.toString(), this.form.value.comments, this.form.value.credit_limit, this.form.value.credit_days, this.form.value.id_residence, this.contacts, this.form.value.id_tax, this.form.value.country_code, this.form.value.address_complete).subscribe({
+      const selectedProducts = this.products.filter(product => product.isSelected);
+
+      // Mostrar un log de los productos seleccionados
+      console.log('Productos seleccionados enviados:', selectedProducts);
+      this._clientService.createClient(
+        this.form.value.name,
+        this.form.value.tradename,
+        this.form.value.rfc,
+        this.form.value.representative,
+        this.form.value.id_residence === 1 ? this.statesCtrl.value : this.form.value.state,
+        this.form.value.id_residence === 1 ? this.municipalitiesCtrl.value.municipality : '',
+        this.form.value.id_residence === 1 ? this.suburbsCtrl.value.suburb : '',
+        this.form.value.postal_code,
+        this.form.value.address,
+        this.form.value.num_ext,
+        this.form.value.num_int,
+        this.form.value.telephone,
+        this.form.value.email,
+        this._userService.user.id_company.toString(),
+        this.taxRegimesCtrl.value.id.toString(),
+        this.listPricesCtrl.value.id.toString(),
+        this.userCtrl.value.id.toString(),
+        this.form.value.comments,
+        this.form.value.credit_limit,
+        this.form.value.credit_days,
+        this.form.value.id_residence,
+        this.contacts,
+        this.form.value.id_tax,
+        this.form.value.country_code,
+        this.form.value.address_complete,
+        selectedProducts 
+      ).subscribe({
           next: (resp) => {
             Swal.fire({
               title: 'AGREGAR CLIENTE',
@@ -688,18 +718,18 @@ export class CreateClientComponent implements OnInit {
             width: this.modalWidth,
             height: 'auto',
             data: {
-              selectedProducts: this.products,
+              selectedProducts: [...this.products],
               listPrice: this.listPrices,
             },
           });
   
-          dialogRef.componentInstance.dataChange.subscribe((data) => {
-            this.products = data;
-            this.loadProducts();
+          dialogRef.componentInstance.dataChange.subscribe((updatedProducts) => {
+            this.products = updatedProducts;
+            this.loadProducts(); 
           });
   
           dialogRef.componentInstance.removeProduct.subscribe((data) => {
-            this.deleteProduct(data);  
+            this.deleteProduct(data);
           });
         },
         error: (err) => {
