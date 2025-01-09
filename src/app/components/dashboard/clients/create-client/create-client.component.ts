@@ -1,6 +1,6 @@
 import { BooleanInput } from '@angular/cdk/coercion';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelect } from '@angular/material/select';
@@ -26,6 +26,8 @@ import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 import { PriceProductsComponent } from '../components/price-list-component/price-list-component';
 import { ListRequestProduct } from 'src/app/models/list-request-product.model';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+
 
 const clearFields = environment.clearFields
 
@@ -41,21 +43,22 @@ export class CreateClientComponent implements OnInit {
   loadingContacts = false
   modalWidth: string = '';
   products: any[] = [];
+  inactive: boolean = false
   displayedColumnsContacts: string[] = ['name', 'email', 'telephone', 'type', 'actions'];
   dataContacts!: MatTableDataSource<any>;
+  selectedProductsDataSource = new MatTableDataSource<ListRequestProduct>();
   form: FormGroup
   formContact: FormGroup
   contacts: Contact[] = []
   residences: Residence[] = []
-  dataProducts!: MatTableDataSource<any>;
+  isDisabled: boolean = false;
 
-
-  code_countries!: CodeCountry[]
+  code_countries!: CodeCountry[] 
   public codeCountryCtrl: FormControl = new FormControl();
   public codeCountryFilterCtrl: FormControl = new FormControl();
   public filteredCodeCountry: ReplaySubject<CodeCountry[]> = new ReplaySubject<CodeCountry[]>(1);
 
-  tax_regimes!: TaxRegimen[]
+  tax_regimes!: TaxRegimen[] 
   public taxRegimesCtrl: FormControl = new FormControl();
   public taxRegimesFilterCtrl: FormControl = new FormControl();
   public filteredTaxRegimes: ReplaySubject<TaxRegimen[]> = new ReplaySubject<TaxRegimen[]>(1);
@@ -65,11 +68,12 @@ export class CreateClientComponent implements OnInit {
   public statesFilterCtrl: FormControl = new FormControl();
   public filteredStates: ReplaySubject<State[]> = new ReplaySubject<State[]>(1);
 
-  listPrices!: ListPrice[]
+  listPrices: ListPrice[] = [];
   public listPricesCtrl: FormControl = new FormControl();
   public listPricesFilterCtrl: FormControl = new FormControl();
   public filteredListPrices: ReplaySubject<ListPrice[]> = new ReplaySubject<ListPrice[]>(1);
-
+  displayedSelectedColumns: string[] = ['id', 'label', 'description', 'porcentage', 'actions'];
+  dataProducts!: MatTableDataSource<any>;
 
   municipalities!: Municipality[]
   public municipalitiesCtrl: FormControl = new FormControl();
@@ -93,6 +97,7 @@ export class CreateClientComponent implements OnInit {
 
 
   @ViewChild('singleSelect', { static: true }) singleSelect!: MatSelect;
+  @Inject(MAT_DIALOG_DATA) public data: any
 
   protected _onDestroy = new Subject<void>();
   tradenameOnlyRead: BooleanInput = true
@@ -112,6 +117,7 @@ export class CreateClientComponent implements OnInit {
     private _uploadService: UploadService,
     private _catalogService: CatalogService,
     private dialog: MatDialog,
+    
   ) {
     this._helpService.helpCreateClient()
     this.breakpointObserver.observe([
@@ -211,6 +217,7 @@ export class CreateClientComponent implements OnInit {
     this.form.controls['rfc'].enable();
 
   }
+
   validatePostalCode() {
 
     if (this.form.value.postal_code.length == 5 && this.form.value.id_residence !== 2) {
@@ -669,44 +676,65 @@ export class CreateClientComponent implements OnInit {
       },
     });
   }
+  
+  openCatalogProducts() {
+    this._listPriceService
+    .getAllData(this._userService.user.id_company.toString(), false)
+      .subscribe({
+        next: (resp) => {
+          this.listPrices = resp;
+        
+          const dialogRef = this.dialog.open(PriceProductsComponent, {
+            width: this.modalWidth,
+            height: 'auto',
+            data: {
+              selectedProducts: this.products,
+              listPrice: this.listPrices,
+            },
+          });
+  
+          dialogRef.componentInstance.dataChange.subscribe((data) => {
+            this.products = data;
+            this.loadProducts();
+          });
+  
+          dialogRef.componentInstance.removeProduct.subscribe((data) => {
+            this.deleteProduct(data);  
+          });
+        },
+        error: (err) => {
+          console.error('Error al cargar datos:', err);
+        },
+      });
+  }  
 
   loadProducts() {
     this.dataProducts = new MatTableDataSource(this.products);
   }
 
   deleteProduct(product: ListRequestProduct) {
-    this.products = this.products.filter((item) => item.id !== product.id);
-    this.loadProducts();
+    this.products = this.products.filter((item) => item.id !== product.id); 
+    this.loadProducts();  // Recargar la tabla
   }
 
-  openCatalogProducts() {
-    this._listPriceService.getAllData(this._userService.user.id_company.toString(), false).subscribe({
-      next: (resp) => {
-        this.listPrices = resp
-        console.log(this.listPrices);
-        const dialogRef = this.dialog.open(PriceProductsComponent, {
-          width: `${this.modalWidth}`,
-          height: 'auto',
-          data: {
-            selectedProducts: this.products, 
-            listPrice: this.listPrices,      
-          },
-        });
-
-        dialogRef.afterClosed().subscribe(result => {
-          if (result) {
-            console.log('Seleccionados:', result);
-          }
-        });
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    });
+  deleteProductByIndex(index: number) {
+    const product = this.products[index];
+    const productIndex = this.data.selectProducts.findIndex(
+      (item: ListRequestProduct) => item.uniqueId === product.uniqueId
+    );
+    if (productIndex > -1) {
+      this.data.selectProducts.splice(productIndex, 1);
+    }
+    this.products.splice(index, 1); // Eliminar de la lista de productos
+    this.loadProducts();  // Recargar la tabla
   }
   
+  loadData() {
+    this.loading = false;
+  }
 
   ngOnInit(): void {
+    this.loadData();
     this.loadResidences()
   }
 }

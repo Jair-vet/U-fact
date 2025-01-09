@@ -265,14 +265,69 @@
         </mat-card-header>
 
         <mat-grid-list cols="12" rowHeight="80px">
-
+          <!-- BOTON -->
           <button type="button" class="btnPrimary" (click)="openCatalogProducts()" [disabled]="loading"
                   style="height:80%; margin-top: 10px;" mat-raised-button>
-              <mat-icon class="icon-size">library_books</mat-icon>SELECCIONAR PRODUCTO
+              <mat-icon class="icon-size">library_books</mat-icon>SELECCIONAR PRECIO Y VENDEDOR
           </button>
 
+          
+          
+          
         </mat-grid-list>
       </mat-card>
+
+      <!-- Tabla de Productos Seleccionados -->
+      <mat-card class="mat-elevation-z8 card-prop" style="padding:0%; margin-bottom: 20px;">
+        <mat-card-header class="primary" style="padding:10px">
+          <mat-icon style="font-size:20px">attach_money</mat-icon>
+          <span>PRODUCTOS SELECCIONADOS</span>
+        </mat-card-header>
+      
+        <div class="mat-elevation-z8" style="overflow-x:auto; width:100%; margin-top: 10px;">
+          <table mat-table [dataSource]="dataProducts" matSort style="width:100%; table-layout: fixed;">
+            <tr mat-header-row *matHeaderRowDef="displayedSelectedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedSelectedColumns;"></tr>
+      
+            <!-- ID -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell class="primary" *matHeaderCellDef mat-sort-header="id" style="width:10%;"> ID </th>
+              <td mat-cell *matCellDef="let item" style="width:10%;">{{item.id}}</td>
+            </ng-container>
+      
+            <!-- Label -->
+            <ng-container matColumnDef="label">
+              <th mat-header-cell class="primary" *matHeaderCellDef style="width:10%;"> LABEL </th>
+              <td mat-cell *matCellDef="let item" style="width:10%;">{{item.label}}</td>
+            </ng-container>
+      
+            <!-- Descripción -->
+            <ng-container matColumnDef="description">
+              <th mat-header-cell class="primary" *matHeaderCellDef style="width:50%;"> DESCRIPCIÓN </th>
+              <td mat-cell *matCellDef="let item" style="width:50%; ">{{item.description}}</td>
+            </ng-container>
+      
+            <!-- Porcentaje -->
+            <ng-container matColumnDef="porcentage">
+              <th mat-header-cell class="primary" *matHeaderCellDef style="width:20%;"> PORCENTAJE </th>
+              <td mat-cell *matCellDef="let item" style="width:20%; ">{{item.porcentage}}%</td>
+            </ng-container>
+      
+            <!-- Acciones -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell class="primary" *matHeaderCellDef style="width:10%; text-align: center;"> ACCIONES </th>
+              <td mat-cell *matCellDef="let item; let i = index" style="width:10%; text-align: center;">
+                <a class="btnAction" style="color:rgb(193, 32, 32);" (click)="deleteProduct(i)" matTooltip="ELIMINAR">
+                  <mat-icon class="custom-size-animation">delete</mat-icon>
+                </a>
+              </td>
+            </ng-container>
+      
+          </table>
+        </div>
+      </mat-card>
+      
+      
 
       <!-- Comentarios y Credito -->
       <mat-card class="mat-elevation-z8 card-prop" style="padding:0%; margin-bottom: 20px;">

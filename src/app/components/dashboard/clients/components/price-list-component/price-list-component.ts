@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Inject, OnInit, Output, ViewChild, ChangeDetectorRef } from '@angular/core';
+import {Component,EventEmitter,Inject,OnInit,Output,ViewChild,ChangeDetectorRef,} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ListRequestProduct } from 'src/app/models/list-request-product.model';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-price-list-component',
@@ -15,82 +16,89 @@ export class PriceProductsComponent implements OnInit {
   waiting = false;
   error = false;
   error_msg = '';
-  objectsNoFound: number = 0;
   loading: boolean = true;
+  objectsNoFound: number = 0;
   products: ListRequestProduct[] = [];
   displayedColumns: string[] = ['id', 'label', 'description', 'porcentage', 'select'];
-  dataSource!: MatTableDataSource<ListRequestProduct>;
-  colBig!: number;
-  colXBig!: number;
-  colMedium!: number;
-  colSmall!: number;
-  modalWidth!: string;
-
+  dataSource!: MatTableDataSource<any>;
+  colBig!: number
+  colXBig!: number
+  colMedium!: number
+  colSmall!: number
+  modalWidth!: string
   @Output() removeProduct: EventEmitter<ListRequestProduct> = new EventEmitter<ListRequestProduct>();
   @Output() dataChange: EventEmitter<any> = new EventEmitter<any>();
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
   protected _onDestroy = new Subject<void>();
-
   @ViewChild(MatSort) sort!: MatSort;
-
-  // Arreglo para almacenar los productos seleccionados
-  selectedProduct: number | null = null; // Solo un ID seleccionado a la vez
-
+  
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) 
+    public data: any,
     public dialogRef: MatDialogRef<PriceProductsComponent>,
     private breakpointObserver: BreakpointObserver,
     private cdr: ChangeDetectorRef
   ) {
-    this.breakpointObserver
-      .observe([
-        Breakpoints.XSmall,
-        Breakpoints.Small,
-        Breakpoints.Medium,
-        Breakpoints.Large,
-        Breakpoints.XLarge,
-      ])
-      .subscribe((result) => {
-        if (result.matches) {
-          if (result.breakpoints[Breakpoints.XSmall]) {
-            this.colBig = 12;
-            this.colSmall = 12;
-          }
-          if (result.breakpoints[Breakpoints.Small]) {
-            this.colBig = 12;
-            this.colMedium = 12;
-            this.colSmall = 6;
-          }
-          if (result.breakpoints[Breakpoints.Medium]) {
-            this.colBig = 12;
-            this.colMedium = 6;
-            this.colSmall = 6;
-          }
-          if (result.breakpoints[Breakpoints.Large]) {
-            this.colBig = 9;
-            this.colMedium = 6;
-            this.colSmall = 3;
-          }
-          if (result.breakpoints[Breakpoints.XLarge]) {
-            this.colBig = 9;
-            this.colMedium = 6;
-            this.colSmall = 3;
-          }
+    this.breakpointObserver.observe([
+      Breakpoints.XSmall,
+      Breakpoints.Small,
+      Breakpoints.Medium,
+      Breakpoints.Large,
+      Breakpoints.XLarge,
+    ]).subscribe(result => {
+      if (result.matches) {
+        if (result.breakpoints[Breakpoints.XSmall]) {
+          this.colBig = 12
+          this.colSmall = 12
         }
-      });
+        if (result.breakpoints[Breakpoints.Small]) {
+          this.colBig = 12
+          this.colMedium = 12
+          this.colSmall = 6
+        }
+        if (result.breakpoints[Breakpoints.Medium]) {
+          this.colBig = 12
+          this.colMedium = 6
+          this.colSmall = 6
+        }
+        if (result.breakpoints[Breakpoints.Large]) {
+          this.colBig = 9
+          this.colMedium = 6
+          this.colSmall = 3
+        }
+        if (result.breakpoints[Breakpoints.XLarge]) {
+          this.colBig = 9
+          this.colMedium = 6
+          this.colSmall = 3
+        }
+      }
+    });
   }
 
-  ngOnInit(): void {
-    this.loadData();
+  closeDialog() {
+    this.dialogRef.close();
   }
 
   loadData() {
-    console.log(this.data);
-
+    console.log(this.data)
+    this.waiting = true
+    this.loading = true
     if (this.data && Array.isArray(this.data.listPrice)) {
-      this.products = this.data.listPrice;
+      if (!Array.isArray(this.data.selectProducts)) {
+        this.data.selectProducts = [];
+      }
+      // Inicializamos la lista de productos
+      this.products = this.data.listPrice.map((product: ListRequestProduct, index: number) => ({
+        ...product,
+        isSelected: false,
+        uniqueId: `product-${index}-${product.id_product}`, // Asignamos un ID único
+      }));
 
-      // Inicializamos el dataSource para la tabla
+      // Configuramos la fuente de datos para la tabla
       this.dataSource = new MatTableDataSource(this.products);
       this.dataSource.sort = this.sort;
       this.loading = false;
@@ -102,36 +110,57 @@ export class PriceProductsComponent implements OnInit {
     }
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
   // Verificar si un producto está seleccionado
-  checkItemSelect(product: ListRequestProduct) {
-    return this.selectedProduct === product.id_product; // Verifica si el ID del producto es el seleccionado
+  checkItemSelect(product: ListRequestProduct): boolean {
+    return this.data.selectProducts.some(
+      (selectedProduct: ListRequestProduct) => selectedProduct.id_product === product.id_product
+    );
   }
 
-  // Manejar la selección de productos
-  toggleSelection(item: ListRequestProduct, select: boolean) {
-    if (select) {
-      // Si seleccionamos un producto, lo asignamos a selectedProduct
-      this.selectedProduct = item.id_product; // Solo se puede seleccionar un producto a la vez
-    } else {
-      // Si desmarcamos, lo quitamos del arreglo
-      this.selectedProduct = null; // Desmarcar el producto
+  ngOnInit(): void {
+    this.loadData(); 
+  }
+
+  selectProduct(product: ListRequestProduct, select: boolean) {
+    // Verificar si 'id' está disponible en el objeto
+    if (!product.id) {
+      console.error('El id no está definido para este producto:', product);
+      return; // Si no hay id, no continuamos con la selección
     }
-
-    // Emitir el producto seleccionado o nulo
-    this.dataChange.emit(this.selectedProduct);
+  
+    // Encuentra el índice del producto en la lista de productos
+    const productIndex = this.products.findIndex(p => p.id === product.id);
+    if (productIndex !== -1) {
+      this.products[productIndex].isSelected = select; 
+    }
+  
+    if (select) {
+      const selectedProduct = {
+        ...product,
+        uniqueId: `product-${product.id}`  
+      };
+  
+      const existingProductIndex = this.data.selectProducts.findIndex(
+        (item: ListRequestProduct) => item.id === selectedProduct.id
+      );
+      if (existingProductIndex === -1) {
+        this.data.selectProducts.push(selectedProduct);
+      }
+  
+      // lista de productos actualizada
+      console.log('Lista actualizada de productos seleccionados:', this.data.selectProducts);
+      this.dataChange.emit(this.data.selectProducts);
+      // this.dataProducts = [...this.data.selectProducts];
+    } else {
+      const productIndex = this.data.selectProducts.findIndex(
+        (item: ListRequestProduct) => item.id === product.id  
+      );
+      
+      if (productIndex > -1) {
+        const removedProduct = this.data.selectProducts.splice(productIndex, 1); 
+      }
+      this.dataChange.emit(this.data.selectProducts);
+    }
   }
-
-  closeDialog() {
-    this.dialogRef.close();
-  }
-
-  // Función para obtener el ID del producto seleccionado
-  getSelectedProductId() {
-    return this.selectedProduct;
-  }
+  
 }
