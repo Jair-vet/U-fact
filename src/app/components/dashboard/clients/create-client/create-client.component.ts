@@ -722,18 +722,24 @@ export class CreateClientComponent implements OnInit {
     const productIndex = this.data.selectProducts.findIndex(
       (item: ListRequestProduct) => item.uniqueId === product.uniqueId
     );
+  
     if (productIndex > -1) {
       this.data.selectProducts.splice(productIndex, 1);
     }
-    this.products.splice(index, 1); // Eliminar de la lista de productos
-    this.loadProducts();  // Recargar la tabla
+  
+    this.products.splice(index, 1);
+    this.loadProducts();
   }
   
+
   loadData() {
     this.loading = false;
   }
 
   ngOnInit(): void {
+    if (!this.data) {
+      this.data = { selectProducts: [] }; 
+    }
     this.loadData();
     this.loadResidences()
   }

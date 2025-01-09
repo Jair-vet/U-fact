@@ -148,7 +148,6 @@ export class PriceProductsComponent implements OnInit {
       }
   
       // lista de productos actualizada
-      console.log('Lista actualizada de productos seleccionados:', this.data.selectProducts);
       this.dataChange.emit(this.data.selectProducts);
       // this.dataProducts = [...this.data.selectProducts];
     } else {
