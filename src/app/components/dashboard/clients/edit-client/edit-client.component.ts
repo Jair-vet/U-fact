@@ -1,6 +1,6 @@
 import { BooleanInput } from '@angular/cdk/coercion';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
@@ -27,6 +27,11 @@ import { SatService } from 'src/app/services/sat.service';
 import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';
 
+import { MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { PriceProductsComponent } from '../components/price-list-component/price-list-component';
+import { ListRequestProduct } from 'src/app/models/list-request-product.model';
+
 @Component({
   selector: 'app-edit-client',
   templateUrl: './edit-client.component.html',
@@ -43,6 +48,8 @@ export class EditClientComponent implements OnInit {
   client!: Client
   idClient: string = '0'
   form: FormGroup
+  modalWidth: string = '';
+  products: any[] = [];
 
   formContact: FormGroup
   error_msg: String = ''
@@ -55,6 +62,8 @@ export class EditClientComponent implements OnInit {
   public listPricesCtrl: FormControl = new FormControl();
   public listPricesFilterCtrl: FormControl = new FormControl();
   public filteredListPrices: ReplaySubject<ListPrice[]> = new ReplaySubject<ListPrice[]>(1);
+  displayedSelectedColumns: string[] = ['id', 'label', 'description', 'porcentage', 'actions'];
+  dataProducts!: MatTableDataSource<any>;
 
 
   states!: State[]
@@ -87,6 +96,7 @@ export class EditClientComponent implements OnInit {
   public filteredUser: ReplaySubject<User[]> = new ReplaySubject<User[]>(1);
 
   @ViewChild('singleSelect', { static: true }) singleSelect!: MatSelect;
+  @Inject(MAT_DIALOG_DATA) public data: any
 
   protected _onDestroy = new Subject<void>();
   tradenameOnlyRead: BooleanInput = true
@@ -104,7 +114,20 @@ export class EditClientComponent implements OnInit {
   }
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  constructor(private _routingService: RoutingService, private _listPriceService: ListPriceService, private _contactService: ContactService, private _helpService: HelpService, private breakpointObserver: BreakpointObserver, private _formBuider: FormBuilder, private _route: ActivatedRoute, private _router: Router, private _userService: UserService, private _clientService: ClientService, private _satService: SatService) {
+  constructor(
+    private _routingService: RoutingService, 
+    private _listPriceService: ListPriceService, 
+    private _contactService: ContactService, 
+    private _helpService: HelpService, 
+    private breakpointObserver: BreakpointObserver, 
+    private _formBuider: FormBuilder, 
+    private _route: ActivatedRoute, 
+    private _router: Router, 
+    private _userService: UserService, 
+    private _clientService: ClientService, 
+    private _satService: SatService,
+    private dialog: MatDialog,
+  ) {
 
     this.breakpointObserver.observe([
       Breakpoints.XSmall,
@@ -272,6 +295,7 @@ export class EditClientComponent implements OnInit {
 
 
   }
+
   deleteContact(id: number) {
     this.loadingContacts = true
     this._contactService.deleteContact(id.toString(), this._typeContact).subscribe({
@@ -294,6 +318,7 @@ export class EditClientComponent implements OnInit {
 
 
   }
+
   loadContacts(isFirst: boolean) {
     this._contactService.getContacts(this.idClient.toString(), this._typeContact).subscribe({
       next: (resp) => {
@@ -314,7 +339,6 @@ export class EditClientComponent implements OnInit {
       },
     })
   }
-
 
   loadData() {
     this._clientService.getClient(this.idClient.toString()).subscribe({
@@ -344,6 +368,7 @@ export class EditClientComponent implements OnInit {
   cancel() {
     this._router.navigateByUrl(this._routingService.previousRoute)
   }
+
   updateClient() {
     this.loading = true
     if ((this.taxRegimesCtrl.value == null || this.userCtrl.value == null || this.listPricesCtrl.value == null || this.suburbsCtrl == null)) {
@@ -652,5 +677,60 @@ export class EditClientComponent implements OnInit {
         this.filterUser();
       });
   }
+
+
+  openCatalogProducts() {
+    this._listPriceService
+    .getAllData(this._userService.user.id_company.toString(), false)
+      .subscribe({
+        next: (resp) => {
+          this.listPrices = resp;
+        
+          const dialogRef = this.dialog.open(PriceProductsComponent, {
+            width: this.modalWidth,
+            height: 'auto',
+            data: {
+              selectedProducts: [...this.products],
+              listPrice: this.listPrices,
+            },
+          });
+  
+          dialogRef.componentInstance.dataChange.subscribe((updatedProducts) => {
+            this.products = updatedProducts;
+            this.loadProducts(); 
+          });
+  
+          dialogRef.componentInstance.removeProduct.subscribe((data) => {
+            this.deleteProduct(data);
+          });
+        },
+        error: (err) => {
+          console.error('Error al cargar datos:', err);
+        },
+    });
+  }
+
+  loadProducts() {
+      this.dataProducts = new MatTableDataSource(this.products);
+    }
+  
+    deleteProduct(product: ListRequestProduct) {
+      this.products = this.products.filter((item) => item.id !== product.id); 
+      this.loadProducts();  // Recargar la tabla
+    }
+  
+    deleteProductByIndex(index: number) {
+      const product = this.products[index];
+      const productIndex = this.data.selectProducts.findIndex(
+        (item: ListRequestProduct) => item.uniqueId === product.uniqueId
+      );
+    
+      if (productIndex > -1) {
+        this.data.selectProducts.splice(productIndex, 1);
+      }
+    
+      this.products.splice(index, 1);
+      this.loadProducts();
+    }
 
 }

@@ -80,7 +80,7 @@ export class PriceProductsComponent implements OnInit {
   }
 
   closeDialog() {
-    this.dialogRef.close();
+    this.dialogRef.close(this.data.selectProducts);
   }
 
   loadData() {
@@ -88,24 +88,19 @@ export class PriceProductsComponent implements OnInit {
     this.loading = true
 
     if (this.data && Array.isArray(this.data.listPrice)) {
-      if (!Array.isArray(this.data.selectProducts)) {
-        this.data.selectProducts = [];
-      }
-
-      // Inicializar la lista de productos con la propiedad `isSelected`
       this.products = this.data.listPrice.map((product: ListRequestProduct, index: number) => {
         const isSelected = this.data.selectProducts.some(
-          (selectedProduct: ListRequestProduct) => selectedProduct.id_product === product.id_product
+          (selectedProduct: ListRequestProduct) =>
+            selectedProduct.uniqueId === `product-${index}-${product.id_product}`
         );
   
         return {
           ...product,
-          isSelected, 
-          uniqueId: `product-${index}-${product.id_product}`,
+          isSelected, // Marca los productos previamente seleccionados
+          uniqueId: `product-${index}-${product.id_product}`, // Identificador único
         };
       });
 
-      // Configuramos la fuente de datos para la tabla
       this.dataSource = new MatTableDataSource(this.products);
       this.dataSource.sort = this.sort;
       this.loading = false;
@@ -129,44 +124,33 @@ export class PriceProductsComponent implements OnInit {
   }
 
   selectProduct(product: ListRequestProduct, select: boolean) {
-    if (!product.id) {
-      console.error('El id no está definido para este producto:', product);
-      return;
-    }
+    const productIndex = this.products.findIndex((p) => p.uniqueId === product.uniqueId);
   
-    // Encuentra el índice del producto en la lista de productos
-    const productIndex = this.products.findIndex((p) => p.id === product.id);
     if (productIndex !== -1) {
       this.products[productIndex].isSelected = select;
     }
   
     if (select) {
-      const selectedProduct = {
-        ...product,
-        uniqueId: `product-${product.id}`,
-      };
-  
       const existingProductIndex = this.data.selectProducts.findIndex(
-        (item: ListRequestProduct) => item.id === selectedProduct.id
+        (item: ListRequestProduct) => item.uniqueId === product.uniqueId
       );
-
-      if (existingProductIndex === -1) {
-        this.data.selectProducts.push(selectedProduct);
-      }
   
+      if (existingProductIndex === -1) {
+        this.data.selectProducts.push(product);
+      }
     } else {
-      // Remover si está deseleccionado
       const productIndex = this.data.selectProducts.findIndex(
-        (item: ListRequestProduct) => item.id === product.id
+        (item: ListRequestProduct) => item.uniqueId === product.uniqueId
       );
   
       if (productIndex > -1) {
         this.data.selectProducts.splice(productIndex, 1);
       }
     }
+  
+    // Emitir los cambios al componente padre en tiempo real
     this.dataChange.emit(this.data.selectProducts);
   }
-
 
   
 }

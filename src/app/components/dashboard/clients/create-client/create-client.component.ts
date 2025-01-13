@@ -253,6 +253,7 @@ export class CreateClientComponent implements OnInit {
     return false
   }
 
+  // TODO:
   createClient() {
     this.loading = true
 
@@ -335,12 +336,14 @@ export class CreateClientComponent implements OnInit {
   }
 
 
+  // TODO:
   setStateAndMunicipality() {
     this.statesCtrl.setValue(this.states[0])
     this.municipalitiesCtrl.setValue(this.municipalities[0])
   }
 
 
+  // TODO:
   clearFields() {
     if (clearFields) {
       this.form.reset({
@@ -707,39 +710,53 @@ export class CreateClientComponent implements OnInit {
     });
   }
   
+  // Productos 
   openCatalogProducts() {
     this._listPriceService
-    .getAllData(this._userService.user.id_company.toString(), false)
+      .getAllData(this._userService.user.id_company.toString(), false)
       .subscribe({
         next: (resp) => {
           this.listPrices = resp;
-        
+  
           const dialogRef = this.dialog.open(PriceProductsComponent, {
             width: this.modalWidth,
             height: 'auto',
             data: {
-              selectedProducts: [...this.products],
+              selectProducts: [...this.products],
               listPrice: this.listPrices,
             },
           });
-  
+
           dialogRef.componentInstance.dataChange.subscribe((updatedProducts) => {
-            this.products = updatedProducts;
+            this.products = updatedProducts; 
             this.loadProducts(); 
           });
   
-          dialogRef.componentInstance.removeProduct.subscribe((data) => {
-            this.deleteProduct(data);
+          dialogRef.afterClosed().subscribe((updatedProducts) => {
+            if (updatedProducts) {
+              this.products = updatedProducts;
+              this.loadProducts();
+            }
           });
         },
         error: (err) => {
           console.error('Error al cargar datos:', err);
         },
       });
-  }  
+  }
+  
+  saveProducts() {
+    console.log('Datos guardados:', this.products);
+
+    // Reinicia los productos seleccionados tras guardar
+    this.products = [];
+    this.loadProducts();
+  }
 
   loadProducts() {
     this.dataProducts = new MatTableDataSource(this.products);
+    console.log('Productos seleccionados:', this.dataProducts);
+    
   }
 
   deleteProduct(product: ListRequestProduct) {
