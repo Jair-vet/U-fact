@@ -6,14 +6,6 @@
         <span class="icon-close-modal" (click)="closeDialog()">&#10008;</span>
     </mat-card-header>
 
-    <mat-grid-list cols="12" rowHeight="80px">
-        <mat-grid-tile [colspan]="12" [rowspan]="1">
-            <mat-form-field appearance="outline" floatLabel="always">
-                <mat-label>BUSCAR</mat-label>
-                <input matInput (keyup)="applyFilter($event)" #input>
-            </mat-form-field>
-        </mat-grid-tile>
-    </mat-grid-list>
 
     <div class="mat-elevation-z8">
         <div class="table-container">
@@ -55,14 +47,14 @@
                 <ng-container matColumnDef="select">
                     <th class="primary" mat-header-cell *matHeaderCellDef></th>
                     <td mat-cell *matCellDef="let item" style="width:10%; text-align: center;">
-                    <a *ngIf="!item.isSelected; else check_box" style="color:rgb(130, 16, 12)" (click)="selectProduct(item, true)">
+                      <a *ngIf="!item.isSelected; else check_box" (click)="selectProduct(item, true)">
                         <mat-icon class="custom-size-animation">check_box_outline_blank</mat-icon>
-                    </a>
-                    <ng-template #check_box>
+                      </a>
+                      <ng-template #check_box>
                         <a style="color:var(--primary)" (click)="selectProduct(item, false)">
-                        <mat-icon class="custom-size-animation">check_box</mat-icon>
+                          <mat-icon class="custom-size-animation">check_box</mat-icon>
                         </a>
-                    </ng-template>
+                      </ng-template>
                     </td>
                 </ng-container>
             </table>
@@ -70,3 +62,6 @@
         </div>
     </div>
 </mat-card>
+
+
+<!-- 0 : description : "Precios a noviembre 2023" id : 1 id_company : 1 isSelected : false label : "AGA" porcentage : 47.83 status: 1 uniqueId : "product-0-1" -->

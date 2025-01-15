@@ -1,6 +1,6 @@
 import { BooleanInput } from '@angular/cdk/coercion';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
@@ -30,7 +30,9 @@ import Swal from 'sweetalert2';
 import { MatDialog } from '@angular/material/dialog';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PriceProductsComponent } from '../components/price-list-component/price-list-component';
-import { ListRequestProduct } from 'src/app/models/list-request-product.model';
+import { ListRequestProduct, Product } from 'src/app/models/list-request-product.model';
+import { ChangeDetectorRef } from '@angular/core';
+
 
 @Component({
   selector: 'app-edit-client',
@@ -105,6 +107,9 @@ export class EditClientComponent implements OnInit {
   maxRFC: number = 10
   colBig!: number;
   colMedium!: number;
+  clientId! : number;
+  id_client! : number;
+  selectedArrayProducts: Array<any> = [];
   colSmall!: number;
   private _typeContact: string = 'client'
   dataSource!: MatTableDataSource<any>;
@@ -112,8 +117,11 @@ export class EditClientComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
+  
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @Output() dataChange: EventEmitter<ListRequestProduct[]> = new EventEmitter<ListRequestProduct[]>();
+ 
   constructor(
     private _routingService: RoutingService, 
     private _listPriceService: ListPriceService, 
@@ -127,6 +135,7 @@ export class EditClientComponent implements OnInit {
     private _clientService: ClientService, 
     private _satService: SatService,
     private dialog: MatDialog,
+    private cdr: ChangeDetectorRef,
   ) {
 
     this.breakpointObserver.observe([
@@ -193,22 +202,20 @@ export class EditClientComponent implements OnInit {
 
     this.idClient = this._route.snapshot.paramMap.get('id') || '0'
     this._routingService.setRouting(`dashboard/clients/edit-client/${this.idClient}`, `dashboard/clients`)
-
+    this.id_client = Number(this.idClient) || 0;
+  
   }
 
   ngAfterViewInit() {
 
 
   }
+
   ngOnInit(): void {
     this.loadTaxRegimes()
   }
 
-
-
   loadDataPostalCode() {
-
-
     this._clientService.validatePostalCode(this.client.postal_code!).subscribe({
       next: (resp) => {
         this.states = resp.state
@@ -220,8 +227,6 @@ export class EditClientComponent implements OnInit {
         this.loadComponentSelectMunicipalities()
         this.loadComponentSelectSuburbs()
         this.loadContacts(true)
-
-
       },
       error: (err) => {
 
@@ -230,8 +235,6 @@ export class EditClientComponent implements OnInit {
 
     })
   }
-
-
 
   validatePostalCode() {
     console.log(this.form.value.postal_code)
@@ -347,6 +350,7 @@ export class EditClientComponent implements OnInit {
       },
       complete: () => {
         this.loadDataPostalCode()
+        this.loadCatalogProducts()
       },
       error: (err) => {
 
@@ -369,40 +373,75 @@ export class EditClientComponent implements OnInit {
     this._router.navigateByUrl(this._routingService.previousRoute)
   }
 
+  // TODO
   updateClient() {
-    this.loading = true
-    if ((this.taxRegimesCtrl.value == null || this.userCtrl.value == null || this.listPricesCtrl.value == null || this.suburbsCtrl == null)) {
+    this.loading = true;
+    
+    // Validación de campos
+    if (this.taxRegimesCtrl.value == null || this.userCtrl.value == null || this.listPricesCtrl.value == null || this.suburbsCtrl == null) {
       Swal.fire({
         title: 'ERROR', text: 'FALTAN CAMPOS POR LLENAR', icon: 'error', heightAuto: false
-      }
-      )
-      this.loading = false
-
-    } else {
-      this._clientService.updateClient(this.form.value.name, this.form.value.tradename, this.form.value.rfc, this.form.value.representative, this.statesCtrl.value == undefined ? '' : this.statesCtrl.value.state, this.municipalitiesCtrl.value == undefined ? '' : this.municipalitiesCtrl.value.municipality, this.suburbsCtrl.value == undefined ? '' : this.suburbsCtrl.value.suburb, this.form.value.postal_code, this.form.value.address, this.form.value.num_ext, this.form.value.num_int, this.form.value.telephone, this.form.value.email, this._userService.user.id_company.toString(), this.taxRegimesCtrl.value.id.toString(), this.listPricesCtrl.value.id.toString(), this.userCtrl.value.id.toString(), this.client.id.toString(), this.form.value.comments, this.form.value.credit_limit, this.form.value.credit_days, 2).subscribe({
-        next: (resp) => {
-          Swal.fire({ title: 'OK', text: resp, icon: 'success', confirmButtonColor: '#58B1F7', heightAuto: false })
-        },
-        error: (err) => {
-          console.log(err)
-          this.loading = false
-          Swal.fire({ title: 'ERROR', text: err.error.message, icon: 'error', confirmButtonColor: '#58B1F7', heightAuto: false })
-        },
-        complete: () => {
-          this.loading = false
-          this._router.navigateByUrl('dashboard/clients')
-        },
-
-      })
+      });
+      this.loading = false;
+      return;
     }
+    
+    // Aquí verificamos si hay productos nuevos agregados
+    const newProducts: number[] = this.selectedArrayProducts
+      .filter(product => product.isSelected)  // Filtramos los productos que están seleccionados
+      .map(product => product.id);
+  
+    // Llamada al servicio de actualización, con los productos nuevos si los hay
+    this._clientService.updateClient(
+      newProducts,
+      this.client.products,  
+      this.form.value.name, 
+      this.form.value.tradename, 
+      this.form.value.rfc, 
+      this.form.value.representative, 
+      this.statesCtrl.value == undefined ? '' : this.statesCtrl.value.state, 
+      this.municipalitiesCtrl.value == undefined ? '' : this.municipalitiesCtrl.value.municipality, 
+      this.suburbsCtrl.value == undefined ? '' : this.suburbsCtrl.value.suburb, 
+      this.form.value.postal_code, 
+      this.form.value.address, 
+      this.form.value.num_ext, 
+      this.form.value.num_int, 
+      this.form.value.telephone, 
+      this.form.value.email, 
+      this._userService.user.id_company.toString(), 
+      this.taxRegimesCtrl.value.id.toString(), 
+      this.listPricesCtrl.value.id.toString(), 
+      this.userCtrl.value.id.toString(), 
+      this.client.id.toString(), 
+      this.form.value.comments, 
+      this.form.value.credit_limit, 
+      this.form.value.credit_days, 
+      2,
+    ).subscribe({
+      next: (resp) => {
+        Swal.fire({ title: 'OK', text: resp, icon: 'success', confirmButtonColor: '#58B1F7', heightAuto: false });
+      },
+      error: (err) => {
+        console.log(err);
+        this.loading = false;
+        Swal.fire({ title: 'ERROR', text: err.error.message, icon: 'error', confirmButtonColor: '#58B1F7', heightAuto: false });
+      },
+      complete: () => {
+        this.loading = false;
+        this._router.navigateByUrl('dashboard/clients');
+      },
+    });
   }
+  
 
+  // TODO
   isValidSelect() {
     this.form.controls['rfc'].setValue('')
     this.setVariableValues()
 
   }
 
+  // TODO
   setVariableValues() {
     if (this.taxRegimesCtrl.value.id) {
 
@@ -424,6 +463,7 @@ export class EditClientComponent implements OnInit {
     }
   }
 
+  // TODO
   setFields() {
     this.statesCtrl.setValue(this.states.filter(x => x.state == this.client.state)[0])
     this.municipalitiesCtrl.setValue(this.municipalities.filter(x => x.municipality == this.client.municipality)[0])
@@ -539,7 +579,7 @@ export class EditClientComponent implements OnInit {
     this._listPriceService.getAllData(this._userService.user.id_company.toString(), false).subscribe({
       next: (resp) => {
         this.listPrices = resp
-        console.log(this.listPrices)
+        // console.log(this.listPrices)
       },
       complete: () => {
         this.loadComponentSelectListPrices()
@@ -553,7 +593,6 @@ export class EditClientComponent implements OnInit {
   }
 
   loadTaxRegimes() {
-
     this.loading = true
     this._satService.getTaxRegimen(0).subscribe({
       next: (resp) => {
@@ -562,13 +601,10 @@ export class EditClientComponent implements OnInit {
       complete: () => {
         this.loadComponentSelectTaxRegimes()
         this.loadListPrices()
-
-
       },
       error: (err) => {
         console.log(err)
       },
-
     })
   }
 
@@ -678,59 +714,131 @@ export class EditClientComponent implements OnInit {
       });
   }
 
-
-  openCatalogProducts() {
+  async loadCatalogProducts(): Promise<void> {
+    this.loading = true;
+    const clientId = Number(this.idClient);
+  
+    try {
+      const resp = await this._clientService.getCatalogProducts(clientId).toPromise();
+      this.selectedArrayProducts = resp.products.map((product: any, index: number) => {
+        const { priceDetail } = product;
+        return {
+          id: priceDetail.id,
+          label: priceDetail.label,
+          description: priceDetail.description,
+          porcentage: priceDetail.porcentage,
+          id_company: priceDetail.id_company,
+          status: priceDetail.status,
+          uniqueId: `product-${index}-${priceDetail.id}`,
+        };
+      });
+  
+      // Sincroniza los productos y actualiza la tabla
+      this.products = [...this.selectedArrayProducts];
+      this.loadProducts();
+  
+      console.log("Productos con detalles de precio:", this.selectedArrayProducts);
+    } catch (err) {
+      console.error("Error al cargar los productos del cliente:", err);
+    } finally {
+      this.loading = false;
+      this.cdr.detectChanges();
+    }
+  }
+  
+  
+  async openCatalogProducts(): Promise<void> {
+  
     this._listPriceService
-    .getAllData(this._userService.user.id_company.toString(), false)
+      .getAllData(this._userService.user.id_company.toString(), false)
       .subscribe({
         next: (resp) => {
           this.listPrices = resp;
-        
+
+          // Generar uniqueId para cada producto en la lista y comparar
+          const enrichedListPrices = this.listPrices.map((product: any) => {
+            const isSelected = this.selectedArrayProducts.some((selectedProduct: any) => {
+              const selectedId = selectedProduct.uniqueId.split('-').pop(); 
+              return selectedId === product.id.toString(); 
+            });
+          
+            return {
+              ...product,
+              isSelected, // Marcar como seleccionado 
+            };
+          });
+
+          this.cdr.detectChanges();
+  
           const dialogRef = this.dialog.open(PriceProductsComponent, {
             width: this.modalWidth,
             height: 'auto',
             data: {
-              selectedProducts: [...this.products],
-              listPrice: this.listPrices,
+              selectProducts: this.selectedArrayProducts, // Productos seleccionados
+              listPrice: enrichedListPrices, // Lista de precios 
             },
           });
+          
+          console.log("Datos enviados al diálogo:", {
+            selectProducts: this.selectedArrayProducts,
+            listPrice: enrichedListPrices,
+          });
   
-          dialogRef.componentInstance.dataChange.subscribe((updatedProducts) => {
-            this.products = updatedProducts;
+          dialogRef.componentInstance.dataChange.subscribe((updatedProducts: any) => {
+            this.selectedArrayProducts = updatedProducts;
             this.loadProducts(); 
           });
   
-          dialogRef.componentInstance.removeProduct.subscribe((data) => {
+          dialogRef.componentInstance.removeProduct.subscribe((data: any) => {
             this.deleteProduct(data);
           });
         },
         error: (err) => {
-          console.error('Error al cargar datos:', err);
+          console.error("Error al cargar datos de precios:", err);
         },
-    });
+      });
   }
 
   loadProducts() {
-      this.dataProducts = new MatTableDataSource(this.products);
-    }
+    this.dataProducts = new MatTableDataSource(this.selectedArrayProducts);
+    // this.cdr.detectChanges();
+  }
   
-    deleteProduct(product: ListRequestProduct) {
-      this.products = this.products.filter((item) => item.id !== product.id); 
-      this.loadProducts();  // Recargar la tabla
-    }
+  deleteProduct(product: ListRequestProduct) {
+    this.selectedArrayProducts = this.selectedArrayProducts.filter(
+      (item) => item.uniqueId !== product.uniqueId
+    );
+    this.loadProducts();
+  }
   
-    deleteProductByIndex(index: number) {
-      const product = this.products[index];
-      const productIndex = this.data.selectProducts.findIndex(
-        (item: ListRequestProduct) => item.uniqueId === product.uniqueId
-      );
+  deleteProductByIndex(index: number) {
+    const product = this.products[index]; // Producto en el arreglo products
+    console.log('Producto:', product);
     
-      if (productIndex > -1) {
-        this.data.selectProducts.splice(productIndex, 1);
-      }
-    
-      this.products.splice(index, 1);
-      this.loadProducts();
-    }
+    const productId = product.uniqueId; // Extraemos el id del producto (o uniqueId según corresponda)
+    console.log('id:', productId);
 
+    // Buscamos el índice en selectedArrayProducts con el uniqueId
+    const productIndex = this.selectedArrayProducts.findIndex(
+      (item: ListRequestProduct) => {
+        const selectedId = item.uniqueId.split('-').pop(); 
+        return selectedId === productId.split('-').pop(); // Comparar el último valor del uniqueId
+      }
+    );
+  
+    if (productIndex > -1) {
+      // Eliminamos el producto de selectedArrayProducts
+      this.selectedArrayProducts.splice(productIndex, 1);
+    }
+  
+    // Eliminamos el producto de la lista products
+    this.products.splice(index, 1);
+    
+    // Recargamos la lista de productos
+    this.loadProducts();
+}
+
+
+
+  
 }

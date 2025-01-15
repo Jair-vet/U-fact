@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { ContactInterface } from '../interfaces/contact-form.interface';
 import { Contact } from '../models/contact.model';
 import { Balance } from '../models/balance.model';
+import { Product } from '../models/product.model';
 
 const base_url = environment.base_url;
 
@@ -95,9 +96,9 @@ export class ClientService {
   
 
 
-  updateClient(name: string, tradename: string, rfc: string, representative: string, state: string, municipality: string, city: string, postal_code: string, address: string, num_ext: string, num_int: string, telephone: string, email: string, id_company: string, id_regime: string, id_type_price: string, id_seller: string, id_client: string, comments: string, credit_limit: number, credit_days: number, id_residence: number) {
+  updateClient( newProducts: number[], products: Product[], name: string, tradename: string, rfc: string, representative: string, state: string, municipality: string, city: string, postal_code: string, address: string, num_ext: string, num_int: string, telephone: string, email: string, id_company: string, id_regime: string, id_type_price: string, id_seller: string, id_client: string, comments: string, credit_limit: number, credit_days: number, id_residence: number) {
     const url = `${base_url}/clients/${id_client}`
-    return this.http.put(url, { name, tradename, rfc, representative, state, municipality, city, postal_code, address, num_ext, num_int, telephone, email, id_company, id_regime, id_type_price, id_seller, comments, credit_limit, credit_days, id_residence }, this.headers).pipe(map((resp: any) => resp.message));
+    return this.http.put(url, { newProducts, products, name, tradename, rfc, representative, state, municipality, city, postal_code, address, num_ext, num_int, telephone, email, id_company, id_regime, id_type_price, id_seller, comments, credit_limit, credit_days, id_residence }, this.headers).pipe(map((resp: any) => resp.message));
   }
 
 
@@ -136,7 +137,12 @@ export class ClientService {
     return this.http.post<Location>(url, { postal_code }, this.headers).pipe(map((resp: any) => resp));
   }
 
-
+  getCatalogProducts(clientId: number) {
+    const url = `${base_url}/clients/tools/load_catalog_products`;
+    return this.http.post<{ products: any[] }>(url, { clientId }, this.headers).pipe(
+      map((resp: any) => resp)
+    );
+  }
 
   getClient(id: String) {
     const url = `${base_url}/clients/${id}`;

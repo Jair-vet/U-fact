@@ -16,7 +16,7 @@ import { EditListPriceComponent } from './list-prices/edit-list-price/edit-list-
 import { UsersComponent } from './users/users.component';
 import { CreateUserComponent } from './users/create-user/create-user.component';
 import { EditUserComponent } from './users/edit-user/edit-user.component';
-import { SalesNotesComponent } from './invoices/sales-notes/sales-notes.component';
+// import { SalesNotesComponent } from './invoices/sales-notes/sales-notes.component';
 import { InvoicesComponent } from './invoices/invoices/invoices.component';
 import { KardexEntriesDeparturesComponent } from './store/products/kardex-entries-departures/kardex-entries-departures.component';
 import { CreditNotesComponent } from './credit-note/credit-notes/credit-notes.component';
@@ -61,7 +61,7 @@ const routes: Routes = [
 
       { path: 'invoices', component: InvoicesComponent },
       { path: 'invoices', component: InvoicesComponent },
-      { path: 'sales-notes', component: SalesNotesComponent },
+      // { path: 'sales-notes', component: SalesNotesComponent },
 
       { path: 'payments-plugins', component: PaymentsPluginsComponent },
       { path: 'payments', component: PaymentsComponent },

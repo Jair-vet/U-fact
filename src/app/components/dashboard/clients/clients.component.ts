@@ -23,8 +23,6 @@ import Swal from 'sweetalert2';
 })
 
 
-
-
 export class ClientsComponent implements OnInit {
 
   loading: boolean = false

@@ -746,7 +746,7 @@ export class CreateClientComponent implements OnInit {
   }
   
   saveProducts() {
-    console.log('Datos guardados:', this.products);
+    // console.log('Datos guardados:', this.products);
 
     // Reinicia los productos seleccionados tras guardar
     this.products = [];
@@ -755,7 +755,7 @@ export class CreateClientComponent implements OnInit {
 
   loadProducts() {
     this.dataProducts = new MatTableDataSource(this.products);
-    console.log('Productos seleccionados:', this.dataProducts);
+    // console.log('Productos seleccionados:', this.dataProducts);
     
   }
 

@@ -1,6 +1,6 @@
 import { ActionReducerMap } from '@ngrx/store';
 import { FilterSaleNoteState } from '../models/models-state/filter-sale-note.state';
-import { filterSalesNotesReducer } from './reducers/filter-sale-note.reducers';
+// import { filterSalesNotesReducer } from './reducers/filter-sale-note.reducers';
 import { FilterOrderState } from '../models/models-state/filter-order.state';
 import { filterOrderReducer } from './reducers/filter-order.reducers';
 import { FilterPaymentState } from '../models/models-state/filter-payment.state';
@@ -15,7 +15,7 @@ import { FilterCreditNoteState } from '../models/models-state/filter-credit-note
 import { filterCreditNoteReducer } from './reducers/filter-credit-note.reducers';
 
 export interface AppState {
-  filterSaleNote: FilterSaleNoteState;
+  // filterSaleNote: FilterSaleNoteState;
   filterOrder: FilterOrderState;
   filterPayment: FilterPaymentState;
   filterInvoice: FilterInvoiceState;
@@ -24,7 +24,7 @@ export interface AppState {
   filterCreditNote: FilterCreditNoteState;
 }
 export const ROOT_REDUCERS: ActionReducerMap<AppState> = {
-  filterSaleNote: filterSalesNotesReducer,
+  // filterSaleNote: filterSalesNotesReducer,
   filterOrder: filterOrderReducer,
   filterPayment: filterPaymentReducer,
   filterInvoice: filterInvoiceReducer,

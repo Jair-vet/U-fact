@@ -40,7 +40,7 @@ import { EditPhraseComponent } from './menu/components/edit-phrase/edit-phrase.c
 import { PdfViewComponent } from './store/components/pdf-view/pdf-view.component';
 import { ProductsOrderComponent } from './orders/products-order/products-order.component';
 import { CatalogDeparturesComponent } from './orders/components/catalog-departures/catalog-departures.component';
-import { SalesNotesComponent } from './invoices/sales-notes/sales-notes.component';
+// import { SalesNotesComponent } from './invoices/sales-notes/sales-notes.component';
 import { PaymentsComponent } from './treasury/payments/payments.component';
 import { CreatePaymentComponent } from './treasury/components/create-payment/create-payment.component';
 import { PreviewInvoiceComponent } from './invoices/components/preview-invoice/preview-invoice.component';
@@ -121,7 +121,7 @@ import { PriceProductsComponent } from './clients/components/price-list-componen
     PdfViewComponent,
     ProductsOrderComponent,
     CatalogDeparturesComponent,
-    SalesNotesComponent,
+    // SalesNotesComponent,
     PaymentsComponent,
     CreatePaymentComponent,
     PaymentsSaleNoteComponent,
