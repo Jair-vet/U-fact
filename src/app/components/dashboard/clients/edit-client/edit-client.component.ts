@@ -47,6 +47,7 @@ export class EditClientComponent implements OnInit {
   loading: Boolean = false
   error: Boolean = false
   loadingContacts: Boolean = false
+  productsSectionError = false; 
   client!: Client
   idClient: string = '0'
   form: FormGroup
@@ -385,10 +386,24 @@ export class EditClientComponent implements OnInit {
       this.loading = false;
       return;
     }
+
+    // Validación para asegurarse de que hay productos seleccionados
+    if (this.selectedArrayProducts.length === 0) {
+      Swal.fire({
+        title: 'ERROR', text: 'DEBES SELECCIONAR AL MENOS UN PRODUCTO', icon: 'error', heightAuto: false
+      });
+
+      // Marca el área en rojo si no se han seleccionado productos
+      this.productsSectionError = true;  // Variable que controlará la clase CSS
+      this.loading = false;
+      return;
+    } else {
+      this.productsSectionError = false;
+    }
     
     // Aquí verificamos si hay productos nuevos agregados
     const newProducts: number[] = this.selectedArrayProducts
-      .filter(product => product.isSelected)  // Filtramos los productos que están seleccionados
+      .filter(product => product.isSelected) 
       .map(product => product.id);
   
     // Llamada al servicio de actualización, con los productos nuevos si los hay
@@ -433,12 +448,9 @@ export class EditClientComponent implements OnInit {
     });
   }
   
-
-  // TODO
   isValidSelect() {
     this.form.controls['rfc'].setValue('')
     this.setVariableValues()
-
   }
 
   // TODO
@@ -469,7 +481,6 @@ export class EditClientComponent implements OnInit {
     this.municipalitiesCtrl.setValue(this.municipalities.filter(x => x.municipality == this.client.municipality)[0])
 
     this.suburbsCtrl.setValue(this.suburbs.filter(x => x.suburb === this.client.city)[0])
-
 
     this.form.controls['name'].setValue(this.client.name);
     this.form.controls['rfc'].setValue(this.client.rfc);
@@ -714,6 +725,8 @@ export class EditClientComponent implements OnInit {
       });
   }
 
+
+  // Listado de Productos
   async loadCatalogProducts(): Promise<void> {
     this.loading = true;
     const clientId = Number(this.idClient);
@@ -745,7 +758,6 @@ export class EditClientComponent implements OnInit {
       this.cdr.detectChanges();
     }
   }
-  
   
   async openCatalogProducts(): Promise<void> {
   
