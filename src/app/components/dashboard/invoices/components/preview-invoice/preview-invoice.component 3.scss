@@ -1,0 +1,196 @@
+.data-client {
+    margin: 5px;
+}
+
+::ng-deep .mat-dialog-container {
+    padding: 0px !important;
+    border-radius: 10px !important;
+}
+
+.body {
+    width: 1000px;
+    min-height: auto;
+    margin-bottom: 30px;
+}
+
+.body:after {
+    content: "VISTA PREVIA";
+    font-size: 7em;
+    font-weight: bolder;
+    color: rgba(107, 190, 226, 0.226);
+    transform: rotate(-45deg);
+    z-index: 9999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    -webkit-pointer-events: none;
+    -moz-pointer-events: none;
+    -ms-pointer-events: none;
+    -o-pointer-events: none;
+    pointer-events: none;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.letter-one {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.letter-two {
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.flex {
+    display: flex;
+}
+
+.block {
+    display: block;
+}
+
+.letter-number {
+    font-size: 15px;
+    font-weight: bold;
+    color: rgb(211, 10, 10);
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-gap: 4px;
+    height: 20px;
+}
+
+.grid-item {
+    border: #d2d2d2 solid 2px;
+    background-color: #ffffff;
+
+}
+
+.title-grid {
+    text-align: center;
+
+    background-color: #313131;
+    color: #ffffff;
+    padding: 3px;
+}
+
+.content {
+    padding: 3px;
+    line-height: 1.2em;
+}
+
+.center {
+    text-align: center;
+}
+
+.start-text {
+    text-align: start;
+}
+
+.end-text {
+    text-align: end;
+}
+
+.one {
+    width: 345px;
+    grid-row: span 12;
+    grid-column: span 12;
+}
+
+.align-right {
+    text-align: right;
+}
+
+.three {
+    grid-column: span 6;
+    grid-row: span 5;
+}
+
+.two {
+    grid-column: span 6;
+    grid-row: span 5;
+}
+
+.four {
+    grid-column: span 2;
+    grid-row: span 4;
+}
+
+.five {
+    grid-column: span 8;
+    grid-row: span 2;
+}
+
+.six {
+    grid-column: span 4;
+    grid-row: span 1;
+}
+
+.seven {
+    grid-column: span 4;
+    grid-row: span 1;
+}
+
+.eight {
+    grid-column: span 12;
+    grid-row: span 1;
+}
+
+.nine {
+    grid-column: 9 / 13;
+    grid-row: span 1;
+}
+
+.ten {
+    grid-column: span 12;
+    grid-row: span 1;
+}
+
+.eleven {
+    grid-column: span 3;
+    grid-row: span 6;
+}
+
+
+.twelve {
+    grid-column: span 9;
+    grid-row: span 3;
+}
+
+
+.thirteen {
+    grid-column: span 9;
+    grid-row: span 3;
+}
+
+
+
+.inline {
+    display: flex;
+
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td,
+th {
+    padding: 1px;
+    border: 1px solid #ddd;
+}

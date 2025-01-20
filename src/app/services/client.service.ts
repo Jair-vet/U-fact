@@ -47,8 +47,7 @@ export class ClientService {
     email: string, 
     id_company: string, 
     id_regime: string, 
-    id_type_price: string, 
-    id_seller: string, 
+    // /* id_seller */: string, 
     comments: string, 
     credit_limit: number, 
     credit_days: number, 
@@ -60,36 +59,7 @@ export class ClientService {
     selectedProducts: any[] // Nuevo parámetro agregado
   ) {
     const url = `${base_url}/clients`;
-    return this.http.post(
-      url,
-      { 
-        name, 
-        tradename, 
-        rfc, 
-        representative, 
-        state, 
-        municipality, 
-        city, 
-        postal_code, 
-        address, 
-        num_ext, 
-        num_int, 
-        telephone, 
-        email, 
-        id_company, 
-        id_regime, 
-        id_type_price, 
-        id_seller, 
-        comments, 
-        credit_limit, 
-        credit_days, 
-        id_residence, 
-        contacts, 
-        id_tax, 
-        country_code, 
-        address_complete,
-        selectedProducts
-      },
+    return this.http.post( url, { name, tradename, rfc, representative, state, municipality, city, postal_code, address, num_ext, num_int, telephone, email, id_company, id_regime, /* id_seller, */ comments, credit_limit, credit_days, id_residence, contacts, id_tax, country_code, address_complete,selectedProducts},
       this.headers
     ).pipe(map((resp: any) => resp.message));
   }

@@ -79,7 +79,7 @@
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>REGIMEN FISCAL</mat-label>
-              <mat-select (selectionChange)="isValidSelect()" [formControl]="taxRegimesCtrl" #singleSelect
+              <mat-select  [formControl]="taxRegimesCtrl" #singleSelect
                 name="taxRegimesCtrl" required>
                 <mat-option>
                   <ngx-mat-select-search placeholderLabel="Buscar..." [formControl]="taxRegimesFilterCtrl"
@@ -115,7 +115,7 @@
           <mat-grid-tile [colspan]="colMedium" [rowspan]="1">
             <mat-form-field appearance="outline" floatLabel="always">
               <mat-label>R.F.C</mat-label>
-              <input matInput name="rfc" [readonly]="rfcOnlyRead" formControlName="rfc">
+              <input matInput name="rfc"  formControlName="rfc">
               <mat-error *ngIf="form.invalid">Ingresar un RFC valido para el tipo de regimen</mat-error>
             </mat-form-field>
           </mat-grid-tile>

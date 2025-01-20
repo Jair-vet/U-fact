@@ -1,0 +1,228 @@
+<div class="primary-spinner">
+    <mat-spinner diameter="50" *ngIf="loading" class="spinner" color="primary"></mat-spinner>
+</div>
+<mat-card style="width:1000px; " *ngIf="!error && !loading">
+    <div class="flex">
+        <div class="item-spacer"></div>
+        <button (click)="stampInvoice()" type="button" mat-raised-button class="btnPrimary"
+            style="height:80%; margin-top: 10px;" [disabled]="loading">
+            <mat-icon class="icon-size">notifications_active</mat-icon>TIMBRAR
+        </button>
+
+    </div>
+    <div class="body">
+        <div class="flex">
+            <div class="block">
+                <img height="150px"
+                    src="https://sgp-web.nyc3.digitaloceanspaces.com/Inncaplast/MIO220506E91/Logotipo/logo2.jpg" alt="">
+            </div>
+            <div class="item-spacer"></div>
+            <div class="grid-container">
+                <div class="grid-item one">
+                    <div class="title-grid letter-one">
+                        FACTURA NUM: {{user.serie}}(?)
+                    </div>
+                    <div class="content letter-two">
+                        <strong>FOLIO FISCAL (UUID):</strong><br>
+                        111111a1-1111-1a1a-aa11-1a1111a11aa1 <br>
+                        <strong>No. DE SERIE DEL CERTIFICADO DEL SAT:</strong><br>
+                        ///////////////// <br>
+                        <strong>NO. DE SERIE DEL CERTIFICADO DEL EMISOR: </strong><br>
+                        {{user.serial}}<br>
+                        <strong>FECHA Y AHORA DE CERTIFICACIÓN:</strong> <br>
+                        /////////////////<br>
+                        <strong>FECHA Y AHORA DE EMISIÓN DE CFDI:</strong><br>
+                        /////////////////<br>
+                    </div>
+                </div>
+            </div>
+        </div> <br><br><br>
+        <div class="grid-container">
+            <div class="grid-item two">
+                <div class="title-grid letter-one">
+                    EMISOR
+                </div>
+                <div class="content letter-two">
+                    {{user.name_company}} <br>
+                    RFC: {{user.rfc}}<br>
+                    {{user.address}} #{{user.num_ext}} COL. {{user.suburb}} <br>
+                    C.P {{user.postal_code}} {{user.municipality}}, {{user.state}}, México <br>
+                    Telefono: {{user.phone}} <br>
+                    Regimen Fiscal: {{user.code_regime}} <br>
+                    Moneda: MXN <br>
+                    Lugar de Expedición: {{user.postal_code}}
+                </div>
+            </div>
+            <div class="grid-item three">
+                <div class="title-grid letter-one">
+                    RECEPTOR
+                </div>
+                <div class="content letter-two">
+
+                    {{invoice.client_name}} <br>
+                    RFC: {{invoice.rfc}}<br>
+                    {{invoice.address}} #{{invoice.num_ext}} COL. {{invoice.city}} <br>
+                    C.P {{invoice.postal_code}} {{invoice.municipality}}, {{invoice.state}}, México
+                    <br>
+                    <strong>Regimen Fiscal: </strong>{{invoice.code_regime}}
+                    <strong> Forma de Pago:</strong> <select [(ngModel)]="id_way_pay" [disabled]="true"
+                        (change)="wayPayChange($event)">
+                        <option *ngFor="let item of wayPays" [value]="item.id">
+                            {{converterToLabel(item.code,item.description, 20)}}
+                        </option>
+                    </select><br>
+                    <strong> Método de Pago:</strong> {{payment_method}} <br>
+                    <strong> Uso de CFDI:</strong>
+                    <select [(ngModel)]="cfdiValue" (change)="cfdiChange($event)">
+                        <option *ngFor="let item of cfdi" [value]="item.id">
+                            {{converterToLabel(item.code,item.description, 40)}}
+                        </option>
+                    </select>
+
+
+                </div>
+            </div>
+        </div>
+
+        <br><br><br><br> <br> <br><br> <br> <br>
+        <div *ngFor="let concept of invoice.concepts; let i = index">
+            <table>
+                <tr *ngIf="i == 0" class="letter-one" style="background-color: #d2d2d2;">
+                    <th style="width:10%">Clave del Producto</th>
+                    <th style="width:10%">Clave de Unidad</th>
+                    <th style="width:10%">Cant.</th>
+                    <th style="width:10%">Unidad</th>
+                    <th style="width:10%">Cant. Pzas</th>
+                    <th style="width:10%">Cant. Linea</th>
+                    <th style="width:20%">Parte - Descripción</th>
+                    <th style="width:10%">Precio x Unidad</th>
+                    <th style="width:10%">Precio x Caja</th>
+                    <th style="width:10%">Importe</th>
+                </tr>
+                <tr class="letter-two">
+                    <td style="width:10%">{{concept.code}}</td>
+                    <td style="width:10%">{{concept.code_unit}}</td>
+                    <td style="width:10%">{{concept.quantity}}</td>
+                    <td style="width:10%">{{concept.unit}}</td>
+                    <td style="width:10%">{{concept.amount_pieces}}</td>
+                    <td style="width:10%">{{concept.amount_line}}</td>
+                    <td style="width:20%"> {{concept.part_number}} - {{concept.description}}</td>
+                    <td style="width:10%" class="align-right">{{concept.price_unit}}</td>
+                    <td style="width:10%" class="align-right">{{concept.price | currency}}</td>
+                    <td style="width:10%" class="align-right">{{concept.total | currency}}</td>
+                </tr>
+
+            </table>
+            <table>
+                <tr class="letter-one" style="background-color: #d2d2d2;">
+
+                    <th style="width:50%">Impuesto Traslado</th>
+                    <th style="width:35%">Base</th>
+                    <th style="width:15%">Importe</th>
+
+                </tr>
+                <tr class="letter-two">
+
+                    <td style="width:50%">{{concept.tax.transferred_taxes}}</td>
+                    <td style="width:35%" class="align-right">{{concept.tax.base | currency}}</td>
+                    <td style="width:15%" class="align-right">{{concept.tax.tax | currency}}</td>
+
+                </tr>
+            </table>
+        </div>
+
+        <br>
+        <div class="grid-container">
+            <div class="grid-item five block">
+                <div class="title-grid letter-one">
+                    Importe con Letra
+                </div>
+                <div class="content letter-two center">
+                    ({{invoice.total_letter}})
+                </div>
+            </div>
+            <div class="grid-item six flex">
+                <div class="title-grid letter-one end-text" style="width:50%;">
+                    Subtotal
+                </div>
+                <div class="content letter-two end-text" style="width:50%;">
+                    {{invoice.sub_total | currency }}
+                </div>
+            </div>
+            <div class="grid-item seven flex">
+                <div class="title-grid letter-one end-text" style="width:50%;">
+                    Trasladado
+                </div>
+                <div class="content letter-two end-text" style="width:50%;">
+                    {{invoice.tax | currency }}
+                </div>
+            </div>
+            <div class="grid-item nine flex">
+                <div class="title-grid letter-one end-text" style="width:50%;">
+                    Total
+                </div>
+                <div class="content letter-two end-text" style="width:50%;">
+                    {{invoice.total | currency }}
+                </div>
+            </div>
+        </div><br><br><br><br><br>
+
+        <div class="grid-container">
+            <div class="grid-item eight">
+                <div class="title-grid letter-one">
+                    Datos de Pago
+                </div>
+                <div class="content letter-two">
+                    <strong> Cuenta Bancaria:</strong>
+                    <select [(ngModel)]="account" (change)="accountChange($event)">
+                        <option *ngFor="let item of accounts" [value]="item.id">
+                            {{converterToLabel(item.bank,item.account, 40)}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid-item ten">
+                <div class="title-grid letter-one">
+                    Cadena Original Del Complemento De Certificación Digital Del Sat
+                </div>
+                <div class="content letter-two">
+                    Estos datos serán proporcionados despues del timbrado, Estos datos serán proporcionados despues del
+                    timbrado, Estos datos serán proporcionados despues del timbrado, Estos datos serán proporcionados
+                    despues del timbrado
+                </div>
+            </div>
+
+            <div class="grid-item eleven">
+            </div>
+            <div class="grid-item twelve">
+                <div class="title-grid letter-one">
+                    Sello Digital Del SAT
+                </div>
+                <div class="content letter-two">
+                    Estos datos serán proporcionados despues del timbrado, Estos datos serán proporcionados despues del
+                    timbrado, Estos datos serán proporcionados despues del timbrado, Estos datos serán proporcionados
+                    despues del timbrado
+                </div>
+            </div>
+
+            <div class="grid-item thirteen">
+                <div class="title-grid letter-one">
+                    Sello Digital Del CfdI
+                </div>
+                <div class="content letter-two">
+                    Estos datos serán proporcionados despues del timbrado, Estos datos serán proporcionados despues del
+                    timbrado, Estos datos serán proporcionados despues del timbrado, Estos datos serán proporcionados
+                    despues del timbrado,
+                </div>
+            </div>
+        </div><br><br><br><br><br><br><br><br><br><br><br><br>
+    </div>
+
+</mat-card>
+<mat-card style="width:780px; height: 750px;" *ngIf="error && !loading" class="colorSecondary">
+
+    <div class="error">
+        <mat-icon style="font-size: 50px" aria-hidden="false">lock</mat-icon>
+        <h1>{{error_msg}}</h1>
+    </div>
+</mat-card>

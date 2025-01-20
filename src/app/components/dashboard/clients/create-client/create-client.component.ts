@@ -101,7 +101,7 @@ export class CreateClientComponent implements OnInit {
 
   protected _onDestroy = new Subject<void>();
   tradenameOnlyRead: BooleanInput = true
-  rfcOnlyRead: BooleanInput = true
+  // rfcOnlyRead: BooleanInput = true
   minRFC: number = 10
   maxRFC: number = 10
 
@@ -117,6 +117,7 @@ export class CreateClientComponent implements OnInit {
     private _uploadService: UploadService,
     private _catalogService: CatalogService,
     private dialog: MatDialog,
+    private fb: FormBuilder, 
     
   ) {
     this._helpService.helpCreateClient()
@@ -158,7 +159,7 @@ export class CreateClientComponent implements OnInit {
 
     this.form = this._formBuider.group({
       name: ['', Validators.required],
-      tradename: ['', Validators.required],
+      // tradename: ['', Validators.required],
       rfc: ['', [Validators.required, Validators.pattern(/[A-ZÑ&]{3,4}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])(?:[A-Z\d]{3})/)]],
       address: ['', Validators.required],
       postal_code: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.minLength(5), Validators.maxLength(5)]],
@@ -244,16 +245,23 @@ export class CreateClientComponent implements OnInit {
     }
   }
 
+  ngOnInit(): void {
+    if (!this.data) {
+      this.data = { selectProducts: [] }; 
+    }
+    this.loadData();
+    this.loadResidences();
+  }
+
   validateClient(): boolean {
     if (this.form.value.id_residence === 1) {
-      return (this.taxRegimesCtrl.value == null || this.userCtrl.value == null || this.listPricesCtrl.value == null || this.suburbsCtrl == null)
+      return (this.taxRegimesCtrl.value == null || /* this.userCtrl.value == null || */ this.suburbsCtrl == null)
     } else if (this.form.value.id_residence === 2) {
       return (this.listPricesCtrl.value == null)
     }
     return false
   }
 
-  // TODO:
   createClient() {
     this.loading = true
 
@@ -267,8 +275,34 @@ export class CreateClientComponent implements OnInit {
     } else {
       const selectedProducts = this.products.filter(product => product.isSelected);
 
-      // Mostrar un log de los productos seleccionados
       console.log('Productos seleccionados enviados:', selectedProducts);
+
+      console.log( this.form.value.name,
+        this.form.value.tradename,
+        this.form.value.rfc,
+        this.form.value.representative,
+        this.form.value.id_residence === 1 ? this.statesCtrl.value : this.form.value.state,
+        this.form.value.id_residence === 1 ? this.municipalitiesCtrl.value.municipality : '',
+        this.form.value.id_residence === 1 ? this.suburbsCtrl.value.suburb : '',
+        this.form.value.postal_code,
+        this.form.value.address,
+        this.form.value.num_ext,
+        this.form.value.num_int,
+        this.form.value.telephone,
+        this.form.value.email,
+        this._userService.user.id_company.toString(),
+        this.taxRegimesCtrl.value.id.toString(),
+        // this.userCtrl.value.id.toString(),
+        this.form.value.comments,
+        this.form.value.credit_limit,
+        this.form.value.credit_days,
+        this.form.value.id_residence,
+        this.contacts,
+        this.form.value.id_tax,
+        this.form.value.country_code,
+        this.form.value.address_complete,
+        selectedProducts );
+      
       this._clientService.createClient(
         this.form.value.name,
         this.form.value.tradename,
@@ -285,8 +319,7 @@ export class CreateClientComponent implements OnInit {
         this.form.value.email,
         this._userService.user.id_company.toString(),
         this.taxRegimesCtrl.value.id.toString(),
-        this.listPricesCtrl.value.id.toString(),
-        this.userCtrl.value.id.toString(),
+        // this.userCtrl.value.id.toString(),
         this.form.value.comments,
         this.form.value.credit_limit,
         this.form.value.credit_days,
@@ -335,8 +368,6 @@ export class CreateClientComponent implements OnInit {
     }
   }
 
-
-  // TODO:
   setStateAndMunicipality() {
     this.statesCtrl.setValue(this.states[0])
     this.municipalitiesCtrl.setValue(this.municipalities[0])
@@ -371,30 +402,32 @@ export class CreateClientComponent implements OnInit {
       this.municipalitiesCtrl.reset()
       this.statesCtrl.reset()
       this.listPricesCtrl.reset()
-      this.userCtrl.reset()
+      // this.userCtrl.reset()
+      this.products = [];
+      this.loadProducts()
     }
   }
 
 
-  isValidSelect() {
-    this.form.controls['rfc'].setValue('')
-    if (this.taxRegimesCtrl.value.id) {
-      this.rfcOnlyRead = false
-      if (this.taxRegimesCtrl.value.fisica == 'SI' && this.taxRegimesCtrl.value.moral == 'SI') {
-        this.minRFC = 12
-        this.maxRFC = 13
-      }
-      else if (this.taxRegimesCtrl.value.fisica == 'SI') {
-        this.minRFC = 13
-        this.maxRFC = 13
-      } else {
-        this.minRFC = 12
-        this.maxRFC = 12
-      }
-    } else {
-      this.rfcOnlyRead = true
-    }
-  }
+  // isValidSelect() {
+  //   this.form.controls['rfc'].setValue('')
+  //   if (this.taxRegimesCtrl.value.id) {
+  //     this.rfcOnlyRead = false
+  //     if (this.taxRegimesCtrl.value.fisica == 'SI' && this.taxRegimesCtrl.value.moral == 'SI') {
+  //       this.minRFC = 12
+  //       this.maxRFC = 13
+  //     }
+  //     else if (this.taxRegimesCtrl.value.fisica == 'SI') {
+  //       this.minRFC = 13
+  //       this.maxRFC = 13
+  //     } else {
+  //       this.minRFC = 12
+  //       this.maxRFC = 12
+  //     }
+  //   } else {
+  //     this.rfcOnlyRead = true
+  //   }
+  // }
 
   createContact() {
     if (this.formContact.value.email != '' && this.formContact.value.telephone != '' && this.formContact.value.name != '') {
@@ -430,7 +463,7 @@ export class CreateClientComponent implements OnInit {
     this._listPriceService.getAllData(this._userService.user.id_company.toString(), false).subscribe({
       next: (resp) => {
         this.listPrices = resp
-        console.log(this.listPrices)
+        // console.log(this.listPrices)
       },
       complete: () => {
         this.loadComponentSelectListPrices()
@@ -783,11 +816,4 @@ export class CreateClientComponent implements OnInit {
     this.loading = false;
   }
 
-  ngOnInit(): void {
-    if (!this.data) {
-      this.data = { selectProducts: [] }; 
-    }
-    this.loadData();
-    this.loadResidences()
-  }
 }

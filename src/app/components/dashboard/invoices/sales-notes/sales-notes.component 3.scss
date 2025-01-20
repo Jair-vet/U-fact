@@ -1,0 +1,45 @@
+.success-payment {
+    background-color: rgb(138, 198, 228);
+    color: black;
+    font-weight: bolder;
+
+}
+
+.pay {
+    color: aliceblue;
+    background-color: rgb(44, 148, 0);
+    font-weight: bolder;
+}
+
+.no-pay {
+    color: aliceblue;
+    background-color: rgb(146, 0, 0);
+    font-weight: bolder;
+}
+
+.partial {
+    color: aliceblue;
+    background-color: rgb(195, 104, 0);
+    font-weight: bolder;
+}
+
+.payments {
+    background-color: rgb(138, 198, 228);
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    width: 100%;
+
+    text-align: center;
+    margin: 10px;
+    border-radius: 10px;
+    font-weight: bolder;
+    color: black;
+}
+
+.na {
+    color: aliceblue;
+    background-color: rgb(180, 4, 4);
+    font-weight: bolder;
+}
