@@ -18,6 +18,8 @@ import { Municipality, State, Suburb } from 'src/app/models/location.model';
 import { User } from 'src/app/models/user.model';
 import { HelpService } from 'src/app/services/help.service';
 import { AddUserComponent } from './components/add-user/add-user.component';
+import * as pdfjsLib from 'pdfjs-dist';
+import 'pdfjs-dist/build/pdf.worker.entry';
 
 @Component({
   selector: 'app-settings',
@@ -56,7 +58,7 @@ export class SettingsComponent implements OnInit {
   public suburbsCtrl: FormControl = new FormControl();
   public suburbsFilterCtrl: FormControl = new FormControl();
   public filteredSuburbs: ReplaySubject<Suburb[]> = new ReplaySubject<Suburb[]>(1);
-  selectedFile: any = null;
+  selectedFile: File | null = null;
 
   banks!: Bank[]
   public banksCtrl: FormControl = new FormControl();
@@ -80,10 +82,12 @@ export class SettingsComponent implements OnInit {
   textButtonSave: string = ''
   textButtonAddUser: string = ''
   modalWidth: string = ''
+  pdfForm: FormGroup;
+  isPDFLoaded: boolean = false;
 
   public user!: User
   @ViewChild('singleSelect', { static: true }) singleSelect!: MatSelect;
-  constructor(private breakpointObserver: BreakpointObserver, private _formBuider: FormBuilder, private _userService: UserService,
+  constructor(private fb: FormBuilder, private breakpointObserver: BreakpointObserver, private _formBuider: FormBuilder, private _userService: UserService,
     private _uploadService: UploadService, private _satService: SatService, private dialog: MatDialog, private _clientService: ClientService) {
 
     this.breakpointObserver.observe([
@@ -135,6 +139,7 @@ export class SettingsComponent implements OnInit {
         }
       }
     });
+
     this.form = this._formBuider.group({
       name: ['', Validators.required],
       email: ['', [Validators.email, Validators.required]],
@@ -153,6 +158,20 @@ export class SettingsComponent implements OnInit {
     })
     this.user = _userService.user
 
+    this.pdfForm = this.fb.group({
+      taxRegimesCtrl: [''],
+      tradename: [''],
+      name: [''],
+      rfc: [''],
+      postal_code: [''],
+      address: [''],
+      num_ext: [''],
+      num_int: [''],
+      phone: [''],
+      email: [''],
+      email_support: [''],
+    });
+
   }
   openDialogInstallCSD(): void {
     const dialogInstallCSD = this.dialog.open(InstallCsdComponent, {
@@ -166,6 +185,13 @@ export class SettingsComponent implements OnInit {
 
 
   }
+
+  get taxRegimesControl(): FormControl {
+    return this.pdfForm.get('taxRegimesCtrl') as FormControl;
+  }
+  
+  
+
   openDialogAddUser(): void {
     const dialogAddUser = this.dialog.open(AddUserComponent, {
       disableClose: true,
@@ -199,6 +225,7 @@ export class SettingsComponent implements OnInit {
     localStorage.setItem('colorAux', colorAux)
 
   }
+
   isValidSelect() {
 
     console.log(this.taxRegimesCtrl.value)
@@ -221,6 +248,7 @@ export class SettingsComponent implements OnInit {
     }
 
   }
+  
   changeImage(event: any): any {
     const file = event.target.files[0];
     const formData = new FormData();
@@ -302,6 +330,9 @@ export class SettingsComponent implements OnInit {
 
   saveData() {
     this.loading = true
+      console.log("Datos a enviar a la API:", this.form.value);
+      console.log("Logo:", this.imageTemp);
+      console.log("Estado de la imagen:", this.isChangeImage);
 
     if (this.isChangeImage) {
 
@@ -309,7 +340,27 @@ export class SettingsComponent implements OnInit {
 
       this._uploadService.uploadImage(this.image, this._userService.user.rfc, 'Company', before).then(img => {
         if (img != false) {
-          this._userService.updateCompany(this.form.value.name, this.taxRegimesCtrl.value.id, this.form.value.tradename, this.form.value.address, this.form.value.postal_code, this.banksCtrl.value.id, this.form.value.interbank_code, this.form.value.account, img, this.form.value.serie, this.statesCtrl.value.state, this.municipalitiesCtrl.value.municipality, this.suburbsCtrl.value.suburb, this.form.value.num_ext, this.form.value.num_int, this.form.value.email, this.form.value.phone, this.form.value.email_support == '' ? this.form.value.email : this.form.value.email_support, this._userService.user.id_company.toString()).subscribe({
+          this._userService.updateCompany(
+            this.form.value.name, 
+            this.taxRegimesCtrl.value.id,
+            this.form.value.tradename, 
+            this.form.value.address, 
+            this.form.value.postal_code, 
+            this.banksCtrl.value.id, 
+            this.form.value.interbank_code, 
+            this.form.value.account, 
+            img, 
+            this.form.value.serie, 
+            this.statesCtrl.value.state, 
+            this.municipalitiesCtrl.value.municipality, 
+            this.suburbsCtrl.value.suburb, 
+            this.form.value.num_ext, 
+            this.form.value.num_int, 
+            this.form.value.email, 
+            this.form.value.phone, 
+            this.form.value.email_support == '' ? this.form.value.email : this.form.value.email_support, 
+            this._userService.user.id_company.toString()
+          ).subscribe({
             next: (resp) => {
               this._userService.user.logo = img
               this.setUser()
@@ -329,7 +380,28 @@ export class SettingsComponent implements OnInit {
         }
       })
     } else {
-      this._userService.updateCompany(this.form.value.name, this.taxRegimesCtrl.value.id, this.form.value.tradename, this.form.value.address, this.form.value.postal_code, this.banksCtrl.value.id, this.form.value.interbank_code, this.form.value.account, this._userService.user.logo, this.form.value.serie, this.statesCtrl.value.state, this.municipalitiesCtrl.value.municipality, this.suburbsCtrl.value.suburb, this.form.value.num_ext, this.form.value.num_int, this.form.value.email, this.form.value.phone, this.form.value.email_support == '' ? this.form.value.email : this.form.value.email_support, this._userService.user.id_company.toString()).subscribe({
+        // Enviar datos sin cambios en la imagen
+        this._userService.updateCompany(
+          this.form.value.name, 
+          this.taxRegimesCtrl.value.id, 
+          this.form.value.tradename, 
+          this.form.value.address, 
+          this.form.value.postal_code, 
+          this.banksCtrl.value.id, 
+          this.form.value.interbank_code, 
+          this.form.value.account, 
+          this._userService.user.logo, 
+          this.form.value.serie, 
+          this.statesCtrl.value.state, 
+          this.municipalitiesCtrl.value.municipality, 
+          this.suburbsCtrl.value.suburb, 
+          this.form.value.num_ext, 
+          this.form.value.num_int, 
+          this.form.value.email, 
+          this.form.value.phone, 
+          this.form.value.email_support == '' ? this.form.value.email : this.form.value.email_support, 
+          this._userService.user.id_company.toString()
+        ).subscribe({
         next: (resp) => {
           this.setUser()
           Swal.fire({ title: 'OK', text: resp, icon: 'success', confirmButtonColor: '#58B1F7', heightAuto: false })
@@ -627,6 +699,100 @@ export class SettingsComponent implements OnInit {
 
     this.form.controls['account'].setValue('')
     this.form.controls['interbank_code'].setValue('')
+  }
+
+  async extractDataFromPDF(arrayBuffer: ArrayBuffer) {
+    console.log('Procesando archivo PDF...');
+  
+    // Convertir ArrayBuffer a Uint8Array
+    const pdfData = new Uint8Array(arrayBuffer);
+  
+    // Cargar el documento PDF
+    const loadingTask = pdfjsLib.getDocument({ data: pdfData });
+    const pdf = await loadingTask.promise;
+    console.log(`Número de páginas en el documento: ${pdf.numPages}`);
+  
+    let textContent = '';
+  
+    // Extraer texto de cada página
+    for (let i = 0; i < pdf.numPages; i++) {
+      const page = await pdf.getPage(i + 1);
+      const text = await page.getTextContent();
+      text.items.forEach((item: any) => {
+        textContent += item.str + ' ';
+      });
+      console.log(`Texto extraído de la página ${i + 1}:`, textContent);
+    }
+  
+    // Procesar datos del texto
+    const rfcMatch = textContent.match(/RFC: ([A-Z0-9]{12,13})/);
+    const nameMatch = textContent.match(/Nombre \\(s\\): (.*?)\\n/);
+    const addressMatch = textContent.match(/Nombre de Vialidad: (.*?) Número Exterior: (\\d+)/);
+    const emailMatch = textContent.match(/Correo Electrónico: (.+@.+\\..+)/);
+    const phoneMatch = textContent.match(/Tel\\. Fijo Lada: \\d+ Número: (\\d{10})/);
+  
+    console.log('Resultados del procesamiento:', {
+      rfc: rfcMatch ? rfcMatch[1] : 'No encontrado',
+      name: nameMatch ? nameMatch[1] : 'No encontrado',
+      address: addressMatch ? `${addressMatch[1]} ${addressMatch[2]}` : 'No encontrado',
+      email: emailMatch ? emailMatch[1] : 'No encontrado',
+      phone: phoneMatch ? phoneMatch[1] : 'No encontrado',
+    });
+  
+    // Actualizar el formulario con los datos procesados
+    this.pdfForm.patchValue({
+      rfc: rfcMatch ? rfcMatch[1] : '',
+      name: nameMatch ? nameMatch[1] : '',
+      address: addressMatch ? `${addressMatch[1]} ${addressMatch[2]}` : '',
+      email: emailMatch ? emailMatch[1] : '',
+      phone: phoneMatch ? phoneMatch[1] : '',
+    });
+  }
+  
+
+  onFileDropped(event: DragEvent): void {
+    event.preventDefault();
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onload = async () => {
+        if (reader.result) {
+          const arrayBuffer = reader.result as ArrayBuffer;
+          await this.extractDataFromPDF(arrayBuffer);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+  }
+  
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  
+  onDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+
+  async onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      this.selectedFile = file;
+      console.log('Archivo seleccionado:', file.name);
+
+      const arrayBuffer = await file.arrayBuffer();
+      this.extractDataFromPDF(arrayBuffer);
+    }
+  }
+
+  clearFile() {
+    console.log('Eliminando archivo:', this.selectedFile?.name);
+    this.selectedFile = null;
+    this.pdfForm.reset(); // Limpia el formulario asociado al archivo
   }
 
   ngOnInit(): void {
